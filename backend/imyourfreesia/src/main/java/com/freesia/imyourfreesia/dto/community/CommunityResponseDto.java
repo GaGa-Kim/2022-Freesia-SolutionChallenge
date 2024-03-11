@@ -2,11 +2,9 @@ package com.freesia.imyourfreesia.dto.community;
 
 import com.freesia.imyourfreesia.domain.community.Community;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
+import lombok.Getter;
 
 @Getter
 public class CommunityResponseDto {
@@ -39,12 +37,12 @@ public class CommunityResponseDto {
     @ApiModelProperty(example = "카테고리")
     private String category;
 
-    public CommunityResponseDto(Community community, List<Long> fileId){
+    public CommunityResponseDto(Community community, List<Long> fileId) {
         this.id = community.getId();
-        this.uid = community.getUid().getId();
+        this.uid = community.getUser().getId();
         this.createdDate = community.getCreatedDate();
-        this.email = community.getUid().getEmail();
-        this.nickName = community.getUid().getNickName();
+        this.email = community.getUser().getEmail();
+        this.nickName = community.getUser().getNickName();
         this.title = community.getTitle();
         this.content = community.getContent();
         this.fileId = fileId;

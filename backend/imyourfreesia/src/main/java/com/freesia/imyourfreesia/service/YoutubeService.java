@@ -2,7 +2,7 @@ package com.freesia.imyourfreesia.service;
 
 import com.freesia.imyourfreesia.config.GlobalConfig;
 import com.freesia.imyourfreesia.domain.youtube.Youtube;
-import com.freesia.imyourfreesia.domain.youtube.YoutubeRespository;
+import com.freesia.imyourfreesia.domain.youtube.YoutubeRepository;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
@@ -31,7 +31,7 @@ public class YoutubeService {
     private static final long NUMBER_OF_VIDEOS_RETURNED = 25; //수정해야 할 수도
     private static String PROPERTIES_FILENAME = "application-youtube.yml";
     private static YouTube youtube;
-    private final YoutubeRespository youtubeRespository;
+    private final YoutubeRepository youtubeRepository;
     private final GlobalConfig config;
 
     @PostConstruct
@@ -91,11 +91,11 @@ public class YoutubeService {
                 youtubeList.add(youtube);
             }
         }
-        return youtubeRespository.saveAll(youtubeList);
+        return youtubeRepository.saveAll(youtubeList);
     }
 
     /* 유튜브 영상 조회 */
     public List<Youtube> findAll() {
-        return youtubeRespository.findAll();
+        return youtubeRepository.findAll();
     }
 }

@@ -2,21 +2,25 @@ package com.freesia.imyourfreesia.domain.challenge;
 
 import com.freesia.imyourfreesia.domain.BaseTimeEntity;
 import com.freesia.imyourfreesia.domain.emoticon.Emoticon;
-import com.freesia.imyourfreesia.domain.likes.Likes;
 import com.freesia.imyourfreesia.domain.user.User;
-import lombok.AllArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import lombok.Setter;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public class Challenge extends BaseTimeEntity {
     @Id
@@ -24,57 +28,47 @@ public class Challenge extends BaseTimeEntity {
     @Column(name = "challengeId")
     private Long id;
 
+    @Setter
     @ManyToOne
-    @JoinColumn (name = "uid")
-    private User uid;
+    @JoinColumn(name = "userId")
+    private User user;
 
     @Column(length = 100, nullable = false)
     private String title;
 
     @Column(columnDefinition = "TEXT", nullable = false)
-    private String contents;
+    private String content;
 
-    //@Column(nullable = false)
-    @OneToMany(
-            mappedBy = "challenge",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            orphanRemoval = true
-    )
-    private List<ChallengePhoto> image = new ArrayList<>();
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ChallengePhoto> photos = new ArrayList<>();
 
-    @OneToMany(mappedBy = "challengeId", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Emoticon> emoticons = new ArrayList<>();
 
     @Builder
-    public Challenge(User uid, String title, String contents){
-        this.uid = uid;
+    public Challenge(Long id, String title, String content) {
+        this.id = id;
         this.title = title;
-        this.contents = contents;
+        this.content = content;
     }
 
-    public void setUid(User uid){
-        this.uid = uid;
-    }
-
-    public Challenge update(String title, String contents) {
+    public Challenge update(String title, String content) {
         this.title = title;
-        this.contents = contents;
+        this.content = content;
         return this;
     }
 
-    public void addImage(ChallengePhoto challengePhoto){
-        this.image.add(challengePhoto);
-
-        if(challengePhoto.getChallenge() != this){
+    public void addPhoto(ChallengePhoto challengePhoto) {
+        this.photos.add(challengePhoto);
+        if (challengePhoto.getChallenge() != this) {
             challengePhoto.setChallenge(this);
         }
     }
 
-    public void addEmoticon(Emoticon emoticon){
+    public void addEmoticon(Emoticon emoticon) {
         this.emoticons.add(emoticon);
-
-        if(emoticon.getChallengeId() != this){
-            emoticon.setChallengeId(this);
+        if (emoticon.getChallenge() != this) {
+            emoticon.setChallenge(this);
         }
     }
 }

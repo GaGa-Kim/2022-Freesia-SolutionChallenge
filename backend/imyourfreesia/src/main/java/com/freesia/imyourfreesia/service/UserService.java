@@ -27,7 +27,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserResponseDto findByEmail(String email) throws Exception {
         User user = userRepository.findByEmail(email);
-        GoalMsg goalMsg = goalMsgRepository.findByUserId(user);
+        GoalMsg goalMsg = goalMsgRepository.findByUser(user);
 
         return new UserResponseDto(user, goalMsg);
 
@@ -36,22 +36,21 @@ public class UserService {
     /* 유저 정보 수정 */
     @Transactional
     public Long update(String email, UserUpdateRequestDto userUpdateRequestDto,
-                       GoalMsgUpdateRequestDto goalMsgUpdateRequestDto, MultipartFile files) throws Exception{
+                       GoalMsgUpdateRequestDto goalMsgUpdateRequestDto, MultipartFile files) throws Exception {
         User user = userRepository.findByEmail(email);
         String profileImg = authService.convertImage(files);
 
         user.update(userUpdateRequestDto.getNickName(), profileImg);
 
-        if(goalMsgRepository.findByUserId(user) != null) {
-            GoalMsg goalMsg = goalMsgRepository.findByUserId(user);
+        if (goalMsgRepository.findByUser(user) != null) {
+            GoalMsg goalMsg = goalMsgRepository.findByUser(user);
             goalMsg.update(goalMsgUpdateRequestDto.getGoalMsg());
-        }
-        else {
+        } else {
             GoalMsg goalMsg = GoalMsg.builder()
                     .goalMsg(goalMsgUpdateRequestDto.getGoalMsg())
                     .build();
 
-            goalMsg.setUserId(user);
+            goalMsg.setUser(user);
             goalMsgRepository.save(goalMsg);
         }
         return user.getId();
@@ -59,7 +58,7 @@ public class UserService {
 
     /* 유저 비밀번호 수정 */
     @Transactional
-    public Long updatePw(String email, UserPasswordUpdateRequestDto requestDto) throws Exception{
+    public Long updatePw(String email, UserPasswordUpdateRequestDto requestDto) throws Exception {
         User user = userRepository.findByEmail(email);
 
         user.pwUpdate(passwordEncoder.encode(requestDto.getPassword()));

@@ -1,12 +1,8 @@
 package com.freesia.imyourfreesia.dto.comment;
 
 import com.freesia.imyourfreesia.domain.comment.Comment;
-import com.freesia.imyourfreesia.domain.community.Community;
-import com.freesia.imyourfreesia.domain.user.User;
-import lombok.Getter;
-
-import javax.persistence.Column;
 import java.time.LocalDate;
+import lombok.Getter;
 
 @Getter
 public class CommentListResponseDto {
@@ -25,17 +21,17 @@ public class CommentListResponseDto {
     private LocalDate createdDate;
     private LocalDate modifiedDate;
 
-    public CommentListResponseDto(Comment entity){
+    public CommentListResponseDto(Comment entity) {
         this.id = entity.getId();
 
-        this.uid = entity.getUid().getId();
-        this.username = entity.getUid().getUsername();
-        this.loginId = entity.getUid().getLoginId();
-        this.email = entity.getUid().getEmail();
-        this.nickName = entity.getUid().getNickName();
-        this.profileImg = entity.getUid().getProfileImg();
+        this.uid = entity.getUser().getId();
+        this.username = entity.getUser().getUsername();
+        this.loginId = entity.getUser().getLoginId();
+        this.email = entity.getUser().getEmail();
+        this.nickName = entity.getUser().getNickName();
+        this.profileImg = entity.getUser().getProfileImg();
 
-        this.pid = entity.getPid().getId();
+        this.pid = entity.getCommunity().getId();
         this.content = entity.getContent();
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();

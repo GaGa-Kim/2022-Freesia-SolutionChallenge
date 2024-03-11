@@ -1,6 +1,5 @@
 package com.freesia.imyourfreesia.service.auth;
 
-import com.freesia.imyourfreesia.domain.user.Authority;
 import com.freesia.imyourfreesia.domain.user.GoalMsg;
 import com.freesia.imyourfreesia.domain.user.GoalMsgRepository;
 import com.freesia.imyourfreesia.domain.user.User;
@@ -14,7 +13,6 @@ import com.freesia.imyourfreesia.jwt.JwtTokenProvider;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,14 +24,12 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final GoalMsgRepository goalMsgRepository;
     private final GoogleService googleService;
     private final KakaoService kakaoService;
     private final NaverService naverService;
-    private final CustomUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
     // 구글 로그인
@@ -43,16 +39,10 @@ public class AuthService {
         String jwt;
 
         GoogleOAuth2UserInfoDto googleOAuth2UserInfoDto = googleService.getUserInfoByAccessToken(accessToken);
-        if (userRepository.findOneWithAuthoritiesByEmail(googleOAuth2UserInfoDto.getEmail()).orElse(null) == null) {
-            Authority authority = Authority.builder()
-                    .authorityName("ROLE_USER")
-                    .build();
-
+        if (!userRepository.existsByEmail(googleOAuth2UserInfoDto.getEmail())) {
             User user = User.builder()
                     .username(googleOAuth2UserInfoDto.getName())
                     .email(googleOAuth2UserInfoDto.getEmail())
-                    .activated(true)
-                    .authorities(Collections.singleton(authority))
                     .build();
 
             userRepository.save(user);
@@ -70,16 +60,10 @@ public class AuthService {
 
         KakaoOAuth2UserInfoDto kakaoOAuth2UserInfoDto = kakaoService.getUserInfoByAccessToken(accessToken);
 
-        if (userRepository.findOneWithAuthoritiesByEmail(kakaoOAuth2UserInfoDto.getEmail()).orElse(null) == null) {
-            Authority authority = Authority.builder()
-                    .authorityName("ROLE_USER")
-                    .build();
-
+        if (!userRepository.existsByEmail(kakaoOAuth2UserInfoDto.getEmail())) {
             User user = User.builder()
                     .username(kakaoOAuth2UserInfoDto.getName())
                     .email(kakaoOAuth2UserInfoDto.getEmail())
-                    .activated(true)
-                    .authorities(Collections.singleton(authority))
                     .build();
 
             userRepository.save(user);
@@ -97,16 +81,10 @@ public class AuthService {
 
         NaverOAuth2UserInfoDto naverOAuth2UserInfoDto = naverService.getUserInfoByAccessToken(accessToken);
 
-        if (userRepository.findOneWithAuthoritiesByEmail(naverOAuth2UserInfoDto.getEmail()).orElse(null) == null) {
-            Authority authority = Authority.builder()
-                    .authorityName("ROLE_USER")
-                    .build();
-
+        if (!userRepository.existsByEmail(naverOAuth2UserInfoDto.getEmail())) {
             User user = User.builder()
                     .username(naverOAuth2UserInfoDto.getName())
                     .email(naverOAuth2UserInfoDto.getEmail())
-                    .activated(true)
-                    .authorities(Collections.singleton(authority))
                     .build();
 
             userRepository.save(user);
@@ -120,14 +98,9 @@ public class AuthService {
     @Transactional
     public User generalJoin(UserSaveRequestDto userSaveRequestDto, MultipartFile profileImage) throws Exception {
 
-        if (userRepository.findOneWithAuthoritiesByEmail(userSaveRequestDto.getEmail()).orElse(null) != null) {
+        if (userRepository.existsByEmail(userSaveRequestDto.getEmail())) {
             throw new RuntimeException("이미 가입되어 있는 유저입니다.");
         }
-
-        Authority authority = Authority.builder()
-                .authorityName("ROLE_USER")
-                .build();
-
         String filePath = convertImage(profileImage);
 
         User user = User.builder()
@@ -137,15 +110,13 @@ public class AuthService {
                 .email(userSaveRequestDto.getEmail())
                 .nickName(userSaveRequestDto.getNickName())
                 .profileImg(filePath)
-                .activated(true)
-                .authorities(Collections.singleton(authority))
                 .build();
 
         GoalMsg goalMsg = GoalMsg.builder()
                 .goalMsg(userSaveRequestDto.getGoalMsg())
                 .build();
 
-        goalMsg.setUserId(user);
+        goalMsg.setUser(user);
 
         goalMsgRepository.save(goalMsg);
 

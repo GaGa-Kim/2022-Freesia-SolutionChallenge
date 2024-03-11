@@ -10,11 +10,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    @Bean
-    public GlobalConfig config() {
-        return new GlobalConfig();
-    }
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
@@ -28,5 +23,10 @@ public class WebConfig implements WebMvcConfigurer {
                         HttpMethod.PATCH.name()
                 )
                 .allowCredentials(false);
+    }
+
+    @Bean
+    public GlobalConfig config() {
+        return new GlobalConfig();
     }
 }

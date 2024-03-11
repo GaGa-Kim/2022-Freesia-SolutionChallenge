@@ -1,30 +1,32 @@
 package com.freesia.imyourfreesia.domain.cheering;
 
 import com.freesia.imyourfreesia.domain.BaseTimeEntity;
-import lombok.AllArgsConstructor;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public class Cheering extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column(name = "cheeringId")
     private Long id;
 
-    private String myEmail; // 응원 누른 사람
+    private String recipientEmail;
 
-    private String yourEmail; // 응원 받은 사람
+    private String senderEmail;
 
     @Builder
-    public Cheering(String myEmail, String yourEmail){
-        this.myEmail = myEmail;
-        this.yourEmail = yourEmail;
+    public Cheering(Long id, String recipientEmail, String senderEmail) {
+        this.id = id;
+        this.recipientEmail = recipientEmail;
+        this.senderEmail = senderEmail;
     }
 }

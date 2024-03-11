@@ -1,17 +1,20 @@
 package com.freesia.imyourfreesia.domain.challenge;
 
 import com.freesia.imyourfreesia.domain.BaseTimeEntity;
-import lombok.AllArgsConstructor;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-
-import javax.persistence.*;
+import lombok.Setter;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public class ChallengePhoto extends BaseTimeEntity {
     @Id
@@ -19,6 +22,7 @@ public class ChallengePhoto extends BaseTimeEntity {
     @Column(name = "challengePhotoId")
     private Long id;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "challengeId")
     private Challenge challenge;
@@ -32,17 +36,10 @@ public class ChallengePhoto extends BaseTimeEntity {
     private Long fileSize;
 
     @Builder
-    public ChallengePhoto(String origFileName, String filePath, Long fileSize){
+    public ChallengePhoto(Long id, String origFileName, String filePath, Long fileSize) {
+        this.id = id;
         this.origFileName = origFileName;
         this.filePath = filePath;
         this.fileSize = fileSize;
-    }
-
-    public void setChallenge(Challenge challenge){
-        this.challenge = challenge;
-
-        if(!challenge.getImage().contains(this)) {
-            challenge.getImage().add(this);
-        }
     }
 }

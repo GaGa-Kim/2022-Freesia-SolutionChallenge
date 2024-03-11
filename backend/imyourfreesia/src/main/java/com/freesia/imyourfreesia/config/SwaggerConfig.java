@@ -1,5 +1,7 @@
 package com.freesia.imyourfreesia.config;
 
+import java.util.Collections;
+import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -14,13 +16,9 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig {  // Swagger
-
+public class SwaggerConfig {
     private static final String API_NAME = "freesia API";
     private static final String API_VERSION = "0.0.1";
     private static final String API_DESCRIPTION = "freesia API 명세서";
@@ -29,15 +27,15 @@ public class SwaggerConfig {  // Swagger
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.freesia.imyourfreesia"))  // Swagger를 적용할 클래스의 package명
-                .paths(PathSelectors.any())  // 해당 package 하위에 있는 모든 url에 적용
+                .apis(RequestHandlerSelectors.basePackage("com.freesia.imyourfreesia"))
+                .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo())
-                .securityContexts(Arrays.asList(securityContext()))
-                .securitySchemes(Arrays.asList(apiKey()));
+                .securityContexts(Collections.singletonList(securityContext()))
+                .securitySchemes(List.of(apiKey()));
     }
 
-    public ApiInfo apiInfo() {  // API의 이름, 현재 버전, API에 대한 정보
+    public ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title(API_NAME)
                 .version(API_VERSION)
@@ -45,7 +43,7 @@ public class SwaggerConfig {  // Swagger
                 .build();
     }
 
-    private ApiKey apiKey() { // swagger에 token 추가할 수 있도록
+    private ApiKey apiKey() {
         return new ApiKey("JWT", "Authorization", "header");
     }
 
@@ -55,10 +53,10 @@ public class SwaggerConfig {  // Swagger
                 .securityReferences(defaultAuth()).forPaths(PathSelectors.any()).build();
     }
 
-    List<SecurityReference> defaultAuth() {
+    private List<SecurityReference> defaultAuth() {
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
-        return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
+        return List.of(new SecurityReference("JWT", authorizationScopes));
     }
 }

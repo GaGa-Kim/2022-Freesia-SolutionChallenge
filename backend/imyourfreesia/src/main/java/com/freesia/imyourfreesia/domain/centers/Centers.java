@@ -1,17 +1,22 @@
 package com.freesia.imyourfreesia.domain.centers;
 
 import com.freesia.imyourfreesia.domain.BaseTimeEntity;
-import lombok.*;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-@ToString
 @Getter
 @NoArgsConstructor
 public class Centers extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "centerId")
     private Long id;
 
     @Column(length = 500, nullable = false)
@@ -27,7 +32,8 @@ public class Centers extends BaseTimeEntity {
     private String websiteUrl;
 
     @Builder
-    public Centers(String name, String contact, String address, String websiteUrl){
+    public Centers(Long id, String name, String contact, String address, String websiteUrl) {
+        this.id = id;
         this.name = name;
         this.contact = contact;
         this.address = address;

@@ -2,11 +2,9 @@ package com.freesia.imyourfreesia.dto.challenge;
 
 import com.freesia.imyourfreesia.domain.challenge.Challenge;
 import com.freesia.imyourfreesia.domain.user.User;
-import lombok.Getter;
-
 import java.io.File;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import lombok.Getter;
 
 @Getter
 public class ChallengeListResponseDto {
@@ -19,18 +17,18 @@ public class ChallengeListResponseDto {
     private LocalDate modifiedDate;
 
 
-    public ChallengeListResponseDto(Challenge entity){
+    public ChallengeListResponseDto(Challenge entity) {
         this.id = entity.getId();
-        this.uid = entity.getUid();
+        this.uid = entity.getUser();
         this.title = entity.getTitle();
-        this.contents = entity.getContents();
+        this.contents = entity.getContent();
 
         String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
 
-        if(!entity.getImage().isEmpty()){
+        if (!entity.getPhotos().isEmpty()) {
             //this.filePath = absolutePath + entity.getImage().get(0).getFilePath();
-            this.filePathId = entity.getImage().get(0).getId();
-        }else{
+            this.filePathId = entity.getPhotos().get(0).getId();
+        } else {
             this.filePathId = null;
         }
 

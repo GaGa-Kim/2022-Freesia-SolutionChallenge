@@ -4,17 +4,15 @@ import com.freesia.imyourfreesia.domain.challenge.Challenge;
 import com.freesia.imyourfreesia.domain.challenge.ChallengeRepository;
 import com.freesia.imyourfreesia.domain.emoticon.Emoticon;
 import com.freesia.imyourfreesia.domain.emoticon.EmoticonRepository;
-import com.freesia.imyourfreesia.domain.likes.Likes;
 import com.freesia.imyourfreesia.domain.user.User;
 import com.freesia.imyourfreesia.domain.user.UserRepository;
 import com.freesia.imyourfreesia.dto.emoticon.EmoticonRequestDto;
 import com.freesia.imyourfreesia.dto.emoticon.EmoticonResponseDto;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -31,7 +29,7 @@ public class EmoticonService {
         User user = userRepository.findByEmail(emoticonRequestDto.getEmail());
         Challenge challenge = challengeRepository.findById(emoticonRequestDto.getChallengeId()).orElseThrow(IllegalArgumentException::new);
 
-        if (emoticonRepository.findByUidAndChallengeIdAndEmoticonName(user, challenge, emoticonRequestDto.getEmoticonName()).isEmpty()) {
+        if (emoticonRepository.findByUserAndChallengeAndName(user, challenge, emoticonRequestDto.getEmoticonName()).isEmpty()) {
             Emoticon emoticons = emoticonRequestDto.toEntity();
             emoticons.setUser(user);
             emoticons.setChallenge(challenge);
@@ -39,8 +37,8 @@ public class EmoticonService {
             List<Emoticon> emoticonList = new ArrayList<>();
             emoticonList.add(emoticons);
 
-            if(!emoticonList.isEmpty()) {
-                for(Emoticon emoticon: emoticonList) {
+            if (!emoticonList.isEmpty()) {
+                for (Emoticon emoticon : emoticonList) {
                     challenge.addEmoticon(emoticonRepository.save(emoticon));
                 }
             }
@@ -59,11 +57,11 @@ public class EmoticonService {
         User user = userRepository.findByEmail(emoticonRequestDto.getEmail());
         Challenge challenge = challengeRepository.findById(emoticonRequestDto.getChallengeId()).orElseThrow(IllegalArgumentException::new);
 
-        if (emoticonRepository.findByUidAndChallengeIdAndEmoticonName(user, challenge, emoticonRequestDto.getEmoticonName()).isEmpty()) {
+        if (emoticonRepository.findByUserAndChallengeAndName(user, challenge, emoticonRequestDto.getEmoticonName()).isEmpty()) {
             return "삭제 실패 (존재하지 않습니다.)";
 
         } else {
-            emoticonRepository.deleteByUidAndChallengeIdAndEmoticonName(user, challenge, emoticonRequestDto.getEmoticonName());
+            emoticonRepository.deleteByUserAndChallengeAndName(user, challenge, emoticonRequestDto.getEmoticonName());
             return "삭제 완료";
         }
     }
@@ -75,11 +73,11 @@ public class EmoticonService {
         Challenge challenge = challengeRepository.findById(challengeId).orElseThrow(IllegalArgumentException::new);
         User user = userRepository.findByEmail(email);
 
-        List<Emoticon> emoticon1List = emoticonRepository.findByChallengeIdAndUidAndEmoticonName(challenge, user, "emoticon1");
-        List<Emoticon> emoticon2List = emoticonRepository.findByChallengeIdAndUidAndEmoticonName(challenge, user, "emoticon2");
-        List<Emoticon> emoticon3List = emoticonRepository.findByChallengeIdAndUidAndEmoticonName(challenge, user, "emoticon3");
-        List<Emoticon> emoticon4List = emoticonRepository.findByChallengeIdAndUidAndEmoticonName(challenge, user, "emoticon4");
-        List<Emoticon> emoticon5List = emoticonRepository.findByChallengeIdAndUidAndEmoticonName(challenge, user, "emoticon5");
+        List<Emoticon> emoticon1List = emoticonRepository.findByChallengeAndUserAndName(challenge, user, "emoticon1");
+        List<Emoticon> emoticon2List = emoticonRepository.findByChallengeAndUserAndName(challenge, user, "emoticon2");
+        List<Emoticon> emoticon3List = emoticonRepository.findByChallengeAndUserAndName(challenge, user, "emoticon3");
+        List<Emoticon> emoticon4List = emoticonRepository.findByChallengeAndUserAndName(challenge, user, "emoticon4");
+        List<Emoticon> emoticon5List = emoticonRepository.findByChallengeAndUserAndName(challenge, user, "emoticon5");
 
         return new EmoticonResponseDto(emoticon1List.size(), emoticon2List.size(), emoticon3List.size(), emoticon4List.size(), emoticon5List.size());
     }
@@ -93,11 +91,11 @@ public class EmoticonService {
         Challenge challenge = challengeRepository.findById(challengeId).orElseThrow(IllegalArgumentException::new);
 
         // 이모티콘 이름 확정 시 변경 필요
-        List<Emoticon> emoticon1List = emoticonRepository.findByChallengeIdAndEmoticonName(challenge, "emoticon1");
-        List<Emoticon> emoticon2List = emoticonRepository.findByChallengeIdAndEmoticonName(challenge, "emoticon2");
-        List<Emoticon> emoticon3List = emoticonRepository.findByChallengeIdAndEmoticonName(challenge, "emoticon3");
-        List<Emoticon> emoticon4List = emoticonRepository.findByChallengeIdAndEmoticonName(challenge, "emoticon4");
-        List<Emoticon> emoticon5List = emoticonRepository.findByChallengeIdAndEmoticonName(challenge, "emoticon5");
+        List<Emoticon> emoticon1List = emoticonRepository.findByChallengeAndName(challenge, "emoticon1");
+        List<Emoticon> emoticon2List = emoticonRepository.findByChallengeAndName(challenge, "emoticon2");
+        List<Emoticon> emoticon3List = emoticonRepository.findByChallengeAndName(challenge, "emoticon3");
+        List<Emoticon> emoticon4List = emoticonRepository.findByChallengeAndName(challenge, "emoticon4");
+        List<Emoticon> emoticon5List = emoticonRepository.findByChallengeAndName(challenge, "emoticon5");
 
         return new EmoticonResponseDto(emoticon1List.size(), emoticon2List.size(), emoticon3List.size(), emoticon4List.size(), emoticon5List.size());
     }

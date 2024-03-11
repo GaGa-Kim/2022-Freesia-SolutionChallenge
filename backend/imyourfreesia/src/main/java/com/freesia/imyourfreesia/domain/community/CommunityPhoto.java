@@ -1,22 +1,28 @@
 package com.freesia.imyourfreesia.domain.community;
 
 import com.freesia.imyourfreesia.domain.BaseTimeEntity;
-import lombok.*;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class Photo extends BaseTimeEntity {
-
+public class CommunityPhoto extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "fileId")
+    @Column(name = "communityPhotoId")
     private Long id;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "communityId")
     private Community community;
@@ -30,16 +36,10 @@ public class Photo extends BaseTimeEntity {
     private Long fileSize;
 
     @Builder
-    public Photo(String origFileName, String filePath, Long fileSize){
+    public CommunityPhoto(Long id, String origFileName, String filePath, Long fileSize) {
+        this.id = id;
         this.origFileName = origFileName;
         this.filePath = filePath;
         this.fileSize = fileSize;
-    }
-
-    public void setCommunity(Community community) {
-        this.community = community;
-
-        if(!community.getImage().contains(this))
-            community.getImage().add(this);
     }
 }

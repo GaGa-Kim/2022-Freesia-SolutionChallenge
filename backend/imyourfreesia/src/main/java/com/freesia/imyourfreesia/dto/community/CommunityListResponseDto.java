@@ -2,11 +2,8 @@ package com.freesia.imyourfreesia.dto.community;
 
 import com.freesia.imyourfreesia.domain.community.Community;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-
-import java.io.File;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import lombok.Getter;
 
 @Getter
 public class CommunityListResponseDto {
@@ -41,19 +38,20 @@ public class CommunityListResponseDto {
     private LocalDate createdDate;
     private LocalDate modifiedDate;
 
-    public CommunityListResponseDto(Community community){
+    public CommunityListResponseDto(Community community) {
         this.id = community.getId();
-        this.uid = community.getUid().getId();
-        this.email = community.getUid().getEmail();
-        this.nickName = community.getUid().getNickName();
+        this.uid = community.getUser().getId();
+        this.email = community.getUser().getEmail();
+        this.nickName = community.getUser().getNickName();
         this.title = community.getTitle();
         this.content = community.getContent();
         this.category = community.getCategory();
 
-        if(!community.getImage().isEmpty())
-            this.thumbnailImageId = community.getImage().get(0).getId();
-        else
+        if (!community.getPhotos().isEmpty()) {
+            this.thumbnailImageId = community.getPhotos().get(0).getId();
+        } else {
             this.thumbnailImageId = null;
+        }
 
         this.createdDate = community.getCreatedDate();
         this.modifiedDate = community.getModifiedDate();

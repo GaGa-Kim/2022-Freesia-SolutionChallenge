@@ -4,27 +4,35 @@ import com.freesia.imyourfreesia.domain.BaseTimeEntity;
 import com.freesia.imyourfreesia.domain.comment.Comment;
 import com.freesia.imyourfreesia.domain.likes.Likes;
 import com.freesia.imyourfreesia.domain.user.User;
-import lombok.*;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class Community extends BaseTimeEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "communityId")
     private Long id;
 
+    @Setter
     @ManyToOne
-    @JoinColumn (name = "userId")
-    private User uid;
+    @JoinColumn(name = "userId")
+    private User user;
 
     @Column(length = 100, nullable = false)
     private String title;
@@ -32,21 +40,21 @@ public class Community extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @OneToMany(mappedBy = "community", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private List<Photo> image = new ArrayList<>();
-
-    @OneToMany(mappedBy = "pid", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private List<Likes> like = new ArrayList<>();
-
-    @OneToMany(mappedBy = "pid", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private List<Comment> comment = new ArrayList<>();
-
     @Column(nullable = false)
     private String category;
 
+    @OneToMany(mappedBy = "community", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private List<CommunityPhoto> photos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "community", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private List<Likes> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "community", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
     @Builder
-    public Community(User uid, String title, String content, String category){
-        this.uid = uid;
+    public Community(Long id, String title, String content, String category) {
+        this.id = id;
         this.title = title;
         this.content = content;
         this.category = category;
@@ -59,28 +67,24 @@ public class Community extends BaseTimeEntity {
         return this;
     }
 
-    public void setUser(User user) {
-        this.uid = user;
-    }
-
-    public void addImage(Photo photo) {
-        this.image.add(photo);
-
-        if(photo.getCommunity() != this)
-            photo.setCommunity(this);
+    public void addPhoto(CommunityPhoto communityPhoto) {
+        this.photos.add(communityPhoto);
+        if (communityPhoto.getCommunity() != this) {
+            communityPhoto.setCommunity(this);
+        }
     }
 
     public void addLike(Likes likes) {
-        this.like.add(likes);
-
-        if(likes.getPid() != this)
-            likes.setPid(this);
+        this.likes.add(likes);
+        if (likes.getCommunity() != this) {
+            likes.setCommunity(this);
+        }
     }
 
     public void addComment(Comment comment) {
-        this.comment.add(comment);
-
-        if(comment.getPid() != this)
-            comment.setPid(this);
+        this.comments.add(comment);
+        if (comment.getCommunity() != this) {
+            comment.setCommunity(this);
+        }
     }
 }

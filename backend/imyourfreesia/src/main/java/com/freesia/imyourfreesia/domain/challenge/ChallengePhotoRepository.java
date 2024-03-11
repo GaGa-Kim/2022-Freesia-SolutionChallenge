@@ -1,10 +1,12 @@
 package com.freesia.imyourfreesia.domain.challenge;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ChallengePhotoRepository extends JpaRepository<ChallengePhoto, Long> {
-    List<ChallengePhoto> findAllByChallengeId(Long challengeId);
-    List<ChallengePhoto> findByChallengeId(Long challengeId);
+    List<ChallengePhoto> findAllByChallenge(Challenge challenge);
+
+    List<ChallengePhoto> findByChallenge(Challenge challenge);
 }

@@ -10,13 +10,12 @@ import com.freesia.imyourfreesia.dto.challenge.ChallengeListResponseDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeResponseDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeSaveRequestDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeUpdateRequestDto;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -28,17 +27,17 @@ public class ChallengeService {
 
     /* 챌린지 등록 */
     @Transactional
-    public Long save(ChallengeSaveRequestDto requestDto, List<MultipartFile> files) throws Exception{
+    public Long save(ChallengeSaveRequestDto requestDto, List<MultipartFile> files) throws Exception {
         User user = userRepository.findByEmail(requestDto.getUid());
 
         Challenge challenge = requestDto.toEntity();
-        challenge.setUid(user);
+        challenge.setUser(user);
 
         List<ChallengePhoto> photoList = fileHandler.parseFileInfo(files);
-        if(!photoList.isEmpty()){
-            for(ChallengePhoto challengePhoto : photoList){
+        if (!photoList.isEmpty()) {
+            for (ChallengePhoto challengePhoto : photoList) {
                 System.out.println(challengePhoto.getFilePath());
-                challenge.addImage(challengePhotoRepository.save(challengePhoto));
+                challenge.addPhoto(challengePhotoRepository.save(challengePhoto));
             }
         }
 
@@ -55,13 +54,13 @@ public class ChallengeService {
                 .collect(Collectors.toList());
     }*/
     @Transactional(readOnly = true)
-    public List<Challenge> findAllDesc(){
+    public List<Challenge> findAllDesc() {
         return challengeRepository.findAllDesc();
     }
 
     /* 챌린지 상세 조회 */
     @Transactional(readOnly = true)
-    public ChallengeResponseDto findById(Long id, List<Long> filePath){
+    public ChallengeResponseDto findById(Long id, List<Long> filePath) {
         Challenge challenge = challengeRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
         return new ChallengeResponseDto(challenge, filePath);
@@ -69,34 +68,34 @@ public class ChallengeService {
 
     /* 챌린지 수정 - 사진 없을 때 */
     @Transactional
-    public Challenge updateChallenge(Long id, ChallengeUpdateRequestDto requestDto) throws Exception{
+    public Challenge updateChallenge(Long id, ChallengeUpdateRequestDto requestDto) throws Exception {
         Challenge challenge = challengeRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
 
-        return challenge.update(requestDto.getTitle(),requestDto.getContents());
+        return challenge.update(requestDto.getTitle(), requestDto.getContents());
     }
 
     /* 챌린지 수정 - 사진 있을 때 */
     @Transactional
-    public Challenge updateChallengeImage(Long id, ChallengeUpdateRequestDto requestDto, List<MultipartFile> files) throws Exception{
+    public Challenge updateChallengeImage(Long id, ChallengeUpdateRequestDto requestDto, List<MultipartFile> files) throws Exception {
         Challenge challenge = challengeRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
 
         List<ChallengePhoto> photoList = fileHandler.parseFileInfo(files);
 
-        if(!photoList.isEmpty()){
-            for(ChallengePhoto photo : photoList){
+        if (!photoList.isEmpty()) {
+            for (ChallengePhoto photo : photoList) {
                 photo.setChallenge(challenge);
                 challengePhotoRepository.save(photo);
             }
         }
 
-        return challenge.update(requestDto.getTitle(),requestDto.getContents());
+        return challenge.update(requestDto.getTitle(), requestDto.getContents());
     }
 
     /* 챌린지 삭제 */
     @Transactional
-    public void deleteChallenge(Long id){
+    public void deleteChallenge(Long id) {
         Challenge challenge = challengeRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
 
@@ -105,10 +104,10 @@ public class ChallengeService {
 
     /* 마이페이지 챌린지 조회 */
     @Transactional(readOnly = true)
-    public List<ChallengeListResponseDto> findByUid(String email){
+    public List<ChallengeListResponseDto> findByUid(String email) {
         User user = userRepository.findByEmail(email);
 
-        return challengeRepository.findByUid(user)
+        return challengeRepository.findByUser(user)
                 .stream()
                 .map(ChallengeListResponseDto::new)
                 .collect(Collectors.toList());

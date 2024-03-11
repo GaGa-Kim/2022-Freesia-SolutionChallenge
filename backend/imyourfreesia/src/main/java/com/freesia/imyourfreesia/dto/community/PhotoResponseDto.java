@@ -1,13 +1,13 @@
 package com.freesia.imyourfreesia.dto.community;
 
-import com.freesia.imyourfreesia.domain.community.Photo;
+import com.freesia.imyourfreesia.domain.community.CommunityPhoto;
 import lombok.Getter;
 
 @Getter
 public class PhotoResponseDto {
     private Long fileId;
 
-    public PhotoResponseDto(Photo photo){
-        this.fileId = photo.getId();
+    public PhotoResponseDto(CommunityPhoto communityPhoto) {
+        this.fileId = communityPhoto.getId();
     }
 }

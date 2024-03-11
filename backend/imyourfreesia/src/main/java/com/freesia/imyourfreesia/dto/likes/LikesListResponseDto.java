@@ -1,12 +1,7 @@
 package com.freesia.imyourfreesia.dto.likes;
 
-import com.freesia.imyourfreesia.domain.community.Community;
-import com.freesia.imyourfreesia.domain.community.Photo;
 import com.freesia.imyourfreesia.domain.likes.Likes;
-import com.freesia.imyourfreesia.domain.user.User;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public class LikesListResponseDto {
@@ -18,12 +13,12 @@ public class LikesListResponseDto {
     private String pcontent;
     private String pcategory;
 
-    public LikesListResponseDto(Likes entity){
+    public LikesListResponseDto(Likes entity) {
         this.id = entity.getId();
-        this.uid = entity.getUid().getId();
-        this.pid = entity.getPid().getId();
-        this.ptitle = entity.getPid().getTitle();
-        this.pcontent = entity.getPid().getContent();
-        this.pcategory = entity.getPid().getCategory();
+        this.uid = entity.getUser().getId();
+        this.pid = entity.getCommunity().getId();
+        this.ptitle = entity.getCommunity().getTitle();
+        this.pcontent = entity.getCommunity().getContent();
+        this.pcategory = entity.getCommunity().getCategory();
     }
 }
