@@ -2,6 +2,7 @@ package com.freesia.imyourfreesia.service;
 
 import com.freesia.imyourfreesia.domain.community.Community;
 import com.freesia.imyourfreesia.domain.community.CommunityRepository;
+import com.freesia.imyourfreesia.domain.file.CommunityFile;
 import com.freesia.imyourfreesia.domain.file.CommunityFileRepository;
 import com.freesia.imyourfreesia.domain.user.User;
 import com.freesia.imyourfreesia.domain.user.UserRepository;
@@ -10,7 +11,7 @@ import com.freesia.imyourfreesia.dto.community.CommunityResponseDto;
 import com.freesia.imyourfreesia.dto.community.CommunitySaveRequestDto;
 import com.freesia.imyourfreesia.dto.community.CommunityUpdateRequestDto;
 import com.freesia.imyourfreesia.dto.file.FileSaveRequestDto;
-import com.freesia.imyourfreesia.service.util.FileHandler;
+import com.freesia.imyourfreesia.service.file.FileHandler;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +38,11 @@ public class CommunityService {
         List<FileSaveRequestDto> communityFileList = fileHandler.saveFiles(files);
 
         if (!communityFileList.isEmpty()) {
-            for (FileSaveRequestDto file : communityFileList) {
-                community.addFile(communityFileRepository.save(file.toCommunityFileEntity()));
+            for (FileSaveRequestDto fileSaveRequestDto : communityFileList) {
+                System.out.println(fileSaveRequestDto.getFilePath());
+                CommunityFile file = fileSaveRequestDto.toCommunityFileEntity();
+                System.out.println(file.getFilePath());
+                community.addFile(communityFileRepository.save(file));
             }
         }
 

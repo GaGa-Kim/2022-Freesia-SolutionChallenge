@@ -10,7 +10,7 @@ import com.freesia.imyourfreesia.dto.challenge.ChallengeResponseDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeSaveRequestDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeUpdateRequestDto;
 import com.freesia.imyourfreesia.dto.file.FileSaveRequestDto;
-import com.freesia.imyourfreesia.service.util.FileHandler;
+import com.freesia.imyourfreesia.service.file.FileHandler;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class ChallengeService {
     /* 챌린지 등록 */
     @Transactional
     public Long save(ChallengeSaveRequestDto requestDto, List<MultipartFile> files) throws Exception {
-        User user = userRepository.findByEmail(requestDto.getUid());
+        User user = userRepository.findById(requestDto.getUid()).orElseThrow();
 
         Challenge challenge = requestDto.toEntity();
         challenge.setUser(user);

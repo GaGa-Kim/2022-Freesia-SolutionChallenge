@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ChallengeSaveRequestDto {
-    private String uid;
+    private Long uid;
     private String title;
     private String contents;
 
 
     @Builder
-    public ChallengeSaveRequestDto(String uid, String title, String contents) {
+    public ChallengeSaveRequestDto(Long uid, String title, String contents) {
         this.uid = uid;
         this.title = title;
         this.contents = contents;

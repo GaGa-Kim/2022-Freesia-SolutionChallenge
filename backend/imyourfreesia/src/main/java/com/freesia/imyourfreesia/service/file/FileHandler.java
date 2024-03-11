@@ -1,6 +1,7 @@
-package com.freesia.imyourfreesia.service.util;
+package com.freesia.imyourfreesia.service.file;
 
 import com.freesia.imyourfreesia.dto.file.FileSaveRequestDto;
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,7 +16,11 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class FileHandler {
     private static final String IMAGE_DIRECTORY = "images";
-    private static final String FILE_SEPARATOR = java.io.File.separator;
+    private static final String FILE_SEPARATOR = File.separator;
+
+    public FileSaveRequestDto saveProfile(MultipartFile multipartFiles) throws IOException {
+        return saveFile(multipartFiles);
+    }
 
     public List<FileSaveRequestDto> saveFiles(List<MultipartFile> multipartFiles) throws IOException {
         List<FileSaveRequestDto> fileList = new ArrayList<>();
@@ -28,21 +33,21 @@ public class FileHandler {
 
     private FileSaveRequestDto saveFile(MultipartFile multipartFile) throws IOException {
         String directoryPath = findDirectoryPath();
-        java.io.File directory = createDirectory(directoryPath);
+        File directory = createDirectory(directoryPath);
         if (directory == null) {
             return null;
         }
         String fileExtension = getFileExtension(Objects.requireNonNull(multipartFile.getContentType()));
         String newFileName = System.nanoTime() + fileExtension;
-        String absoluteFilePath = directoryPath + FILE_SEPARATOR + newFileName;
+        String absoluteFilePath = new File("").getAbsolutePath() + FILE_SEPARATOR + FILE_SEPARATOR;
 
-        java.io.File file = new java.io.File(absoluteFilePath);
+        File file = new File(absoluteFilePath + directoryPath + FILE_SEPARATOR + newFileName);
         multipartFile.transferTo(file);
         setFilePermissions(file);
 
         return FileSaveRequestDto.builder()
                 .origFileName(multipartFile.getOriginalFilename())
-                .filePath(directoryPath + java.io.File.separator + newFileName)
+                .filePath(absoluteFilePath + directoryPath + FILE_SEPARATOR + newFileName)
                 .fileSize(multipartFile.getSize())
                 .build();
     }
@@ -53,8 +58,8 @@ public class FileHandler {
         return IMAGE_DIRECTORY + FILE_SEPARATOR + currentDate;
     }
 
-    private java.io.File createDirectory(String directoryPath) {
-        java.io.File directory = new java.io.File(directoryPath);
+    private File createDirectory(String directoryPath) {
+        File directory = new File(directoryPath);
         if (!directory.exists()) {
             boolean directoryCreated = directory.mkdirs();
             if (!directoryCreated) {

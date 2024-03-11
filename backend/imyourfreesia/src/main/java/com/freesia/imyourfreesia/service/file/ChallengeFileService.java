@@ -1,4 +1,4 @@
-package com.freesia.imyourfreesia.service;
+package com.freesia.imyourfreesia.service.file;
 
 import com.freesia.imyourfreesia.domain.challenge.Challenge;
 import com.freesia.imyourfreesia.domain.challenge.ChallengeRepository;

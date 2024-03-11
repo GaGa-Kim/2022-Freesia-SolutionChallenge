@@ -19,7 +19,7 @@ import lombok.Setter;
 public class ChallengeFile extends File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "challengePhotoId")
+    @Column(name = "challengeFileId")
     private Long id;
 
     @Setter

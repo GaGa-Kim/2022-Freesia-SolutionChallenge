@@ -1,4 +1,4 @@
-package com.freesia.imyourfreesia.service;
+package com.freesia.imyourfreesia.service.file;
 
 import com.freesia.imyourfreesia.domain.community.Community;
 import com.freesia.imyourfreesia.domain.community.CommunityRepository;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CommunityFileService {
     private final CommunityFileRepository communityFileRepository;
-    private CommunityRepository communityRepository;
+    private final CommunityRepository communityRepository;
 
     // 이미지 아이디에 따른 이미지 개별 조회
     @Transactional(readOnly = true)

@@ -10,15 +10,12 @@ import com.freesia.imyourfreesia.dto.auth.NaverOAuth2UserInfoDto;
 import com.freesia.imyourfreesia.dto.auth.TokenDto;
 import com.freesia.imyourfreesia.dto.auth.UserSaveRequestDto;
 import com.freesia.imyourfreesia.jwt.JwtTokenProvider;
-import java.io.File;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import com.freesia.imyourfreesia.service.file.FileHandler;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -31,6 +28,7 @@ public class AuthService {
     private final KakaoService kakaoService;
     private final NaverService naverService;
     private final PasswordEncoder passwordEncoder;
+    private final FileHandler fileHandler;
 
     // 구글 로그인
     @Transactional
@@ -141,55 +139,7 @@ public class AuthService {
     // 사진 변환
     public String convertImage(MultipartFile profileImage) throws Exception {
 
-        String filePath = "";
-
-        if (profileImage != null) {
-            LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter dateTimeFormatter =
-                    DateTimeFormatter.ofPattern("yyyyMMdd");
-            String current_date = now.format(dateTimeFormatter);
-
-            String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
-
-            String path = "images" + File.separator + current_date;
-            File file = new File(path);
-
-            if (!file.exists()) {
-                boolean wasSuccessful = file.mkdirs();
-
-                if (!wasSuccessful) {
-                    System.out.println("file: was not successful");
-                }
-            }
-
-            String originalFileExtension = "";
-            String contentType = profileImage.getContentType();
-
-            if (ObjectUtils.isEmpty(contentType)) {
-                return null;
-            } else {
-                if (contentType.contains("image/jpeg")) {
-                    originalFileExtension = ".jpg";
-                } else if (contentType.contains("image/png")) {
-                    originalFileExtension = ".png";
-                } else {
-                    return null;
-                }
-            }
-
-            String new_file_name = System.nanoTime() + originalFileExtension;
-
-            filePath = absolutePath + path + File.separator + new_file_name;
-
-            file = new File(absolutePath + path + File.separator + new_file_name);
-            profileImage.transferTo(file);
-
-            file.setWritable(true);
-            file.setReadable(true);
-
-        }
-
-        return filePath;
+        return fileHandler.saveProfile(profileImage).getFilePath();
     }
 
 }

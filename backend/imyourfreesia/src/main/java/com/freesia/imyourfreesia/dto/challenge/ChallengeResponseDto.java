@@ -8,24 +8,19 @@ import lombok.Getter;
 
 @Getter
 public class ChallengeResponseDto {
-    private Long id;
-    private User uid;
-    private String title;
-    private String contents;
-    //private List<Long> imageId;
-    private List<Long> filePathId;
-    private LocalDate createdDate;
-    private LocalDate modifiedDate;
-    // private String createdDate;
-    // private String modifiedDate;
-
+    private final Long id;
+    private final User uid;
+    private final String title;
+    private final String contents;
+    private final List<Long> filePathId;
+    private final LocalDate createdDate;
+    private final LocalDate modifiedDate;
 
     public ChallengeResponseDto(Challenge entity, List<Long> filePath) {
         this.id = entity.getId();
         this.uid = entity.getUser();
         this.title = entity.getTitle();
         this.contents = entity.getContent();
-        //this.imageId = imageId;
         this.filePathId = filePath;
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();

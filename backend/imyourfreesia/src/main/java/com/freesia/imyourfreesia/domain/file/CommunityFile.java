@@ -19,7 +19,7 @@ import lombok.Setter;
 public class CommunityFile extends File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "communityPhotoId")
+    @Column(name = "communityFileId")
     private Long id;
 
     @Setter
