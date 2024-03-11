@@ -14,17 +14,17 @@ public class ChallengeSaveRequestDto {
 
 
     @Builder
-    public ChallengeSaveRequestDto(String uid, String title, String contents){
+    public ChallengeSaveRequestDto(String uid, String title, String contents) {
         this.uid = uid;
         this.title = title;
         this.contents = contents;
 
     }
 
-    public Challenge toEntity(){
+    public Challenge toEntity() {
         return Challenge.builder()
                 .title(title)
-                .contents(contents)
+                .content(contents)
                 .build();
     }
 }

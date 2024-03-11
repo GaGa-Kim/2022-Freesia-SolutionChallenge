@@ -1,15 +1,16 @@
 package com.freesia.imyourfreesia.service;
 
 import com.freesia.imyourfreesia.domain.community.Community;
-import com.freesia.imyourfreesia.domain.community.CommunityPhoto;
-import com.freesia.imyourfreesia.domain.community.CommunityPhotoRepository;
 import com.freesia.imyourfreesia.domain.community.CommunityRepository;
+import com.freesia.imyourfreesia.domain.file.CommunityFileRepository;
 import com.freesia.imyourfreesia.domain.user.User;
 import com.freesia.imyourfreesia.domain.user.UserRepository;
 import com.freesia.imyourfreesia.dto.community.CommunityListResponseDto;
 import com.freesia.imyourfreesia.dto.community.CommunityResponseDto;
 import com.freesia.imyourfreesia.dto.community.CommunitySaveRequestDto;
 import com.freesia.imyourfreesia.dto.community.CommunityUpdateRequestDto;
+import com.freesia.imyourfreesia.dto.file.FileSaveRequestDto;
+import com.freesia.imyourfreesia.service.util.FileHandler;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class CommunityService {
 
     private final CommunityRepository communityRepository;
     private final UserRepository userRepository;
-    private final CommunityPhotoRepository communityPhotoRepository;
+    private final CommunityFileRepository communityFileRepository;
     private final FileHandler fileHandler;
 
     // 게시글 저장
@@ -33,11 +34,11 @@ public class CommunityService {
         Community community = communitySaveRequestDto.toEntity();
         community.setUser(user);
 
-        List<CommunityPhoto> communityPhotoList = fileHandler.parseFileInfo(files);
+        List<FileSaveRequestDto> communityFileList = fileHandler.saveFiles(files);
 
-        if (!communityPhotoList.isEmpty()) {
-            for (CommunityPhoto communityPhoto : communityPhotoList) {
-                community.addPhoto(communityPhotoRepository.save(communityPhoto));
+        if (!communityFileList.isEmpty()) {
+            for (FileSaveRequestDto file : communityFileList) {
+                community.addFile(communityFileRepository.save(file.toCommunityFileEntity()));
             }
         }
 
@@ -72,12 +73,11 @@ public class CommunityService {
     public Long updateWithImage(Long id, CommunityUpdateRequestDto communityUpdateRequestDto, List<MultipartFile> files) throws Exception {
         Community community = communityRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
 
-        List<CommunityPhoto> communityPhotoList = fileHandler.parseFileInfo(files);
+        List<FileSaveRequestDto> communityFileList = fileHandler.saveFiles(files);
 
-        if (!communityPhotoList.isEmpty()) {
-            for (CommunityPhoto communityPhoto : communityPhotoList) {
-                communityPhoto.setCommunity(community);
-                communityPhotoRepository.save(communityPhoto);
+        if (!communityFileList.isEmpty()) {
+            for (FileSaveRequestDto file : communityFileList) {
+                community.addFile(communityFileRepository.save(file.toCommunityFileEntity()));
             }
         }
 

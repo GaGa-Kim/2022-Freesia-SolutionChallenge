@@ -25,9 +25,9 @@ public class ChallengeListResponseDto {
 
         String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
 
-        if (!entity.getPhotos().isEmpty()) {
+        if (!entity.getFiles().isEmpty()) {
             //this.filePath = absolutePath + entity.getImage().get(0).getFilePath();
-            this.filePathId = entity.getPhotos().get(0).getId();
+            this.filePathId = entity.getFiles().get(0).getId();
         } else {
             this.filePathId = null;
         }

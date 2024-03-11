@@ -2,6 +2,7 @@ package com.freesia.imyourfreesia.domain.challenge;
 
 import com.freesia.imyourfreesia.domain.BaseTimeEntity;
 import com.freesia.imyourfreesia.domain.emoticon.Emoticon;
+import com.freesia.imyourfreesia.domain.file.ChallengeFile;
 import com.freesia.imyourfreesia.domain.user.User;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,7 @@ public class Challenge extends BaseTimeEntity {
     private String content;
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ChallengePhoto> photos = new ArrayList<>();
+    private List<ChallengeFile> files = new ArrayList<>();
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Emoticon> emoticons = new ArrayList<>();
@@ -58,10 +59,10 @@ public class Challenge extends BaseTimeEntity {
         return this;
     }
 
-    public void addPhoto(ChallengePhoto challengePhoto) {
-        this.photos.add(challengePhoto);
-        if (challengePhoto.getChallenge() != this) {
-            challengePhoto.setChallenge(this);
+    public void addFile(ChallengeFile challengeFile) {
+        this.files.add(challengeFile);
+        if (challengeFile.getChallenge() != this) {
+            challengeFile.setChallenge(this);
         }
     }
 

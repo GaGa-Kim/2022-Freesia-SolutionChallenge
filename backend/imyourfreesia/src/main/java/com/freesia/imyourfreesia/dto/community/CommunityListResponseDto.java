@@ -47,8 +47,8 @@ public class CommunityListResponseDto {
         this.content = community.getContent();
         this.category = community.getCategory();
 
-        if (!community.getPhotos().isEmpty()) {
-            this.thumbnailImageId = community.getPhotos().get(0).getId();
+        if (!community.getFiles().isEmpty()) {
+            this.thumbnailImageId = community.getFiles().get(0).getId();
         } else {
             this.thumbnailImageId = null;
         }

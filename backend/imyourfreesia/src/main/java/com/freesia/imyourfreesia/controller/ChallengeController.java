@@ -1,16 +1,16 @@
 package com.freesia.imyourfreesia.controller;
 
 import com.freesia.imyourfreesia.domain.challenge.Challenge;
-import com.freesia.imyourfreesia.domain.challenge.ChallengePhoto;
-import com.freesia.imyourfreesia.domain.challenge.ChallengePhotoRepository;
+import com.freesia.imyourfreesia.domain.file.ChallengeFile;
+import com.freesia.imyourfreesia.domain.file.ChallengeFileRepository;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeListResponseDto;
-import com.freesia.imyourfreesia.dto.challenge.ChallengePhotoDto;
-import com.freesia.imyourfreesia.dto.challenge.ChallengePhotoResponseDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeResponseDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeSaveRequestDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeSaveVO;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeUpdateRequestDto;
-import com.freesia.imyourfreesia.service.ChallengePhotoService;
+import com.freesia.imyourfreesia.dto.file.FileIdResponseDto;
+import com.freesia.imyourfreesia.dto.file.FileResponseDto;
+import com.freesia.imyourfreesia.service.ChallengeFileService;
 import com.freesia.imyourfreesia.service.ChallengeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -44,8 +44,8 @@ import org.springframework.web.multipart.MultipartFile;
 @CrossOrigin(origins = "http://localhost:3000")
 public class ChallengeController {
     private final ChallengeService challengeService;
-    private final ChallengePhotoService challengePhotoService;
-    private final ChallengePhotoRepository challengePhotoRepository;
+    private final ChallengeFileService challengeFileService;
+    private final ChallengeFileRepository challengeFileRepository;
 
     /* 챌린지 등록 */
     @ApiOperation(value = "챌린지 등록", notes = "챌린지 등록 API")
@@ -88,20 +88,15 @@ public class ChallengeController {
     @GetMapping("/challenge")
     public ResponseEntity<ChallengeResponseDto> loadChallengeDetail(@RequestParam Long id) throws Exception {
 
-        List<ChallengePhotoResponseDto> photoResponseDtoList =
-                challengePhotoService.findAllByChallenge(id);
+        List<FileIdResponseDto> photoResponseDtoList =
+                challengeFileService.findAllByChallenge(id);
 
         List<Long> filePath = new ArrayList<>();
-        //String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
-
-        for (ChallengePhotoResponseDto photoResponseDto : photoResponseDtoList)
-        //filePath.add(absolutePath + photoResponseDto.getFilePath());
-        {
-            filePath.add(photoResponseDto.getFilePathId());
+        for (FileIdResponseDto photoResponseDto : photoResponseDtoList) {
+            filePath.add(photoResponseDto.getFileId());
         }
 
-        return ResponseEntity.ok()
-                .body(challengeService.findById(id, filePath));
+        return ResponseEntity.ok().body(challengeService.findById(id, filePath));
     }
 
     /* 챌린지 수정 */
@@ -121,7 +116,7 @@ public class ChallengeController {
                         .build();
 
         if (challengeSaveVO.getFiles() != null) {
-            List<ChallengePhoto> dbPhotoList = challengePhotoRepository.findAllByChallenge(id);
+            List<ChallengeFile> dbPhotoList = challengeFileService.imageList(id);
             List<MultipartFile> multipartList = challengeSaveVO.getFiles();
             List<MultipartFile> addFileList = new ArrayList<>();
 
@@ -133,18 +128,18 @@ public class ChallengeController {
                 }
             } else {
                 if (CollectionUtils.isEmpty(multipartList)) {
-                    for (ChallengePhoto dbPhoto : dbPhotoList) {
-                        challengePhotoService.deletePhoto(dbPhoto.getId());
+                    for (ChallengeFile dbPhoto : dbPhotoList) {
+                        challengeFileService.deletePhoto(dbPhoto.getId());
                     }
                 } else {
                     List<String> dbOriginNameList = new ArrayList<>();
 
-                    for (ChallengePhoto dbPhoto : dbPhotoList) {
-                        ChallengePhotoDto dbPhotoDto = challengePhotoService.findByImageId(dbPhoto.getId());
+                    for (ChallengeFile dbPhoto : dbPhotoList) {
+                        FileResponseDto dbPhotoDto = challengeFileService.findByImageId(dbPhoto.getId());
                         String dbOrigFileName = dbPhotoDto.getOrigFileName();
 
                         if (!multipartList.contains(dbOrigFileName)) {
-                            challengePhotoService.deletePhoto(dbPhoto.getId());
+                            challengeFileService.deletePhoto(dbPhoto.getId());
                         } else {
                             dbOriginNameList.add(dbOrigFileName);
                         }
@@ -186,7 +181,7 @@ public class ChallengeController {
             produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE}
     )
     public ResponseEntity<String> getImage(@RequestParam Long id) throws IOException {
-        ChallengePhotoDto photoDto = challengePhotoService.findByImageId(id);
+        FileResponseDto photoDto = challengeFileService.findByImageId(id);
         String absolutePath
                 = new File("").getAbsolutePath() + File.separator + File.separator;
         String path = photoDto.getFilePath();

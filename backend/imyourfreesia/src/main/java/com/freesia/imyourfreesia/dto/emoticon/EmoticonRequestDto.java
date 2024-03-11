@@ -20,15 +20,15 @@ public class EmoticonRequestDto {
     private String emoticonName;
 
     @Builder
-    public EmoticonRequestDto(String email, Long challengeId, String emoticonName){
+    public EmoticonRequestDto(String email, Long challengeId, String emoticonName) {
         this.email = email;
         this.challengeId = challengeId;
         this.emoticonName = emoticonName;
     }
 
-    public Emoticon toEntity(){
+    public Emoticon toEntity() {
         return Emoticon.builder()
-                .emoticonName(emoticonName)
+                .name(emoticonName)
                 .build();
     }
 }

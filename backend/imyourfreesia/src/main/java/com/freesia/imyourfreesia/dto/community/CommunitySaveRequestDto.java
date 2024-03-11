@@ -27,16 +27,15 @@ public class CommunitySaveRequestDto {
     private String category;
 
     @Builder
-    public CommunitySaveRequestDto(String email, String title, String content, String category){
+    public CommunitySaveRequestDto(String email, String title, String content, String category) {
         this.email = email;
         this.title = title;
         this.content = content;
         this.category = category;
     }
 
-    public Community toEntity(){
+    public Community toEntity() {
         return Community.builder()
-                .uid(uid)
                 .title(title)
                 .content(content)
                 .category(category)

@@ -1,15 +1,16 @@
 package com.freesia.imyourfreesia.service;
 
 import com.freesia.imyourfreesia.domain.challenge.Challenge;
-import com.freesia.imyourfreesia.domain.challenge.ChallengePhoto;
-import com.freesia.imyourfreesia.domain.challenge.ChallengePhotoRepository;
 import com.freesia.imyourfreesia.domain.challenge.ChallengeRepository;
+import com.freesia.imyourfreesia.domain.file.ChallengeFileRepository;
 import com.freesia.imyourfreesia.domain.user.User;
 import com.freesia.imyourfreesia.domain.user.UserRepository;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeListResponseDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeResponseDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeSaveRequestDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeUpdateRequestDto;
+import com.freesia.imyourfreesia.dto.file.FileSaveRequestDto;
+import com.freesia.imyourfreesia.service.util.FileHandler;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class ChallengeService {
     private final UserRepository userRepository;
     private final ChallengeRepository challengeRepository;
-    private final ChallengePhotoRepository challengePhotoRepository;
-    private final ChallengeFileHandler fileHandler;
+    private final ChallengeFileRepository challengeFileRepository;
+    private final FileHandler fileHandler;
 
     /* 챌린지 등록 */
     @Transactional
@@ -33,14 +34,12 @@ public class ChallengeService {
         Challenge challenge = requestDto.toEntity();
         challenge.setUser(user);
 
-        List<ChallengePhoto> photoList = fileHandler.parseFileInfo(files);
-        if (!photoList.isEmpty()) {
-            for (ChallengePhoto challengePhoto : photoList) {
-                System.out.println(challengePhoto.getFilePath());
-                challenge.addPhoto(challengePhotoRepository.save(challengePhoto));
+        List<FileSaveRequestDto> fileList = fileHandler.saveFiles(files);
+        if (!fileList.isEmpty()) {
+            for (FileSaveRequestDto file : fileList) {
+                challenge.addFile(challengeFileRepository.save(file.toChallengeFileEntity()));
             }
         }
-
         return challengeRepository.save(challenge).getId();
     }
 
@@ -81,15 +80,12 @@ public class ChallengeService {
         Challenge challenge = challengeRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
 
-        List<ChallengePhoto> photoList = fileHandler.parseFileInfo(files);
-
-        if (!photoList.isEmpty()) {
-            for (ChallengePhoto photo : photoList) {
-                photo.setChallenge(challenge);
-                challengePhotoRepository.save(photo);
+        List<FileSaveRequestDto> fileList = fileHandler.saveFiles(files);
+        if (!fileList.isEmpty()) {
+            for (FileSaveRequestDto file : fileList) {
+                challenge.addFile(challengeFileRepository.save(file.toChallengeFileEntity()));
             }
         }
-
         return challenge.update(requestDto.getTitle(), requestDto.getContents());
     }
 
