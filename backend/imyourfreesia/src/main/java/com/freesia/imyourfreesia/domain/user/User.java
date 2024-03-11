@@ -2,10 +2,23 @@ package com.freesia.imyourfreesia.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.freesia.imyourfreesia.domain.BaseTimeEntity;
-import lombok.*;
-
-import javax.persistence.*;
 import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -14,7 +27,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class User extends BaseTimeEntity {
-
     @JsonIgnore
     @Id
     @Column(name = "userId")
@@ -35,9 +47,13 @@ public class User extends BaseTimeEntity {
 
     private String profileImg;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     private boolean activated;
 
-    @ManyToMany(cascade=CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_authority",
             joinColumns = {@JoinColumn(name = "userId", referencedColumnName = "userId")},
@@ -45,7 +61,8 @@ public class User extends BaseTimeEntity {
     private Set<Authority> authorities;
 
     @Builder
-    public User(String username, String loginId, String password, String email, String nickName, String profileImg, boolean activated, Set<Authority> authorities){
+    public User(String username, String loginId, String password, String email, String nickName, String profileImg, boolean activated,
+                Set<Authority> authorities) {
         this.username = username;
         this.loginId = loginId;
         this.password = password;
@@ -62,7 +79,7 @@ public class User extends BaseTimeEntity {
         return this;
     }
 
-    public User pwUpdate(String password){
+    public User pwUpdate(String password) {
         this.password = password;
         return this;
     }

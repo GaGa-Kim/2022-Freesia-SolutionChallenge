@@ -1,17 +1,31 @@
 package com.freesia.imyourfreesia.controller;
 
 import com.freesia.imyourfreesia.domain.user.UserRepository;
-import com.freesia.imyourfreesia.dto.auth.*;
+import com.freesia.imyourfreesia.dto.auth.GeneralAuthVO;
+import com.freesia.imyourfreesia.dto.auth.GoogleLoginReqDto;
+import com.freesia.imyourfreesia.dto.auth.KakaoLoginReqDto;
+import com.freesia.imyourfreesia.dto.auth.NaverLoginReqDto;
+import com.freesia.imyourfreesia.dto.auth.TokenDto;
+import com.freesia.imyourfreesia.dto.auth.UserSaveRequestDto;
 import com.freesia.imyourfreesia.service.auth.AuthService;
 import com.freesia.imyourfreesia.service.auth.EmailService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Api(tags={"Auth API"})
+@Api(tags = {"Auth API"})
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -30,20 +44,20 @@ public class AuthController {
 
     @ApiOperation(value = "구글 로그인", notes = "구글 로그인 API")
     @PostMapping("/google")
-    public TokenDto googleLogin(@RequestBody GoogleLoginReqDto googleLoginReqDto) throws Exception {
-        return authService.googleLogin(googleLoginReqDto.getAccessToken());
+    public TokenDto googleLogin(@RequestBody GoogleLoginReqDto googleLoginReqDto, HttpServletResponse response) throws Exception {
+        return authService.googleLogin(googleLoginReqDto.getAccessToken(), response);
     }
 
     @ApiOperation(value = "카카오 로그인", notes = "카카오 로그인 API")
     @PostMapping("/kakao")
-    public TokenDto kakaoLogin(@RequestBody KakaoLoginReqDto kakaoLoginReqDto) {
-        return authService.kakaoLogin(kakaoLoginReqDto.getAccessToken());
+    public TokenDto kakaoLogin(@RequestBody KakaoLoginReqDto kakaoLoginReqDto, HttpServletResponse response) {
+        return authService.kakaoLogin(kakaoLoginReqDto.getAccessToken(), response);
     }
 
     @ApiOperation(value = "네이버 로그인", notes = "네이버 로그인 API")
     @PostMapping("/naver")
-    public TokenDto naverLogin(@RequestBody NaverLoginReqDto naverLoginReqDto) {
-        return authService.naverLoin(naverLoginReqDto.getAccessToken());
+    public TokenDto naverLogin(@RequestBody NaverLoginReqDto naverLoginReqDto, HttpServletResponse response) {
+        return authService.naverLoin(naverLoginReqDto.getAccessToken(), response);
     }
 
     @PostMapping("/sendAuthEmail")
@@ -54,9 +68,7 @@ public class AuthController {
         if (userRepository.findByEmail(email) == null) {
             String authCode = emailService.sendAuthMail(email);
             return ResponseEntity.ok(authCode);
-        }
-
-        else {
+        } else {
             throw new RuntimeException("이미 가입되어 있는 유저입니다.");
         }
     }
@@ -84,7 +96,7 @@ public class AuthController {
             @ApiImplicitParam(name = "loginId", value = "사용자 아이디"),
             @ApiImplicitParam(name = "password", value = "사용자 비밀번호")
     })
-    public TokenDto generalLogin(@RequestParam String loginId, String password) throws Exception {
-        return authService.generalLogin(loginId, password);
+    public TokenDto generalLogin(@RequestParam String loginId, String password, HttpServletResponse response) throws Exception {
+        return authService.generalLogin(loginId, password, response);
     }
 }

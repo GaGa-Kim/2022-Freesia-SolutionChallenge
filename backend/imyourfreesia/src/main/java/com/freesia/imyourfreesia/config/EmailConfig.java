@@ -1,34 +1,32 @@
 package com.freesia.imyourfreesia.config;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-
-import org.springframework.beans.factory.annotation.Value;
+import java.util.Properties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-import java.util.Properties;
-
 @Configuration
-@PropertySource("classpath:mail.properties")
 public class EmailConfig {
-    @Value("${mail.smtp.port}")
-    private int port;
-    @Value("${mail.smtp.socketFactory.port}")
-    private int socketPort;
-    @Value("${mail.smtp.auth}")
-    private boolean auth;
-    @Value("${mail.smtp.starttls.enable}")
-    private boolean starttls;
-    @Value("${mail.smtp.starttls.required}")
-    private boolean startlls_required;
-    @Value("${mail.smtp.socketFactory.fallback}")
-    private boolean fallback;
-    @Value("${AdminMail.id}")
-    private String id;
-    @Value("${AdminMail.password}")
-    private String password;
+    private final int port;
+    private final int socketPort;
+    private final boolean auth;
+    private final boolean starttls;
+    private final boolean startllsRequired;
+    private final boolean fallback;
+    private final String id;
+    private final String password;
+
+    public EmailConfig(GlobalConfig config) {
+        port = config.getPort();
+        socketPort = config.getSocketPort();
+        auth = config.isAuth();
+        starttls = config.isStarttls();
+        startllsRequired = config.isStartllsRequired();
+        fallback = config.isFallback();
+        id = config.getAdminId();
+        password = config.getAdminPassword();
+    }
 
     @Bean
     public JavaMailSender javaMailService() {
@@ -41,17 +39,15 @@ public class EmailConfig {
         javaMailSender.setDefaultEncoding("UTF-8");
         return javaMailSender;
     }
-    private Properties getMailProperties()
-    {
+
+    private Properties getMailProperties() {
         Properties pt = new Properties();
         pt.put("mail.smtp.socketFactory.port", socketPort);
         pt.put("mail.smtp.auth", auth);
         pt.put("mail.smtp.starttls.enable", starttls);
-        pt.put("mail.smtp.starttls.required", startlls_required);
-        pt.put("mail.smtp.socketFactory.fallback",fallback);
+        pt.put("mail.smtp.starttls.required", startllsRequired);
+        pt.put("mail.smtp.socketFactory.fallback", fallback);
         pt.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         return pt;
     }
-
-
 }

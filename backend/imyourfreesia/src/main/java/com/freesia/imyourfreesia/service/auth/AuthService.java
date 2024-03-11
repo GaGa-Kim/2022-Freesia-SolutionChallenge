@@ -1,26 +1,33 @@
 package com.freesia.imyourfreesia.service.auth;
 
-import com.freesia.imyourfreesia.config.JwtTokenUtil;
-import com.freesia.imyourfreesia.domain.user.*;
-import com.freesia.imyourfreesia.dto.auth.*;
+import com.freesia.imyourfreesia.domain.user.Authority;
+import com.freesia.imyourfreesia.domain.user.GoalMsg;
+import com.freesia.imyourfreesia.domain.user.GoalMsgRepository;
+import com.freesia.imyourfreesia.domain.user.User;
+import com.freesia.imyourfreesia.domain.user.UserRepository;
+import com.freesia.imyourfreesia.dto.auth.GoogleOAuth2UserInfoDto;
+import com.freesia.imyourfreesia.dto.auth.KakaoOAuth2UserInfoDto;
+import com.freesia.imyourfreesia.dto.auth.NaverOAuth2UserInfoDto;
+import com.freesia.imyourfreesia.dto.auth.TokenDto;
+import com.freesia.imyourfreesia.dto.auth.UserSaveRequestDto;
+import com.freesia.imyourfreesia.jwt.JwtTokenProvider;
+import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final GoalMsgRepository goalMsgRepository;
     private final GoogleService googleService;
@@ -31,12 +38,11 @@ public class AuthService {
 
     // 구글 로그인
     @Transactional
-    public TokenDto googleLogin(String accessToken) {
+    public TokenDto googleLogin(String accessToken, HttpServletResponse response) {
 
         String jwt;
 
         GoogleOAuth2UserInfoDto googleOAuth2UserInfoDto = googleService.getUserInfoByAccessToken(accessToken);
-
         if (userRepository.findOneWithAuthoritiesByEmail(googleOAuth2UserInfoDto.getEmail()).orElse(null) == null) {
             Authority authority = Authority.builder()
                     .authorityName("ROLE_USER")
@@ -51,16 +57,14 @@ public class AuthService {
 
             userRepository.save(user);
         }
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(googleOAuth2UserInfoDto.getEmail());
-
-        jwt = jwtTokenUtil.generateToken(userDetails);
+        jwt = jwtTokenProvider.generateToken(googleOAuth2UserInfoDto.getEmail());
+        jwtTokenProvider.setHeaderAccessToken(response, jwt);
         return new TokenDto(jwt, googleOAuth2UserInfoDto.getEmail());
     }
 
     // 카카오 로그인
     @Transactional
-    public TokenDto kakaoLogin(String accessToken) {
+    public TokenDto kakaoLogin(String accessToken, HttpServletResponse response) {
 
         String jwt;
 
@@ -80,16 +84,14 @@ public class AuthService {
 
             userRepository.save(user);
         }
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(kakaoOAuth2UserInfoDto.getEmail());
-
-        jwt = jwtTokenUtil.generateToken(userDetails);
+        jwt = jwtTokenProvider.generateToken(kakaoOAuth2UserInfoDto.getEmail());
+        jwtTokenProvider.setHeaderAccessToken(response, jwt);
         return new TokenDto(jwt, kakaoOAuth2UserInfoDto.getEmail());
     }
 
     // 네이버 로그인
     @Transactional
-    public TokenDto naverLoin(String accessToken) {
+    public TokenDto naverLoin(String accessToken, HttpServletResponse response) {
 
         String jwt;
 
@@ -109,10 +111,8 @@ public class AuthService {
 
             userRepository.save(user);
         }
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(naverOAuth2UserInfoDto.getEmail());
-
-        jwt = jwtTokenUtil.generateToken(userDetails);
+        jwt = jwtTokenProvider.generateToken(naverOAuth2UserInfoDto.getEmail());
+        jwtTokenProvider.setHeaderAccessToken(response, jwt);
         return new TokenDto(jwt, naverOAuth2UserInfoDto.getEmail());
     }
 
@@ -142,8 +142,8 @@ public class AuthService {
                 .build();
 
         GoalMsg goalMsg = GoalMsg.builder()
-                    .goalMsg(userSaveRequestDto.getGoalMsg())
-                    .build();
+                .goalMsg(userSaveRequestDto.getGoalMsg())
+                .build();
 
         goalMsg.setUserId(user);
 
@@ -153,18 +153,17 @@ public class AuthService {
     }
 
     // 일반 로그인
-    public TokenDto generalLogin(String loginId, String password) {
+    public TokenDto generalLogin(String loginId, String password, HttpServletResponse response) {
 
         String jwt;
 
         User user = userRepository.findByLoginId(loginId);
 
-        if(user == null || !passwordEncoder.matches(password, user.getPassword())) {
+        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("로그인에 실패했습니다.");
         }
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
-        jwt = jwtTokenUtil.generateToken(userDetails);
+        jwt = jwtTokenProvider.generateToken(user.getEmail());
+        jwtTokenProvider.setHeaderAccessToken(response, jwt);
         return new TokenDto(jwt, user.getEmail());
     }
 
@@ -187,8 +186,9 @@ public class AuthService {
             if (!file.exists()) {
                 boolean wasSuccessful = file.mkdirs();
 
-                if (!wasSuccessful)
+                if (!wasSuccessful) {
                     System.out.println("file: was not successful");
+                }
             }
 
             String originalFileExtension = "";
@@ -197,12 +197,13 @@ public class AuthService {
             if (ObjectUtils.isEmpty(contentType)) {
                 return null;
             } else {
-                if (contentType.contains("image/jpeg"))
+                if (contentType.contains("image/jpeg")) {
                     originalFileExtension = ".jpg";
-                else if (contentType.contains("image/png"))
+                } else if (contentType.contains("image/png")) {
                     originalFileExtension = ".png";
-                else
+                } else {
                     return null;
+                }
             }
 
             String new_file_name = System.nanoTime() + originalFileExtension;
