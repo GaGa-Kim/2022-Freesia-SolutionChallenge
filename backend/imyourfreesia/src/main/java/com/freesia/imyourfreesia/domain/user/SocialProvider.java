@@ -1,5 +1,6 @@
 package com.freesia.imyourfreesia.domain.user;
 
+import com.freesia.imyourfreesia.except.InvalidProviderException;
 import java.util.Arrays;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public enum SocialProvider {
         return Arrays.stream(SocialProvider.values())
                 .filter(p -> p == provider)
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Unsupported provider: " + provider))
+                .orElseThrow(InvalidProviderException::new)
                 .getUserInfoUrl();
     }
 }
