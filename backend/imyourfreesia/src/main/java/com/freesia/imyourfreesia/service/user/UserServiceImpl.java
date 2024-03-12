@@ -26,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final GoalMsgRepository goalMsgRepository;
-    
+
     private final AuthService authService;
     private final PasswordEncoder passwordEncoder;
 
@@ -91,4 +91,3 @@ public class UserServiceImpl implements UserService {
         return authService.saveGoalMsg(user, message);
     }
 }
-

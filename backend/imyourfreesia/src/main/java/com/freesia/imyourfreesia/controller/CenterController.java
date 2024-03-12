@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(tags = {"Center API (샌터 API)"})
+@Api(tags = {"Center API (센터 API)"})
 @RestController
 @Validated
 @RequiredArgsConstructor
