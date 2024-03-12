@@ -39,19 +39,19 @@ public interface ChallengeService {
     /**
      * 챌린지를 수정한다.
      *
-     * @param id         (챌린지 아이디)
-     * @param requestDto (챌린지 수정 정보를 담은 DTO)
-     * @param files      (챌린지 파일들)
+     * @param challengeId (챌린지 아이디)
+     * @param requestDto  (챌린지 수정 정보를 담은 DTO)
+     * @param files       (챌린지 파일들)
      * @return ChallengeResponseDto (챌린지 정보를 담은 DTO)
      */
-    ChallengeResponseDto updateChallenge(Long id, ChallengeUpdateRequestDto requestDto, List<MultipartFile> files) throws Exception;
+    ChallengeResponseDto updateChallenge(Long challengeId, ChallengeUpdateRequestDto requestDto, List<MultipartFile> files) throws Exception;
 
     /**
      * 챌린지를 삭제한다.
      *
-     * @param id (챌린지 아이디)
+     * @param challengeId (챌린지 아이디)
      */
-    void deleteChallenge(Long id);
+    void deleteChallenge(Long challengeId);
 
     /**
      * 회원이 작성한 챌린지 목록을 조회한다.

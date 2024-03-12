@@ -10,4 +10,6 @@ public interface CommunityRepository extends JpaRepository<Community, Long> {
     List<Community> findByCategory(String category);
 
     List<Community> findByUser(User user);
+
+    void deleteById(Long id);
 }

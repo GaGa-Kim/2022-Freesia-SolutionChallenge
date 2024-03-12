@@ -1,37 +1,40 @@
 package com.freesia.imyourfreesia.dto.community;
 
 import com.freesia.imyourfreesia.domain.community.Community;
-import com.freesia.imyourfreesia.domain.user.User;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommunitySaveRequestDto {
-
-    @ApiModelProperty(example = "게시글 작성자 아이디")
-    private User uid;
-
-    @ApiModelProperty(example = "게시글 작성자 이메일")
+    @ApiModelProperty(example = "커뮤니티 작성 회원 이메일")
+    @NotBlank
+    @Email
     private String email;
 
-    @ApiModelProperty(example = "게시글 제목")
+    @ApiModelProperty(example = "커뮤니티 제목")
+    @NotBlank
     private String title;
 
-    @ApiModelProperty(example = "게시글 내용")
+    @ApiModelProperty(example = "커뮤니티 내용")
+    @NotBlank
     private String content;
 
-    @ApiModelProperty(example = "카테고리")
+    @ApiModelProperty(example = "커뮤니티 카테고리")
+    @NotBlank
     private String category;
 
     @Builder
-    public CommunitySaveRequestDto(String email, String title, String content, String category) {
-        this.email = email;
-        this.title = title;
-        this.content = content;
-        this.category = category;
+    public CommunitySaveRequestDto(CommunityRequestVO communityRequestVO) {
+        this.email = communityRequestVO.getEmail();
+        this.title = communityRequestVO.getTitle();
+        this.content = communityRequestVO.getContent();
+        this.category = communityRequestVO.getCategory();
     }
 
     public Community toEntity() {

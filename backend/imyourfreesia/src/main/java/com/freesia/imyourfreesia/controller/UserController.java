@@ -11,7 +11,7 @@ import com.freesia.imyourfreesia.dto.user.UserPasswordUpdateRequestDto;
 import com.freesia.imyourfreesia.dto.user.UserResponseDto;
 import com.freesia.imyourfreesia.dto.user.UserUpdateRequestDto;
 import com.freesia.imyourfreesia.service.challenge.ChallengeServiceImpl;
-import com.freesia.imyourfreesia.service.community.CommunityService;
+import com.freesia.imyourfreesia.service.community.CommunityServiceImpl;
 import com.freesia.imyourfreesia.service.file.ChallengeFileServiceImpl;
 import com.freesia.imyourfreesia.service.like.LikeService;
 import com.freesia.imyourfreesia.service.user.UserService;
@@ -45,7 +45,7 @@ import org.springframework.web.multipart.MultipartFile;
 @CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
     private final ChallengeServiceImpl challengeServiceImpl;
-    private final CommunityService communityService;
+    private final CommunityServiceImpl communityServiceImpl;
     private final LikeService likeService;
     private final UserService userService;
     private final UserRepository userRepository;
@@ -133,7 +133,7 @@ public class UserController {
     @GetMapping("/mypage/community")
     public ResponseEntity<List<CommunityListResponseDto>> loadMyCommunity(@RequestParam String email) throws Exception {
         return ResponseEntity.ok()
-                .body(communityService.findByUid(email));
+                .body(communityServiceImpl.findCommunityByUser(email));
     }
 
     /* 마이페이지 북마크 조회 */

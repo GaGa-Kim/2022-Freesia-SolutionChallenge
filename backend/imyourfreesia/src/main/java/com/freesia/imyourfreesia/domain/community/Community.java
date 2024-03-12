@@ -88,4 +88,8 @@ public class Community extends BaseTimeEntity {
             comment.setCommunity(this);
         }
     }
+
+    public void removeAllFiles() {
+        this.files.clear();
+    }
 }

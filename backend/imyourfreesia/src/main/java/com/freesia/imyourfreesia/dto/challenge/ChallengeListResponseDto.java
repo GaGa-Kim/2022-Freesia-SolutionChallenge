@@ -2,7 +2,6 @@ package com.freesia.imyourfreesia.dto.challenge;
 
 import com.freesia.imyourfreesia.domain.challenge.Challenge;
 import com.freesia.imyourfreesia.domain.file.ChallengeFile;
-import com.freesia.imyourfreesia.domain.user.User;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
 import java.util.List;
@@ -13,30 +12,38 @@ public class ChallengeListResponseDto {
     @ApiModelProperty(notes = "챌린지 아이디")
     private final Long id;
 
-    @ApiModelProperty(notes = "작성 회원")
-    private final User uid;
+    @ApiModelProperty(example = "챌린지 작성 회원 아이디")
+    private final Long uid;
 
-    @ApiModelProperty(notes = "제목")
+    @ApiModelProperty(example = "챌린지 작성 회원 이메일")
+    private final String email;
+
+    @ApiModelProperty(example = "챌린지 작성 회원 닉네임")
+    private final String nickName;
+
+    @ApiModelProperty(notes = "챌린지 제목")
     private final String title;
 
-    @ApiModelProperty(notes = "내용")
+    @ApiModelProperty(notes = "챌린지 내용")
     private final String contents;
 
-    @ApiModelProperty(notes = "썸네일 파일 아이디")
-    private final Long fileId;
+    @ApiModelProperty(notes = "챌린지 썸네일 파일 아이디")
+    private final Long thumbnailFileId;
 
-    @ApiModelProperty(notes = "생성 날짜")
+    @ApiModelProperty(notes = "챌린지 생성 날짜")
     private final LocalDate createdDate;
 
-    @ApiModelProperty(notes = "수정 날짜")
+    @ApiModelProperty(notes = "챌린지 수정 날짜")
     private final LocalDate modifiedDate;
 
     public ChallengeListResponseDto(Challenge challenge) {
         this.id = challenge.getId();
-        this.uid = challenge.getUser();
+        this.uid = challenge.getUser().getId();
+        this.email = challenge.getUser().getEmail();
+        this.nickName = challenge.getUser().getNickName();
         this.title = challenge.getTitle();
         this.contents = challenge.getContent();
-        this.fileId = getFileThumbnail(challenge.getFiles());
+        this.thumbnailFileId = getFileThumbnail(challenge.getFiles());
         this.createdDate = challenge.getCreatedDate();
         this.modifiedDate = challenge.getModifiedDate();
     }

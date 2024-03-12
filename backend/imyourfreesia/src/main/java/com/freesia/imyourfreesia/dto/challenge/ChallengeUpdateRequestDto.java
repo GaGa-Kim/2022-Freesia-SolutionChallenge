@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChallengeUpdateRequestDto {
-    @ApiModelProperty(notes = "제목")
+    @ApiModelProperty(notes = "챌린지 제목")
     @NotBlank
     private String title;
 
-    @ApiModelProperty(notes = "내용")
+    @ApiModelProperty(notes = "챌린지 내용")
     @NotBlank
     private String contents;
 

@@ -1,117 +1,65 @@
 package com.freesia.imyourfreesia.service.community;
 
-import com.freesia.imyourfreesia.domain.community.Community;
-import com.freesia.imyourfreesia.domain.community.CommunityRepository;
-import com.freesia.imyourfreesia.domain.file.CommunityFile;
-import com.freesia.imyourfreesia.domain.file.CommunityFileRepository;
-import com.freesia.imyourfreesia.domain.user.User;
 import com.freesia.imyourfreesia.dto.community.CommunityListResponseDto;
 import com.freesia.imyourfreesia.dto.community.CommunityResponseDto;
 import com.freesia.imyourfreesia.dto.community.CommunitySaveRequestDto;
 import com.freesia.imyourfreesia.dto.community.CommunityUpdateRequestDto;
-import com.freesia.imyourfreesia.dto.file.FileSaveRequestDto;
-import com.freesia.imyourfreesia.service.file.FileHandler;
-import com.freesia.imyourfreesia.service.user.UserService;
 import java.util.List;
-import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-@RequiredArgsConstructor
-@Service
-public class CommunityService {
-    private final CommunityRepository communityRepository;
-    private final CommunityFileRepository communityFileRepository;
-    private final FileHandler fileHandler;
-    private final UserService userService;
+@Transactional
+public interface CommunityService {
+    /**
+     * 커뮤니티를 저장한다.
+     *
+     * @param requestDto (커뮤니티 저장 정보를 담은 DTO)
+     * @param files      (커뮤니티 파일들)
+     * @return CommunityResponseDto (커뮤니티 정보를 담은 DTO)
+     */
+    CommunityResponseDto saveCommunity(CommunitySaveRequestDto requestDto, List<MultipartFile> files) throws Exception;
 
-    // 게시글 저장
-    @Transactional
-    public Long save(CommunitySaveRequestDto communitySaveRequestDto, List<MultipartFile> files) throws Exception {
-        User user = userService.findUserByEmail(communitySaveRequestDto.getEmail());
-        Community community = communitySaveRequestDto.toEntity();
-        community.setUser(user);
-
-        List<FileSaveRequestDto> communityFileList = fileHandler.saveFiles(files);
-
-        if (!communityFileList.isEmpty()) {
-            for (FileSaveRequestDto fileSaveRequestDto : communityFileList) {
-                System.out.println(fileSaveRequestDto.getFilePath());
-                CommunityFile file = fileSaveRequestDto.toCommunityFileEntity();
-                System.out.println(file.getFilePath());
-                community.addFile(communityFileRepository.save(file));
-            }
-        }
-
-        return communityRepository.save(community).getId();
-    }
-
-    // 게시판 리스트 조회
-    @Transactional
-    public List<Community> list(String category) {
-        return communityRepository.findByCategory(category);
-    }
-
-    // 게시글 상세페이지 조회
-    @Transactional
-    public CommunityResponseDto findById(Long id, List<Long> fileId) {
-        Community community = communityRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
-        return new CommunityResponseDto(community, fileId);
-    }
-
-    // 게시글 수정 - 사진 없을 때
-    @Transactional
-    public Long update(Long id, CommunityUpdateRequestDto communityUpdateRequestDto) throws Exception {
-        Community community = communityRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
-
-        community.update(communityUpdateRequestDto.getTitle(), communityUpdateRequestDto.getContent(), community.getCategory());
-
-        return id;
-    }
-
-    // 게시글 수정 - 사진 있을 때
-    @Transactional
-    public Long updateWithImage(Long id, CommunityUpdateRequestDto communityUpdateRequestDto, List<MultipartFile> files) throws Exception {
-        Community community = communityRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
-
-        List<FileSaveRequestDto> communityFileList = fileHandler.saveFiles(files);
-
-        if (!communityFileList.isEmpty()) {
-            for (FileSaveRequestDto file : communityFileList) {
-                community.addFile(communityFileRepository.save(file.toCommunityFileEntity()));
-            }
-        }
-
-        community.update(communityUpdateRequestDto.getTitle(), communityUpdateRequestDto.getContent(), community.getCategory());
-
-        return id;
-    }
-
-
-    // 게시글 삭제
-    @Transactional
-    public void delete(Long id) {
-        Community community = communityRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
-        communityRepository.delete(community);
-    }
-
-    // 이메일로 카테고리에서 내 게시글 조회
-    @Transactional
-    public List<Community> findByEmail(String email) {
-        User user = userService.findUserByEmail(email);
-        return communityRepository.findByUser(user);
-    }
-
-    /* 마이페이지 커뮤니티 조회 */
+    /**
+     * 커뮤니티 카테고리 목록을 조회한다.
+     *
+     * @param category (커뮤니티 카테고리)
+     * @return List<CommunityListResponseDto ( 커뮤니티 정보를 담은 DTO 목록 )
+     */
     @Transactional(readOnly = true)
-    public List<CommunityListResponseDto> findByUid(String email) {
-        User user = userService.findUserByEmail(email);
-        return communityRepository.findByUser(user)
-                .stream()
-                .map(CommunityListResponseDto::new)
-                .collect(Collectors.toList());
-    }
+    List<CommunityListResponseDto> findCommunityByCategory(String category);
 
+    /**
+     * 커뮤니티 아이디에 따른 커뮤니티를 조회한다.
+     *
+     * @param communityId (커뮤니티 아이디)
+     * @return CommunityResponseDto (커뮤니티 정보를 담은 DTO)
+     */
+    @Transactional(readOnly = true)
+    CommunityResponseDto findCommunityById(Long communityId);
+
+    /**
+     * 커뮤니티를 수정한다.
+     *
+     * @param communityId (커뮤니티 아이디)
+     * @param requestDto  (커뮤니티 수정 정보를 담은 DTO)
+     * @param files       (커뮤니티 파일들)
+     * @return CommunityResponseDto (커뮤니티 정보를 담은 DTO)
+     */
+    CommunityResponseDto updateCommunity(Long communityId, CommunityUpdateRequestDto requestDto, List<MultipartFile> files) throws Exception;
+
+    /**
+     * 커뮤니티를 삭제한다.
+     *
+     * @param communityId (커뮤니티 아이디)
+     */
+    void deleteCommunity(Long communityId);
+
+    /**
+     * 회원이 작성한 커뮤니티 목록을 조회한다.
+     *
+     * @param email (회원 이메일)
+     * @return List<CommunityListResponseDto> (커뮤니티 정보를 담은 DTO 목록)
+     */
+    @Transactional(readOnly = true)
+    List<CommunityListResponseDto> findCommunityByUser(String email);
 }

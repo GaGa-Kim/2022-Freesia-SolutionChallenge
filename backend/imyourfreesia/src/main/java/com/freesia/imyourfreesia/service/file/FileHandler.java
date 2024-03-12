@@ -31,10 +31,6 @@ public class FileHandler {
         return fileList;
     }
 
-    public String findAbsoluteFilePath() {
-        return new File("").getAbsolutePath() + FILE_SEPARATOR + FILE_SEPARATOR;
-    }
-
     private FileSaveRequestDto saveFile(MultipartFile multipartFile) throws IOException {
         String directoryPath = findDirectoryPath();
         File directory = createDirectory(directoryPath);
@@ -43,7 +39,7 @@ public class FileHandler {
         }
         String fileExtension = getFileExtension(Objects.requireNonNull(multipartFile.getContentType()));
         String newFileName = System.nanoTime() + fileExtension;
-        String absoluteFilePath = findAbsoluteFilePath();
+        String absoluteFilePath = getAbsoluteFilePath();
 
         File file = new File(absoluteFilePath + directoryPath + FILE_SEPARATOR + newFileName);
         multipartFile.transferTo(file);
@@ -85,6 +81,10 @@ public class FileHandler {
         } else {
             return "";
         }
+    }
+
+    private String getAbsoluteFilePath() {
+        return new File("").getAbsolutePath() + FILE_SEPARATOR + FILE_SEPARATOR;
     }
 
     private void setFilePermissions(java.io.File file) {

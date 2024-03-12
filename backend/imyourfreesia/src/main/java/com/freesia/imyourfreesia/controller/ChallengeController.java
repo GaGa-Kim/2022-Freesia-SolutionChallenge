@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(tags = {"Challenge API"})
+@Api(tags = {"Challenge API (챌린지 API)"})
 @RestController
 @Validated
 @RequiredArgsConstructor

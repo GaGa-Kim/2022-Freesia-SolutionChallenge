@@ -9,18 +9,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class ChallengeRequestVO {
-    @ApiModelProperty(notes = "회원 아이디")
+    @ApiModelProperty(notes = "챌린지 작성 회원 아이디")
     @NotNull
     private Long uid;
 
-    @ApiModelProperty(notes = "제목")
+    @ApiModelProperty(notes = "챌린지 제목")
     @NotBlank
     private String title;
 
-    @ApiModelProperty(notes = "내용")
+    @ApiModelProperty(notes = "챌린지 내용")
     @NotBlank
     private String contents;
 
-    @ApiModelProperty(notes = "파일들")
+    @ApiModelProperty(notes = "챌린지 파일들")
     private List<MultipartFile> files;
 }

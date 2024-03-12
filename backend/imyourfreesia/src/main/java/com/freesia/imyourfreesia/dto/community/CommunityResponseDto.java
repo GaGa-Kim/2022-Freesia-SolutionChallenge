@@ -8,42 +8,46 @@ import lombok.Getter;
 
 @Getter
 public class CommunityResponseDto {
-    @ApiModelProperty(example = "게시글 아이디")
+    @ApiModelProperty(example = "커뮤니티 아이디")
     private final Long id;
 
-    @ApiModelProperty(example = "게시글 작성자 아이디")
-    private final Long userId;
+    @ApiModelProperty(example = "커뮤니티 작성자 아이디")
+    private final Long uid;
 
-    @ApiModelProperty(example = "생성 날짜")
-    private final LocalDate createdDate;
-
-    @ApiModelProperty(example = "게시글 작성자 이메일")
+    @ApiModelProperty(example = "커뮤니티 작성자 이메일")
     private final String email;
 
-    @ApiModelProperty(example = "게시글 작성자 닉네임")
+    @ApiModelProperty(example = "커뮤니티 작성자 닉네임")
     private final String nickName;
 
-    @ApiModelProperty(example = "게시글 제목")
+    @ApiModelProperty(example = "커뮤니티 제목")
     private final String title;
 
-    @ApiModelProperty(example = "게시글 내용")
+    @ApiModelProperty(example = "커뮤니티 내용")
     private final String content;
 
-    @ApiModelProperty(example = "게시글 이미지")
+    @ApiModelProperty(example = "파일 아이디 목록")
     private final List<Long> fileId;
 
-    @ApiModelProperty(example = "카테고리")
+    @ApiModelProperty(example = "커뮤니티 카테고리")
     private final String category;
 
-    public CommunityResponseDto(Community community, List<Long> fileId) {
+    @ApiModelProperty(notes = "커뮤니티 생성 날짜")
+    private final LocalDate createdDate;
+
+    @ApiModelProperty(notes = "커뮤니티 수정 날짜")
+    private final LocalDate modifiedDate;
+
+    public CommunityResponseDto(Community community, List<Long> fileIdList) {
         this.id = community.getId();
-        this.userId = community.getUser().getId();
+        this.uid = community.getUser().getId();
         this.createdDate = community.getCreatedDate();
         this.email = community.getUser().getEmail();
         this.nickName = community.getUser().getNickName();
         this.title = community.getTitle();
         this.content = community.getContent();
-        this.fileId = fileId;
+        this.fileId = fileIdList;
         this.category = community.getCategory();
+        this.modifiedDate = community.getModifiedDate();
     }
 }
