@@ -1,38 +1,50 @@
 package com.freesia.imyourfreesia.dto.challenge;
 
 import com.freesia.imyourfreesia.domain.challenge.Challenge;
+import com.freesia.imyourfreesia.domain.file.ChallengeFile;
 import com.freesia.imyourfreesia.domain.user.User;
-import java.io.File;
+import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.Getter;
 
 @Getter
 public class ChallengeListResponseDto {
-    private Long id;
-    private User uid;
-    private String title;
-    private String contents;
-    private Long filePathId;
-    private LocalDate createdDate;
-    private LocalDate modifiedDate;
+    @ApiModelProperty(notes = "챌린지 아이디")
+    private final Long id;
 
+    @ApiModelProperty(notes = "작성 회원")
+    private final User uid;
 
-    public ChallengeListResponseDto(Challenge entity) {
-        this.id = entity.getId();
-        this.uid = entity.getUser();
-        this.title = entity.getTitle();
-        this.contents = entity.getContent();
+    @ApiModelProperty(notes = "제목")
+    private final String title;
 
-        String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
+    @ApiModelProperty(notes = "내용")
+    private final String contents;
 
-        if (!entity.getFiles().isEmpty()) {
-            //this.filePath = absolutePath + entity.getImage().get(0).getFilePath();
-            this.filePathId = entity.getFiles().get(0).getId();
-        } else {
-            this.filePathId = null;
+    @ApiModelProperty(notes = "썸네일 파일 아이디")
+    private final Long fileId;
+
+    @ApiModelProperty(notes = "생성 날짜")
+    private final LocalDate createdDate;
+
+    @ApiModelProperty(notes = "수정 날짜")
+    private final LocalDate modifiedDate;
+
+    public ChallengeListResponseDto(Challenge challenge) {
+        this.id = challenge.getId();
+        this.uid = challenge.getUser();
+        this.title = challenge.getTitle();
+        this.contents = challenge.getContent();
+        this.fileId = getFileThumbnail(challenge.getFiles());
+        this.createdDate = challenge.getCreatedDate();
+        this.modifiedDate = challenge.getModifiedDate();
+    }
+
+    private Long getFileThumbnail(List<ChallengeFile> fileList) {
+        if (fileList.isEmpty()) {
+            return null;
         }
-
-        this.createdDate = entity.getCreatedDate();
-        this.modifiedDate = entity.getModifiedDate();
+        return fileList.get(0).getId();
     }
 }

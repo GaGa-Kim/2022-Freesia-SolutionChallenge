@@ -1,23 +1,34 @@
 package com.freesia.imyourfreesia.dto.challenge;
 
 import com.freesia.imyourfreesia.domain.challenge.Challenge;
+import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChallengeSaveRequestDto {
+    @ApiModelProperty(notes = "회원 아이디")
+    @NotNull
     private Long uid;
+
+    @ApiModelProperty(notes = "제목")
+    @NotBlank
     private String title;
+
+    @ApiModelProperty(notes = "내용")
+    @NotBlank
     private String contents;
 
-
     @Builder
-    public ChallengeSaveRequestDto(ChallengeSaveVO challengeSaveVO) {
-        this.uid = challengeSaveVO.getUid();
-        this.title = challengeSaveVO.getTitle();
-        this.contents = challengeSaveVO.getContents();
+    public ChallengeSaveRequestDto(ChallengeRequestVO challengeRequestVO) {
+        this.uid = challengeRequestVO.getUid();
+        this.title = challengeRequestVO.getTitle();
+        this.contents = challengeRequestVO.getContents();
 
     }
 

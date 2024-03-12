@@ -3,17 +3,22 @@ package com.freesia.imyourfreesia.service.file;
 import com.freesia.imyourfreesia.domain.file.File;
 import com.freesia.imyourfreesia.dto.file.FileIdResponseDto;
 import com.freesia.imyourfreesia.dto.file.FileResponseDto;
+import java.io.IOException;
 import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
 public interface FileService {
-    FileResponseDto findByFileId(Long id);
+    void saveFile(File file);
 
-    List<? extends File> imageList(Long id);
+    FileResponseDto findByFileId(Long fileId);
 
-    List<FileIdResponseDto> findAll(Long id);
+    List<? extends File> fileList(Long id);
+
+    List<FileIdResponseDto> findAllFileId(Long id);
 
     @Transactional
-    void delete(Long id);
+    void deleteFile(Long id);
+
+    String getFileByteArray(Long id) throws IOException;
 }

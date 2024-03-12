@@ -26,14 +26,14 @@ public class CenterController {
     @GetMapping("/center")
     @ApiOperation(value = "지역 센터 정보 검색", notes = "지역 센터 정보 검색 API")
     @ApiImplicitParam(name = "address", value = "주소")
-    public ResponseEntity<List<Center>> searchCenter(@RequestParam @NotNull String address) {
+    public ResponseEntity<List<Center>> findCenterListByAddress(@RequestParam @NotNull String address) {
         return ResponseEntity.ok().body(centerService.findCenterListByAddress(address));
 
     }
 
     @GetMapping("/centers")
     @ApiOperation(value = "지역 센터 정보 전체 조회", notes = "지역 센터 전체 조회 API")
-    public ResponseEntity<List<Center>> totalCenter() {
+    public ResponseEntity<List<Center>> findAllCenterList() {
         return ResponseEntity.ok().body(centerService.findAllCenterList());
 
     }

@@ -8,34 +8,37 @@ import lombok.Getter;
 
 @Getter
 public class UserResponseDto {
-    private Long id;
-    private String username;
-    private String loginId;
-    private String email;
-    private String nickName;
-    private String goalMsg;
-    private LocalDate goalMsg_modifiedDate;
+    private final Long id;
+    private final String username;
+    private final String loginId;
+    private final String email;
+    private final String nickName;
     private int days;
+    private String goalMsg;
+    private LocalDate goalMsgModifiedDate;
 
-    public UserResponseDto(User entity, GoalMsg goalMsg) throws Exception {
+    public UserResponseDto(User user, GoalMsg goalMsg) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.loginId = user.getLoginId();
+        this.email = user.getEmail();
+        this.nickName = user.getNickName();
+        getGoalMsg(goalMsg);
+    }
 
-        this.id = entity.getId();
-        this.username = entity.getUsername();
-        this.loginId = entity.getLoginId();
-        this.email = entity.getEmail();
-        this.nickName = entity.getNickName();
-
+    private void getGoalMsg(GoalMsg goalMsg) {
         if (goalMsg != null) {
             this.goalMsg = goalMsg.getGoalMsg();
-            this.goalMsg_modifiedDate = goalMsg.getModifiedDate();
-
-            if (this.goalMsg == "") {
-                this.days = 0;
-            } else {
-                LocalDate startDatetime = LocalDate.now();
-                Period period = Period.between(goalMsg_modifiedDate, startDatetime);
-                this.days = period.getDays() + 1;
-            }
+            this.goalMsgModifiedDate = goalMsg.getModifiedDate();
+            this.days = calculateDays(this.goalMsgModifiedDate);
+        } else {
+            this.days = 0;
         }
+    }
+
+    private int calculateDays(LocalDate goalMsgModifiedDate) {
+        LocalDate startDatetime = LocalDate.now();
+        Period period = Period.between(goalMsgModifiedDate, startDatetime);
+        return period.getDays() + 1;
     }
 }

@@ -3,6 +3,7 @@ package com.freesia.imyourfreesia.dto.auth;
 import com.freesia.imyourfreesia.domain.user.User;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -14,20 +15,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserSaveRequestDto {
     @ApiModelProperty(notes = "회원 이름")
-    @NotNull
+    @NotBlank
     private String username;
 
     @ApiModelProperty(notes = "회원 아이디")
-    @NotNull
+    @NotBlank
     private String loginId;
 
     @ApiModelProperty(notes = "회원 비밀번호")
-    @NotNull
+    @NotBlank
     @Size(min = 3, max = 100)
     private String password;
 
     @ApiModelProperty(notes = "회원 이메일")
-    @NotNull
+    @NotBlank
     @Email
     private String email;
 
@@ -37,7 +38,7 @@ public class UserSaveRequestDto {
     private String nickName;
 
     @ApiModelProperty(notes = "회원 목표")
-    @NotNull
+    @NotBlank
     @Size(min = 3, max = 100)
     private String goalMsg;
 

@@ -1,11 +1,11 @@
 package com.freesia.imyourfreesia.controller;
 
 import com.freesia.imyourfreesia.domain.user.SocialProvider;
-import com.freesia.imyourfreesia.domain.user.User;
 import com.freesia.imyourfreesia.dto.auth.GeneralAuthVO;
 import com.freesia.imyourfreesia.dto.auth.OAuth2LoginRequestDto;
 import com.freesia.imyourfreesia.dto.auth.TokenResponseDto;
 import com.freesia.imyourfreesia.dto.auth.UserSaveRequestDto;
+import com.freesia.imyourfreesia.dto.user.UserResponseDto;
 import com.freesia.imyourfreesia.service.auth.AuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -14,7 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -66,7 +66,7 @@ public class AuthController {
 
     @ApiOperation(value = "일반 회원 가입 ", notes = "일반 회원 가입 API")
     @PostMapping(value = "/generalJoin", consumes = {"multipart/form-data"})
-    public ResponseEntity<User> generalJoin(@Valid GeneralAuthVO generalAuthVO) throws Exception {
+    public ResponseEntity<UserResponseDto> generalJoin(@Valid GeneralAuthVO generalAuthVO) throws Exception {
         UserSaveRequestDto userSaveRequestDto = UserSaveRequestDto.builder().generalAuthVO(generalAuthVO).build();
         return ResponseEntity.ok(authService.generalJoin(userSaveRequestDto, generalAuthVO.getProfileImg()));
     }
@@ -77,8 +77,8 @@ public class AuthController {
             @ApiImplicitParam(name = "loginId", value = "사용자 아이디"),
             @ApiImplicitParam(name = "password", value = "사용자 비밀번호")
     })
-    public ResponseEntity<TokenResponseDto> generalLogin(@RequestParam @NotNull String loginId,
-                                                         @RequestParam @NotNull String password, HttpServletResponse response) {
+    public ResponseEntity<TokenResponseDto> generalLogin(@RequestParam @NotBlank String loginId,
+                                                         @RequestParam @NotBlank String password, HttpServletResponse response) {
         return ResponseEntity.ok(authService.generalLogin(loginId, password, response));
     }
 }

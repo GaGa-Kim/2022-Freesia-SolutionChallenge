@@ -47,9 +47,7 @@ public class CommunityController {
     // 게시글 저장
     @PostMapping(value = "/api/community", consumes = {"multipart/form-data"})
     @ApiOperation(value = "커뮤니티 글 저장 (사용 X / 포스트맨 이용)", notes = "커뮤니티 글 저장 API")
-    public Long save(
-            CommunitySaveVO communitySaveVO) throws Exception {
-
+    public Long save(CommunitySaveVO communitySaveVO) throws Exception {
         CommunitySaveRequestDto communitySaveRequestDto =
                 CommunitySaveRequestDto.builder()
                         .email(communitySaveVO.getEmail())
@@ -57,7 +55,6 @@ public class CommunityController {
                         .content(communitySaveVO.getContent())
                         .category(communitySaveVO.getCategory())
                         .build();
-
         return communityServiceImpl.save(communitySaveRequestDto, communitySaveVO.getFiles());
     }
 
@@ -84,7 +81,7 @@ public class CommunityController {
     @ApiImplicitParam(name = "id", value = "게시글 id", example = "1")
     public CommunityResponseDto view(@RequestParam Long id) throws Exception {
 
-        List<FileIdResponseDto> communityFileIdResponseDtoList = communityFileServiceImpl.findAll(id);
+        List<FileIdResponseDto> communityFileIdResponseDtoList = communityFileServiceImpl.findAllFileId(id);
         List<Long> fileId = new ArrayList<>();
 
         for (FileIdResponseDto communityFileIdResponseDto : communityFileIdResponseDtoList) {
@@ -109,7 +106,7 @@ public class CommunityController {
                         .build();
 
         if (communitySaveVO.getFiles() != null) {
-            List<CommunityFile> dbCommunityFileList = (List<CommunityFile>) communityFileServiceImpl.imageList(id);
+            List<CommunityFile> dbCommunityFileList = (List<CommunityFile>) communityFileServiceImpl.fileList(id);
             List<MultipartFile> multipartList = communitySaveVO.getFiles();
             List<MultipartFile> addFileList = new ArrayList<>();
 
@@ -122,7 +119,7 @@ public class CommunityController {
             } else {
                 if (CollectionUtils.isEmpty(multipartList)) {
                     for (CommunityFile dbCommunityFile : dbCommunityFileList) {
-                        communityFileServiceImpl.delete(dbCommunityFile.getId());
+                        communityFileServiceImpl.deleteFile(dbCommunityFile.getId());
                     }
                 } else {
                     List<String> dbOriginNameList = new ArrayList<>();
@@ -132,7 +129,7 @@ public class CommunityController {
                         String dbOrigFileName = dbCommunityPhotoSaveRequestDto.getOrigFileName();
 
                         if (!multipartList.contains(dbOrigFileName)) {
-                            communityFileServiceImpl.delete(dbCommunityFile.getId());
+                            communityFileServiceImpl.deleteFile(dbCommunityFile.getId());
                         } else {
                             dbOriginNameList.add(dbOrigFileName);
                         }

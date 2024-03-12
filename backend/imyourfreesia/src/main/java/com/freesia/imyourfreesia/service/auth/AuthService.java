@@ -1,9 +1,9 @@
 package com.freesia.imyourfreesia.service.auth;
 
 import com.freesia.imyourfreesia.domain.user.SocialProvider;
-import com.freesia.imyourfreesia.domain.user.User;
 import com.freesia.imyourfreesia.dto.auth.TokenResponseDto;
 import com.freesia.imyourfreesia.dto.auth.UserSaveRequestDto;
+import com.freesia.imyourfreesia.dto.user.UserResponseDto;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,9 +33,9 @@ public interface AuthService {
      *
      * @param requestDto   (회원 저장 정보를 담은 DTO)
      * @param profileImage (프로필 이미지)
-     * @return User (회원)
+     * @return UserResponseDto (회원 정보를 담은 DTO)
      */
-    User generalJoin(UserSaveRequestDto requestDto, MultipartFile profileImage) throws Exception;
+    UserResponseDto generalJoin(UserSaveRequestDto requestDto, MultipartFile profileImage) throws Exception;
 
     /**
      * 회원 가입을 한 후, JWT 토큰을 발급 받고 회원 정보를 조회한다.

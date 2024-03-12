@@ -2,7 +2,7 @@ package com.freesia.imyourfreesia.service.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.freesia.imyourfreesia.dto.auth.OAuth2UserInfoDto;
+import com.freesia.imyourfreesia.dto.auth.OAuth2UserInfoRequestDto;
 import com.freesia.imyourfreesia.except.AccessTokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class OAuth2Service {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    public OAuth2UserInfoDto getUserInfoByAccessToken(String accessToken, String userInfoUri) {
+    public OAuth2UserInfoRequestDto getUserInfoByAccessToken(String accessToken, String userInfoUri) {
         HttpHeaders headers = new HttpHeaders();
         headers.add(AUTHORIZATION_HEADER, BEARER_PREFIX + accessToken);
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -38,7 +38,7 @@ public class OAuth2Service {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
         try {
             ResponseEntity<String> response = restTemplate.postForEntity(userInfoUri, request, String.class);
-            return objectMapper.readValue(response.getBody(), OAuth2UserInfoDto.class);
+            return objectMapper.readValue(response.getBody(), OAuth2UserInfoRequestDto.class);
         } catch (RestClientException | JsonProcessingException e) {
             log.error(e.getMessage());
             throw new AccessTokenException();

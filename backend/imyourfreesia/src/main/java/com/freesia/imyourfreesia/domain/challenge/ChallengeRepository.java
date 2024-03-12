@@ -12,4 +12,6 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
     List<Challenge> findAllDesc();
 
     List<Challenge> findByUser(User user);
+
+    void deleteById(Long id);
 }

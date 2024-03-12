@@ -2,6 +2,7 @@ package com.freesia.imyourfreesia.dto.auth;
 
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
@@ -10,25 +11,25 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 public class GeneralAuthVO {
     @ApiModelProperty(notes = "회원 이름")
-    @NotNull
+    @NotBlank
     private String username;
 
     @ApiModelProperty(notes = "회원 아이디")
-    @NotNull
+    @NotBlank
     private String loginId;
 
     @ApiModelProperty(notes = "회원 비밀번호")
-    @NotNull
+    @NotBlank
     @Size(min = 3, max = 100)
     private String password;
 
     @ApiModelProperty(notes = "회원 이메일")
-    @NotNull
+    @NotBlank
     @Email
     private String email;
 
     @ApiModelProperty(notes = "회원 닉네임")
-    @NotNull
+    @NotBlank
     @Size(min = 1, max = 100)
     private String nickName;
 

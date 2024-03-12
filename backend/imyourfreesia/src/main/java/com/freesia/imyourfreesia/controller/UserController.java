@@ -10,7 +10,7 @@ import com.freesia.imyourfreesia.dto.user.GoalMsgUpdateRequestDto;
 import com.freesia.imyourfreesia.dto.user.UserPasswordUpdateRequestDto;
 import com.freesia.imyourfreesia.dto.user.UserResponseDto;
 import com.freesia.imyourfreesia.dto.user.UserUpdateRequestDto;
-import com.freesia.imyourfreesia.service.challenge.ChallengeService;
+import com.freesia.imyourfreesia.service.challenge.ChallengeServiceImpl;
 import com.freesia.imyourfreesia.service.community.CommunityService;
 import com.freesia.imyourfreesia.service.file.ChallengeFileServiceImpl;
 import com.freesia.imyourfreesia.service.like.LikeService;
@@ -44,7 +44,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
-    private final ChallengeService challengeService;
+    private final ChallengeServiceImpl challengeServiceImpl;
     private final CommunityService communityService;
     private final LikeService likeService;
     private final UserService userService;
@@ -124,7 +124,7 @@ public class UserController {
     @GetMapping("/mypage/challenge")
     public ResponseEntity<List<ChallengeListResponseDto>> loadMyChallenge(@RequestParam String email) throws Exception {
         return ResponseEntity.ok()
-                .body(challengeService.findByUid(email));
+                .body(challengeServiceImpl.findChallengeByUser(email));
     }
 
     /* 마이페이지 커뮤니티 조회 */

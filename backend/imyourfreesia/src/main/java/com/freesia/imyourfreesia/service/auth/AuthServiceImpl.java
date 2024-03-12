@@ -5,9 +5,10 @@ import com.freesia.imyourfreesia.domain.user.GoalMsgRepository;
 import com.freesia.imyourfreesia.domain.user.SocialProvider;
 import com.freesia.imyourfreesia.domain.user.User;
 import com.freesia.imyourfreesia.domain.user.UserRepository;
-import com.freesia.imyourfreesia.dto.auth.OAuth2UserInfoDto;
+import com.freesia.imyourfreesia.dto.auth.OAuth2UserInfoRequestDto;
 import com.freesia.imyourfreesia.dto.auth.TokenResponseDto;
 import com.freesia.imyourfreesia.dto.auth.UserSaveRequestDto;
+import com.freesia.imyourfreesia.dto.user.UserResponseDto;
 import com.freesia.imyourfreesia.except.DuplicateEmailException;
 import com.freesia.imyourfreesia.except.InvalidPasswordException;
 import com.freesia.imyourfreesia.except.UserNotActivatedException;
@@ -45,13 +46,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User generalJoin(UserSaveRequestDto requestDto, MultipartFile profileImage) throws Exception {
+    public UserResponseDto generalJoin(UserSaveRequestDto requestDto, MultipartFile profileImage) throws Exception {
         checkUserExistence(requestDto.getEmail());
         User user = requestDto.toEntity();
         user.updatePassword(passwordEncoder.encode(requestDto.getPassword()));
         user.updateProfileImg(saveProfileImage(profileImage));
-        addGoalMsg(user, requestDto.getGoalMsg());
-        return userRepository.save(user);
+        GoalMsg goalMsg = addGoalMsg(user, requestDto.getGoalMsg());
+        userRepository.save(user);
+        return new UserResponseDto(user, goalMsg);
     }
 
     @Override
@@ -69,17 +71,17 @@ public class AuthServiceImpl implements AuthService {
 
     private User saveSocialUser(String accessToken, SocialProvider provider) {
         String userInfoUrl = SocialProvider.findProviderInfoUrl(provider);
-        OAuth2UserInfoDto oAuth2UserInfoDto = oAuth2Service.getUserInfoByAccessToken(accessToken, userInfoUrl);
-        return findOrAddUser(oAuth2UserInfoDto);
+        OAuth2UserInfoRequestDto oAuth2UserInfoRequestDto = oAuth2Service.getUserInfoByAccessToken(accessToken, userInfoUrl);
+        return findOrAddUser(oAuth2UserInfoRequestDto);
     }
 
-    private User findOrAddUser(OAuth2UserInfoDto oAuth2UserInfoDto) {
-        if (userRepository.existsByEmail(oAuth2UserInfoDto.getEmail())) {
-            return userRepository.findByEmail(oAuth2UserInfoDto.getEmail());
+    private User findOrAddUser(OAuth2UserInfoRequestDto oAuth2UserInfoRequestDto) {
+        if (userRepository.existsByEmail(oAuth2UserInfoRequestDto.getEmail())) {
+            return userRepository.findByEmail(oAuth2UserInfoRequestDto.getEmail());
         }
         return userRepository.save(User.builder()
-                .username(oAuth2UserInfoDto.getName())
-                .email(oAuth2UserInfoDto.getEmail())
+                .username(oAuth2UserInfoRequestDto.getName())
+                .email(oAuth2UserInfoRequestDto.getEmail())
                 .build());
     }
 
@@ -101,12 +103,13 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
-    private void addGoalMsg(User user, String message) {
+    private GoalMsg addGoalMsg(User user, String message) {
         GoalMsg goalMsg = GoalMsg.builder()
                 .goalMsg(message)
                 .build();
         goalMsg.setUser(user);
         goalMsgRepository.save(goalMsg);
+        return goalMsg;
     }
 
     private TokenResponseDto issueToken(User user, HttpServletResponse response) {

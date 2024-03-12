@@ -72,4 +72,8 @@ public class Challenge extends BaseTimeEntity {
             emoticon.setChallenge(this);
         }
     }
+
+    public void removeAllFiles() {
+        this.files.clear();
+    }
 }
