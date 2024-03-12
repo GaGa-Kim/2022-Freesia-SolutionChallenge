@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CenterServiceImpl implements CenterService {
-    private final CenterCrawler centerCrawler;
     private final CenterRepository centerRepository;
+
+    private final CenterCrawler centerCrawler;
 
     @Override
     @PostConstruct

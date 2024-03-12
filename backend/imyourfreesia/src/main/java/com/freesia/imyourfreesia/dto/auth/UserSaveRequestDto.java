@@ -43,13 +43,13 @@ public class UserSaveRequestDto {
     private String goalMsg;
 
     @Builder
-    public UserSaveRequestDto(GeneralAuthVO generalAuthVO) {
-        this.username = generalAuthVO.getUsername();
-        this.loginId = generalAuthVO.getLoginId();
-        this.password = generalAuthVO.getPassword();
-        this.email = generalAuthVO.getEmail();
-        this.nickName = generalAuthVO.getNickName();
-        this.goalMsg = generalAuthVO.getGoalMsg();
+    public UserSaveRequestDto(UserRequestVO userRequestVO) {
+        this.username = userRequestVO.getUsername();
+        this.loginId = userRequestVO.getLoginId();
+        this.password = userRequestVO.getPassword();
+        this.email = userRequestVO.getEmail();
+        this.nickName = userRequestVO.getNickName();
+        this.goalMsg = userRequestVO.getGoalMsg();
     }
 
     public User toEntity() {

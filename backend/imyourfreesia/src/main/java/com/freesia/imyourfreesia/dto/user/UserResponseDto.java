@@ -2,19 +2,37 @@ package com.freesia.imyourfreesia.dto.user;
 
 import com.freesia.imyourfreesia.domain.user.GoalMsg;
 import com.freesia.imyourfreesia.domain.user.User;
+import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
 import java.time.Period;
 import lombok.Getter;
+import net.minidev.json.annotate.JsonIgnore;
 
 @Getter
 public class UserResponseDto {
+    @ApiModelProperty(notes = "회원 아이디")
     private final Long id;
+
+    @ApiModelProperty(notes = "회원 이름")
     private final String username;
+
+    @ApiModelProperty(notes = "회원 아이디")
     private final String loginId;
+
+    @ApiModelProperty(notes = "회원 이메일")
     private final String email;
+
+    @ApiModelProperty(notes = "회원 닉네임")
     private final String nickName;
+
+    @ApiModelProperty(notes = "회원 목표 유지 일자")
     private int days;
+
+    @ApiModelProperty(notes = "회원 목표")
     private String goalMsg;
+
+    @JsonIgnore
+    @ApiModelProperty(notes = "회원 목표 수정 시간")
     private LocalDate goalMsgModifiedDate;
 
     public UserResponseDto(User user, GoalMsg goalMsg) {

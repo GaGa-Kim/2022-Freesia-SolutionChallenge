@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LikeServiceImpl implements LikeService {
     private final LikeRepository likeRepository;
+
     private final UserService userService;
     private final CommunityService communityService;
 

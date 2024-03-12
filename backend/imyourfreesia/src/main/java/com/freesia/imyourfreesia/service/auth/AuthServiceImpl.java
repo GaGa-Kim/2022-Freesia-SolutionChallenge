@@ -51,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
         User user = requestDto.toEntity();
         user.updatePassword(passwordEncoder.encode(requestDto.getPassword()));
         user.updateProfileImg(saveProfileImage(profileImage));
-        GoalMsg goalMsg = addGoalMsg(user, requestDto.getGoalMsg());
+        GoalMsg goalMsg = saveGoalMsg(user, requestDto.getGoalMsg());
         userRepository.save(user);
         return new UserResponseDto(user, goalMsg);
     }
@@ -67,6 +67,16 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String saveProfileImage(MultipartFile profileImage) throws Exception {
         return fileHandler.saveProfile(profileImage).getFilePath();
+    }
+
+    @Override
+    public GoalMsg saveGoalMsg(User user, String message) {
+        GoalMsg goalMsg = GoalMsg.builder()
+                .goalMsg(message)
+                .build();
+        goalMsg.setUser(user);
+        goalMsgRepository.save(goalMsg);
+        return goalMsg;
     }
 
     private User saveSocialUser(String accessToken, SocialProvider provider) {
@@ -101,15 +111,6 @@ public class AuthServiceImpl implements AuthService {
         if (!user.isActivated()) {
             throw new UserNotActivatedException();
         }
-    }
-
-    private GoalMsg addGoalMsg(User user, String message) {
-        GoalMsg goalMsg = GoalMsg.builder()
-                .goalMsg(message)
-                .build();
-        goalMsg.setUser(user);
-        goalMsgRepository.save(goalMsg);
-        return goalMsg;
     }
 
     private TokenResponseDto issueToken(User user, HttpServletResponse response) {

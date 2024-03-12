@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CheeringServiceImpl implements CheeringService {
     private final CheeringRepository cheeringRepository;
+
     private final UserService userService;
 
     @Override

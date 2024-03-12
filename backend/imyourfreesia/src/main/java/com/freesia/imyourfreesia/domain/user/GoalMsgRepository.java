@@ -4,4 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GoalMsgRepository extends JpaRepository<GoalMsg, Long> {
     GoalMsg findByUser(User user);
+
+    boolean existsByUser(User user);
 }

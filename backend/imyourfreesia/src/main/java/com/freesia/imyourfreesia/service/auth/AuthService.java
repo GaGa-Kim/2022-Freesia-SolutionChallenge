@@ -1,6 +1,8 @@
 package com.freesia.imyourfreesia.service.auth;
 
+import com.freesia.imyourfreesia.domain.user.GoalMsg;
 import com.freesia.imyourfreesia.domain.user.SocialProvider;
+import com.freesia.imyourfreesia.domain.user.User;
 import com.freesia.imyourfreesia.dto.auth.TokenResponseDto;
 import com.freesia.imyourfreesia.dto.auth.UserSaveRequestDto;
 import com.freesia.imyourfreesia.dto.user.UserResponseDto;
@@ -54,4 +56,13 @@ public interface AuthService {
      * @return String (프로필 이미지가 저장된 경로)
      */
     String saveProfileImage(MultipartFile profileImage) throws Exception;
+
+    /**
+     * 회원 목표를 저장한다.
+     *
+     * @param user    (회원)
+     * @param message (목표 메시지)
+     * @return GoalMsg (회원 목표)
+     */
+    GoalMsg saveGoalMsg(User user, String message);
 }

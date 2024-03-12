@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmoticonServiceImpl implements EmoticonService {
     private final EmoticonRepository emoticonRepository;
+
     private final UserService userService;
     private final ChallengeService challengeService;
 

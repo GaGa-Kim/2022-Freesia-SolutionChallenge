@@ -35,7 +35,7 @@ public class YoutubeService {
     private final GlobalConfig config;
 
     @PostConstruct
-    public void getYoutubeData() throws IOException {
+    public void getYoutubeData() {
         try {
             youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, new HttpRequestInitializer() {
                 public void initialize(HttpRequest request) throws IOException {

@@ -9,7 +9,7 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
-public class GeneralAuthVO {
+public class UserRequestVO {
     @ApiModelProperty(notes = "회원 이름")
     @NotBlank
     private String username;

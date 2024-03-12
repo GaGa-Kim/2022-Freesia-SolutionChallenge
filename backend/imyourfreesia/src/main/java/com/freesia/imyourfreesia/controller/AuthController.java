@@ -1,9 +1,9 @@
 package com.freesia.imyourfreesia.controller;
 
 import com.freesia.imyourfreesia.domain.user.SocialProvider;
-import com.freesia.imyourfreesia.dto.auth.GeneralAuthVO;
 import com.freesia.imyourfreesia.dto.auth.OAuth2LoginRequestDto;
 import com.freesia.imyourfreesia.dto.auth.TokenResponseDto;
+import com.freesia.imyourfreesia.dto.auth.UserRequestVO;
 import com.freesia.imyourfreesia.dto.auth.UserSaveRequestDto;
 import com.freesia.imyourfreesia.dto.user.UserResponseDto;
 import com.freesia.imyourfreesia.service.auth.AuthService;
@@ -66,9 +66,9 @@ public class AuthController {
 
     @ApiOperation(value = "일반 회원 가입 ", notes = "일반 회원 가입 API")
     @PostMapping(value = "/generalJoin", consumes = {"multipart/form-data"})
-    public ResponseEntity<UserResponseDto> generalJoin(@Valid GeneralAuthVO generalAuthVO) throws Exception {
-        UserSaveRequestDto userSaveRequestDto = UserSaveRequestDto.builder().generalAuthVO(generalAuthVO).build();
-        return ResponseEntity.ok(authService.generalJoin(userSaveRequestDto, generalAuthVO.getProfileImg()));
+    public ResponseEntity<UserResponseDto> generalJoin(@Valid UserRequestVO userRequestVO) throws Exception {
+        UserSaveRequestDto userSaveRequestDto = UserSaveRequestDto.builder().userRequestVO(userRequestVO).build();
+        return ResponseEntity.ok(authService.generalJoin(userSaveRequestDto, userRequestVO.getProfileImg()));
     }
 
     @ApiOperation(value = "일반 로그인", notes = "일반 로그인 API")

@@ -26,8 +26,8 @@ public class CommunityServiceImpl implements CommunityService {
     private final CommunityRepository communityRepository;
     private final FileService communityFileServiceImpl;
 
-    private final FileHandler fileHandler;
     private final UserService userService;
+    private final FileHandler fileHandler;
 
     @Override
     public CommunityResponseDto saveCommunity(CommunitySaveRequestDto requestDto, List<MultipartFile> files) throws Exception {

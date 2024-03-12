@@ -1,5 +1,6 @@
 package com.freesia.imyourfreesia.dto.user;
 
+import com.freesia.imyourfreesia.dto.auth.UserRequestVO;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -17,7 +18,7 @@ public class GoalMsgUpdateRequestDto {
     private String goalMsg;
 
     @Builder
-    public GoalMsgUpdateRequestDto(String goalMsg) {
-        this.goalMsg = goalMsg;
+    public GoalMsgUpdateRequestDto(UserRequestVO userRequestVO) {
+        this.goalMsg = userRequestVO.getGoalMsg();
     }
 }
