@@ -1,5 +1,6 @@
 package com.freesia.imyourfreesia.service.challenge;
 
+import com.freesia.imyourfreesia.domain.challenge.Challenge;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeListResponseDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeResponseDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeSaveRequestDto;
@@ -34,7 +35,16 @@ public interface ChallengeService {
      * @return ChallengeResponseDto (챌린지 정보를 담은 DTO)
      */
     @Transactional(readOnly = true)
-    ChallengeResponseDto findChallengeById(Long challengeId);
+    Challenge findChallengeById(Long challengeId);
+
+    /**
+     * 챌린지 아이디에 따른 챌린지를 상세 조회한다.
+     *
+     * @param challengeId (챌린지 아이디)
+     * @return ChallengeResponseDto (챌린지 정보를 담은 DTO)
+     */
+    @Transactional(readOnly = true)
+    ChallengeResponseDto findChallengeDetailsById(Long challengeId);
 
     /**
      * 챌린지를 수정한다.

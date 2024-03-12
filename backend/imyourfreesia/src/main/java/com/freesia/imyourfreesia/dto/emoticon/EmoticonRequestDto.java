@@ -2,21 +2,27 @@ package com.freesia.imyourfreesia.dto.emoticon;
 
 import com.freesia.imyourfreesia.domain.emoticon.Emoticon;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EmoticonRequestDto {
-
-    @ApiModelProperty(example = "이모티콘 작성자 이메일")
+    @ApiModelProperty(notes = "이모티콘 작성자 이메일")
+    @Email
     private String email;
 
-    @ApiModelProperty(example = "게시글 아이디")
+    @ApiModelProperty(notes = "챌린지 아이디")
+    @NotNull
     private Long challengeId;
 
-    @ApiModelProperty(example = "이모티콘 이름")
+    @ApiModelProperty(notes = "이모티콘 이름")
+    @NotBlank
     private String emoticonName;
 
     @Builder

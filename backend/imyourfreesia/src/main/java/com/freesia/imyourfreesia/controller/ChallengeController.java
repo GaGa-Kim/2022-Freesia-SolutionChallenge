@@ -52,7 +52,7 @@ public class ChallengeController {
     @ApiOperation(value = "챌린지 상세 조회", notes = "챌린지 상세 조회 API")
     @ApiImplicitParam(name = "id", value = "챌린지 id", example = "1")
     public ResponseEntity<ChallengeResponseDto> findChallengeById(@RequestParam @NotNull Long id) {
-        return ResponseEntity.ok().body(challengeService.findChallengeById(id));
+        return ResponseEntity.ok().body(challengeService.findChallengeDetailsById(id));
     }
 
     @PutMapping("/api/challenge")

@@ -22,7 +22,6 @@ public class CommentServiceImpl implements CommentService {
     private final UserService userService;
     private final CommunityService communityService;
 
-    /* 댓글 저장 */
     @Override
     public List<CommentListResponseDto> saveComment(CommentSaveRequestDto requestDto) {
         User user = userService.findUserByEmail(requestDto.getEmail());
@@ -35,14 +34,12 @@ public class CommentServiceImpl implements CommentService {
         return findAllCommentByCommunity(community);
     }
 
-    /* 댓글 조회 */
     @Override
     public List<CommentListResponseDto> findAllCommentByCommunityId(Long communityId) {
         Community community = communityService.findCommunityById(communityId);
         return findAllCommentByCommunity(community);
     }
 
-    /* 댓글 수정 */
     @Override
     public List<CommentListResponseDto> updateComment(Long commentId, CommentUpdateRequestDto requestDto) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(NotFoundException::new);
@@ -51,7 +48,6 @@ public class CommentServiceImpl implements CommentService {
         return findAllCommentByCommunity(community);
     }
 
-    /* 댓글 삭제 */
     @Override
     public void deleteComment(Long commentId) {
         commentRepository.deleteById(commentId);

@@ -53,14 +53,14 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public CommunityResponseDto findCommunityDetilsById(Long communityId) {
-        Community community = communityRepository.findById(communityId).orElseThrow(NotFoundException::new);
+    public CommunityResponseDto findCommunityDetailsById(Long communityId) {
+        Community community = findCommunityById(communityId);
         return new CommunityResponseDto(community, getFileIdListByCommunity(community));
     }
 
     @Override
     public CommunityResponseDto updateCommunity(Long communityId, CommunityUpdateRequestDto requestDto, List<MultipartFile> files) throws Exception {
-        Community community = communityRepository.findById(communityId).orElseThrow(NotFoundException::new);
+        Community community = findCommunityById(communityId);
         if (!files.isEmpty()) {
             community.removeAllFiles();
             saveCommunityFiles(community, files);

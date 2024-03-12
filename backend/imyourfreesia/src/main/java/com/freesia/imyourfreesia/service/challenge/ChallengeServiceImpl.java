@@ -48,14 +48,19 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public ChallengeResponseDto findChallengeById(Long challengeId) {
-        Challenge challenge = challengeRepository.findById(challengeId).orElseThrow(NotFoundException::new);
+    public Challenge findChallengeById(Long challengeId) {
+        return challengeRepository.findById(challengeId).orElseThrow(NotFoundException::new);
+    }
+
+    @Override
+    public ChallengeResponseDto findChallengeDetailsById(Long challengeId) {
+        Challenge challenge = findChallengeById(challengeId);
         return new ChallengeResponseDto(challenge, getFileIdListByChallenge(challenge));
     }
 
     @Override
     public ChallengeResponseDto updateChallenge(Long challengeId, ChallengeUpdateRequestDto requestDto, List<MultipartFile> files) throws Exception {
-        Challenge challenge = challengeRepository.findById(challengeId).orElseThrow(NotFoundException::new);
+        Challenge challenge = findChallengeById(challengeId);
         if (!files.isEmpty()) {
             challenge.removeAllFiles();
             saveChallengeFiles(challenge, files);

@@ -54,7 +54,7 @@ public class CommunityController {
     @ApiOperation(value = "커뮤니티 글 상세 조회", notes = "커뮤니티 글 상세 조회 API")
     @ApiImplicitParam(name = "id", value = "게시글 id", example = "1")
     public ResponseEntity<CommunityResponseDto> view(@RequestParam Long id) {
-        return ResponseEntity.ok().body(communityService.findCommunityDetilsById(id));
+        return ResponseEntity.ok().body(communityService.findCommunityDetailsById(id));
     }
 
     @PutMapping("/api/community")
