@@ -8,28 +8,28 @@ import lombok.Getter;
 
 @Getter
 public class CommunityResponseDto {
-    @ApiModelProperty(example = "커뮤니티 아이디")
+    @ApiModelProperty(notes = "커뮤니티 아이디")
     private final Long id;
 
-    @ApiModelProperty(example = "커뮤니티 작성자 아이디")
+    @ApiModelProperty(notes = "커뮤니티 작성자 아이디")
     private final Long uid;
 
-    @ApiModelProperty(example = "커뮤니티 작성자 이메일")
+    @ApiModelProperty(notes = "커뮤니티 작성자 이메일")
     private final String email;
 
-    @ApiModelProperty(example = "커뮤니티 작성자 닉네임")
+    @ApiModelProperty(notes = "커뮤니티 작성자 닉네임")
     private final String nickName;
 
-    @ApiModelProperty(example = "커뮤니티 제목")
+    @ApiModelProperty(notes = "커뮤니티 제목")
     private final String title;
 
-    @ApiModelProperty(example = "커뮤니티 내용")
+    @ApiModelProperty(notes = "커뮤니티 내용")
     private final String content;
 
-    @ApiModelProperty(example = "파일 아이디 목록")
+    @ApiModelProperty(notes = "파일 아이디 목록")
     private final List<Long> fileId;
 
-    @ApiModelProperty(example = "커뮤니티 카테고리")
+    @ApiModelProperty(notes = "커뮤니티 카테고리")
     private final String category;
 
     @ApiModelProperty(notes = "커뮤니티 생성 날짜")

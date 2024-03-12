@@ -54,11 +54,12 @@ public class CommunityController {
     @ApiOperation(value = "커뮤니티 글 상세 조회", notes = "커뮤니티 글 상세 조회 API")
     @ApiImplicitParam(name = "id", value = "게시글 id", example = "1")
     public ResponseEntity<CommunityResponseDto> view(@RequestParam Long id) {
-        return ResponseEntity.ok().body(communityService.findCommunityById(id));
+        return ResponseEntity.ok().body(communityService.findCommunityDetilsById(id));
     }
 
     @PutMapping("/api/community")
     @ApiOperation(value = "커뮤니티 글 수정", notes = "게시글 글 수정 API")
+    @ApiImplicitParam(name = "id", value = "게시글 id", example = "1")
     public ResponseEntity<CommunityResponseDto> update(@RequestParam(value = "id") @NotNull Long id,
                                                        @Valid CommunityRequestVO requestVO) throws Exception {
         CommunityUpdateRequestDto communityUpdateRequestDto = CommunityUpdateRequestDto.builder().communityRequestVO(requestVO).build();
@@ -75,6 +76,7 @@ public class CommunityController {
 
     @GetMapping(value = "/community/image", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     @ApiOperation(value = "커뮤니티 이미지 ByteArray 조회", notes = "커뮤니티 이미지 ByteArray 조회 API")
+    @ApiImplicitParam(name = "id", value = "커뮤니티 이미지 id", example = "1")
     public ResponseEntity<String> getImage(@RequestParam @NotNull Long id) throws IOException {
         return ResponseEntity.ok().body(communityFileServiceImpl.getFileByteArray(id));
     }

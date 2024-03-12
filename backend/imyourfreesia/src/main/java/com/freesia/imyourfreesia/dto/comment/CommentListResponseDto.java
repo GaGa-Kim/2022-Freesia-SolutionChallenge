@@ -1,39 +1,48 @@
 package com.freesia.imyourfreesia.dto.comment;
 
 import com.freesia.imyourfreesia.domain.comment.Comment;
+import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
 import lombok.Getter;
 
 @Getter
 public class CommentListResponseDto {
-    private Long id;
+    @ApiModelProperty(notes = "댓글 아이디")
+    private final Long id;
 
-    //private User uid;
-    private Long uid;
-    private String username;
-    private String loginId;
-    private String email;
-    private String nickName;
-    private String profileImg;
+    @ApiModelProperty(notes = "댓글 작성 회원 아이디")
+    private final Long uid;
 
-    private Long pid;
-    private String content;
-    private LocalDate createdDate;
-    private LocalDate modifiedDate;
+    @ApiModelProperty(notes = "댓글 작성 회원 이메일")
+    private final String email;
 
-    public CommentListResponseDto(Comment entity) {
-        this.id = entity.getId();
+    @ApiModelProperty(notes = "댓글 작성 회원 닉네임")
+    private final String nickName;
 
-        this.uid = entity.getUser().getId();
-        this.username = entity.getUser().getUsername();
-        this.loginId = entity.getUser().getLoginId();
-        this.email = entity.getUser().getEmail();
-        this.nickName = entity.getUser().getNickName();
-        this.profileImg = entity.getUser().getProfileImg();
+    @ApiModelProperty(notes = "댓글 작성 회원 프로필 사진")
+    private final String profileImg;
 
-        this.pid = entity.getCommunity().getId();
-        this.content = entity.getContent();
-        this.createdDate = entity.getCreatedDate();
-        this.modifiedDate = entity.getModifiedDate();
+    @ApiModelProperty(notes = "커뮤니티 아이디")
+    private final Long pid;
+
+    @ApiModelProperty(notes = "댓글 내용")
+    private final String content;
+
+    @ApiModelProperty(notes = "댓글 생성 날짜")
+    private final LocalDate createdDate;
+
+    @ApiModelProperty(notes = "댓글 수정 날짜")
+    private final LocalDate modifiedDate;
+
+    public CommentListResponseDto(Comment comment) {
+        this.id = comment.getId();
+        this.uid = comment.getUser().getId();
+        this.email = comment.getUser().getEmail();
+        this.nickName = comment.getUser().getNickName();
+        this.profileImg = comment.getUser().getProfileImg();
+        this.pid = comment.getCommunity().getId();
+        this.content = comment.getContent();
+        this.createdDate = comment.getCreatedDate();
+        this.modifiedDate = comment.getModifiedDate();
     }
 }

@@ -11,13 +11,13 @@ public class ChallengeResponseDto {
     @ApiModelProperty(notes = "챌린지 아이디")
     private final Long id;
 
-    @ApiModelProperty(example = "챌린지 작성자 아이디")
+    @ApiModelProperty(notes = "챌린지 작성자 아이디")
     private final Long uid;
 
-    @ApiModelProperty(example = "챌린지 작성자 이메일")
+    @ApiModelProperty(notes = "챌린지 작성자 이메일")
     private final String email;
 
-    @ApiModelProperty(example = "챌린지 작성자 닉네임")
+    @ApiModelProperty(notes = "챌린지 작성자 닉네임")
     private final String nickName;
 
     @ApiModelProperty(notes = "챌린지 제목")

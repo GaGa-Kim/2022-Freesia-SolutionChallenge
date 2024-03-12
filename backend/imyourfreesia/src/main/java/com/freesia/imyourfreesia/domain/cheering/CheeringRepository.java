@@ -14,4 +14,6 @@ public interface CheeringRepository extends JpaRepository<Cheering, Long> {
     Boolean existsBySenderEmailAndRecipientEmail(String senderEmail, String recipientEmail);
 
     Long countByCreatedDateBetweenAndRecipientEmail(LocalDate start, LocalDate end, String recipientEmail);
+
+    void deleteById(Long id);
 }

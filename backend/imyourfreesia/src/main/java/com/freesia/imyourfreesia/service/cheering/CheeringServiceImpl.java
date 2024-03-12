@@ -4,7 +4,6 @@ import com.freesia.imyourfreesia.domain.cheering.Cheering;
 import com.freesia.imyourfreesia.domain.cheering.CheeringRepository;
 import com.freesia.imyourfreesia.domain.user.User;
 import com.freesia.imyourfreesia.dto.cheering.CheeringSaveRequestDto;
-import com.freesia.imyourfreesia.except.NotFoundException;
 import com.freesia.imyourfreesia.service.user.UserService;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -27,8 +26,7 @@ public class CheeringServiceImpl implements CheeringService {
 
     @Override
     public void deleteCheering(Long cheeringId) {
-        Cheering cheering = cheeringRepository.findById(cheeringId).orElseThrow(NotFoundException::new);
-        cheeringRepository.delete(cheering);
+        cheeringRepository.deleteById(cheeringId);
     }
 
     @Override

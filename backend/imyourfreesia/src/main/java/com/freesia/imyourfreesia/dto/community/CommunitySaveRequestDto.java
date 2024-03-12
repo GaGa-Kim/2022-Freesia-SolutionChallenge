@@ -12,20 +12,20 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommunitySaveRequestDto {
-    @ApiModelProperty(example = "커뮤니티 작성 회원 이메일")
+    @ApiModelProperty(notes = "커뮤니티 작성 회원 이메일")
     @NotBlank
     @Email
     private String email;
 
-    @ApiModelProperty(example = "커뮤니티 제목")
+    @ApiModelProperty(notes = "커뮤니티 제목")
     @NotBlank
     private String title;
 
-    @ApiModelProperty(example = "커뮤니티 내용")
+    @ApiModelProperty(notes = "커뮤니티 내용")
     @NotBlank
     private String content;
 
-    @ApiModelProperty(example = "커뮤니티 카테고리")
+    @ApiModelProperty(notes = "커뮤니티 카테고리")
     @NotBlank
     private String category;
 

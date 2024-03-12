@@ -1,96 +1,43 @@
 package com.freesia.imyourfreesia.service.comment;
 
-import com.freesia.imyourfreesia.domain.comment.Comment;
-import com.freesia.imyourfreesia.domain.comment.CommentRepository;
-import com.freesia.imyourfreesia.domain.community.Community;
-import com.freesia.imyourfreesia.domain.community.CommunityRepository;
-import com.freesia.imyourfreesia.domain.user.User;
 import com.freesia.imyourfreesia.dto.comment.CommentListResponseDto;
 import com.freesia.imyourfreesia.dto.comment.CommentSaveRequestDto;
 import com.freesia.imyourfreesia.dto.comment.CommentUpdateRequestDto;
-import com.freesia.imyourfreesia.service.user.UserService;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@RequiredArgsConstructor
-@Service
-public class CommentService {
-    private final CommunityRepository communityRepository;
-    private final CommentRepository commentRepository;
-    private final UserService userService;
+@Transactional
+public interface CommentService {
+    /**
+     * 댓글을 저장한다.
+     *
+     * @param requestDto (댓글 저장 정보를 담은 DTO)
+     * @return List<CommentListResponseDto> (댓글 정보를 담은 DTO 목록)
+     */
+    List<CommentListResponseDto> saveComment(CommentSaveRequestDto requestDto);
 
-    /* 댓글 저장 */
-    @Transactional
-    public List<CommentListResponseDto> save(CommentSaveRequestDto requestDto) {
-        User user = userService.findUserByEmail(requestDto.getUid());
-        Community community = communityRepository.findById(requestDto.getPid())
-                .orElseThrow(IllegalArgumentException::new);
-
-        Comment comments = requestDto.toEntity();
-        comments.setUser(user);
-        comments.setCommunity(community);
-
-        List<Comment> commentList = new ArrayList<>();
-        commentList.add(comments);
-
-        if (!commentList.isEmpty()) {
-            for (Comment comment : commentList) {
-                community.addComment(commentRepository.save(comments));
-            }
-        }
-
-        return commentRepository.findAllByCommunity(community)
-                .stream()
-                .map(CommentListResponseDto::new)
-                .collect(Collectors.toList());
-    }
-
-    /* 댓글 조회 */
+    /**
+     * 커뮤니티 아이디에 따른 댓글 목록을 조회한다.
+     *
+     * @param communityId (커뮤니티 아이디)
+     * @return List<CommentListResponseDto> (댓글 정보를 담은 DTO 목록)
+     */
     @Transactional(readOnly = true)
-    public List<CommentListResponseDto> findAllByPid(Long pid) {
-        Community community = communityRepository.findById(pid)
-                .orElseThrow(IllegalArgumentException::new);
+    List<CommentListResponseDto> findAllCommentByCommunityId(Long communityId);
 
-        return commentRepository.findAllByCommunity(community)
-                .stream()
-                .map(CommentListResponseDto::new)
-                .collect(Collectors.toList());
-    }
-    /*
-    public List<Comment> findAllByPid(Long pid){
-        Community community = communityRepository.findById(pid)
-                .orElseThrow(IllegalArgumentException::new);
-        return commentRepository.findAllByPid(community);
-    }*/
+    /**
+     * 댓글을 수정한다.
+     *
+     * @param commentId  (댓글 아이디)
+     * @param requestDto (댓글 수정 정보를 담은 DTO)
+     * @return List<CommentListResponseDto> (댓글 정보를 담은 DTO 목록)
+     */
+    List<CommentListResponseDto> updateComment(Long commentId, CommentUpdateRequestDto requestDto);
 
-
-    /* 댓글 수정 */
-    @Transactional
-    public List<CommentListResponseDto> update(Long id, CommentUpdateRequestDto requestDto) {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(IllegalArgumentException::new);
-
-        comment.update(requestDto.getContent());
-
-        Community community = communityRepository.findById(requestDto.getPid())
-                .orElseThrow(IllegalArgumentException::new);
-
-        return commentRepository.findAllByCommunity(community)
-                .stream()
-                .map(CommentListResponseDto::new)
-                .collect(Collectors.toList());
-    }
-
-    /* 댓글 삭제 */
-    @Transactional
-    public void delete(Long id) {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(IllegalArgumentException::new);
-
-        commentRepository.delete(comment);
-    }
+    /**
+     * 댓글을 삭제한다.
+     *
+     * @param commentId (댓글 아이디)
+     */
+    void deleteComment(Long commentId);
 }

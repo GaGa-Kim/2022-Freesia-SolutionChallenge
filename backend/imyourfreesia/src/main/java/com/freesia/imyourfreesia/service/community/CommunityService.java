@@ -1,5 +1,6 @@
 package com.freesia.imyourfreesia.service.community;
 
+import com.freesia.imyourfreesia.domain.community.Community;
 import com.freesia.imyourfreesia.dto.community.CommunityListResponseDto;
 import com.freesia.imyourfreesia.dto.community.CommunityResponseDto;
 import com.freesia.imyourfreesia.dto.community.CommunitySaveRequestDto;
@@ -32,10 +33,19 @@ public interface CommunityService {
      * 커뮤니티 아이디에 따른 커뮤니티를 조회한다.
      *
      * @param communityId (커뮤니티 아이디)
+     * @return Community (커뮤니티)
+     */
+    @Transactional(readOnly = true)
+    Community findCommunityById(Long communityId);
+
+    /**
+     * 커뮤니티 아이디에 따른 커뮤니티를 조회한다.
+     *
+     * @param communityId (커뮤니티 아이디)
      * @return CommunityResponseDto (커뮤니티 정보를 담은 DTO)
      */
     @Transactional(readOnly = true)
-    CommunityResponseDto findCommunityById(Long communityId);
+    CommunityResponseDto findCommunityDetilsById(Long communityId);
 
     /**
      * 커뮤니티를 수정한다.

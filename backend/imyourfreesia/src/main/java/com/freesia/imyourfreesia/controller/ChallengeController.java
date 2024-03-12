@@ -9,7 +9,6 @@ import com.freesia.imyourfreesia.service.challenge.ChallengeService;
 import com.freesia.imyourfreesia.service.file.FileService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
 import java.util.List;
@@ -58,9 +57,7 @@ public class ChallengeController {
 
     @PutMapping("/api/challenge")
     @ApiOperation(value = "챌린지 수정", notes = "챌린지 수정 API")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "챌린지 id", example = "1")
-    })
+    @ApiImplicitParam(name = "id", value = "챌린지 id", example = "1")
     public ResponseEntity<ChallengeResponseDto> updateChallenge(@RequestParam @NotNull Long id,
                                                                 @Valid ChallengeRequestVO requestVO) throws Exception {
         ChallengeUpdateRequestDto requestDto = ChallengeUpdateRequestDto.builder().challengeRequestVO(requestVO).build();

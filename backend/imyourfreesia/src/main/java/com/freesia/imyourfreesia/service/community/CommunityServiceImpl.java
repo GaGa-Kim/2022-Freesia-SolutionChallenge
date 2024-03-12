@@ -48,7 +48,12 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public CommunityResponseDto findCommunityById(Long communityId) {
+    public Community findCommunityById(Long communityId) {
+        return communityRepository.findById(communityId).orElseThrow(NotFoundException::new);
+    }
+
+    @Override
+    public CommunityResponseDto findCommunityDetilsById(Long communityId) {
         Community community = communityRepository.findById(communityId).orElseThrow(NotFoundException::new);
         return new CommunityResponseDto(community, getFileIdListByCommunity(community));
     }
