@@ -1,7 +1,7 @@
 package com.freesia.imyourfreesia.controller;
 
 import com.freesia.imyourfreesia.domain.youtube.Youtube;
-import com.freesia.imyourfreesia.service.YoutubeService;
+import com.freesia.imyourfreesia.service.youtube.YoutubeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;

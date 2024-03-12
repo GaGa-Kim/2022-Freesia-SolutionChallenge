@@ -3,7 +3,7 @@ package com.freesia.imyourfreesia.domain.community;
 import com.freesia.imyourfreesia.domain.BaseTimeEntity;
 import com.freesia.imyourfreesia.domain.comment.Comment;
 import com.freesia.imyourfreesia.domain.file.CommunityFile;
-import com.freesia.imyourfreesia.domain.likes.Likes;
+import com.freesia.imyourfreesia.domain.like.Like;
 import com.freesia.imyourfreesia.domain.user.User;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +48,7 @@ public class Community extends BaseTimeEntity {
     private List<CommunityFile> files = new ArrayList<>();
 
     @OneToMany(mappedBy = "community", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private List<Likes> likes = new ArrayList<>();
+    private List<Like> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "community", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
@@ -75,10 +75,10 @@ public class Community extends BaseTimeEntity {
         }
     }
 
-    public void addLike(Likes likes) {
-        this.likes.add(likes);
-        if (likes.getCommunity() != this) {
-            likes.setCommunity(this);
+    public void addLike(Like like) {
+        this.likes.add(like);
+        if (like.getCommunity() != this) {
+            like.setCommunity(this);
         }
     }
 

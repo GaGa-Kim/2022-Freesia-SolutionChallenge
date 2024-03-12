@@ -2,7 +2,6 @@ package com.freesia.imyourfreesia.controller;
 
 import com.freesia.imyourfreesia.domain.community.Community;
 import com.freesia.imyourfreesia.domain.file.CommunityFile;
-import com.freesia.imyourfreesia.domain.file.CommunityFileRepository;
 import com.freesia.imyourfreesia.dto.community.CommunityListResponseDto;
 import com.freesia.imyourfreesia.dto.community.CommunityResponseDto;
 import com.freesia.imyourfreesia.dto.community.CommunitySaveRequestDto;
@@ -10,8 +9,8 @@ import com.freesia.imyourfreesia.dto.community.CommunitySaveVO;
 import com.freesia.imyourfreesia.dto.community.CommunityUpdateRequestDto;
 import com.freesia.imyourfreesia.dto.file.FileIdResponseDto;
 import com.freesia.imyourfreesia.dto.file.FileResponseDto;
-import com.freesia.imyourfreesia.service.CommunityService;
-import com.freesia.imyourfreesia.service.file.CommunityFileService;
+import com.freesia.imyourfreesia.service.community.CommunityService;
+import com.freesia.imyourfreesia.service.file.FileService;
 import com.nimbusds.oauth2.sdk.util.CollectionUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -42,10 +41,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class CommunityController {
-
-    private final CommunityService communityService;
-    private final CommunityFileService communityFileService;
-    private final CommunityFileRepository communityFileRepository;
+    private final CommunityService communityServiceImpl;
+    private final FileService communityFileServiceImpl;
 
     // 게시글 저장
     @PostMapping(value = "/api/community", consumes = {"multipart/form-data"})
@@ -61,7 +58,7 @@ public class CommunityController {
                         .category(communitySaveVO.getCategory())
                         .build();
 
-        return communityService.save(communitySaveRequestDto, communitySaveVO.getFiles());
+        return communityServiceImpl.save(communitySaveRequestDto, communitySaveVO.getFiles());
     }
 
     // 게시판 리스트 조회 (고민, 후기, 모임)
@@ -70,7 +67,7 @@ public class CommunityController {
     @ApiImplicitParam(name = "category", value = "카테고리명")
     public List<CommunityListResponseDto> list(@RequestParam String category) throws Exception {
 
-        List<Community> communityList = communityService.list(category);
+        List<Community> communityList = communityServiceImpl.list(category);
         List<CommunityListResponseDto> communityListResponseDtoList = new ArrayList<>();
 
         for (Community community : communityList) {
@@ -87,14 +84,14 @@ public class CommunityController {
     @ApiImplicitParam(name = "id", value = "게시글 id", example = "1")
     public CommunityResponseDto view(@RequestParam Long id) throws Exception {
 
-        List<FileIdResponseDto> communityFileIdResponseDtoList = communityFileService.findAllByCommunity(id);
+        List<FileIdResponseDto> communityFileIdResponseDtoList = communityFileServiceImpl.findAll(id);
         List<Long> fileId = new ArrayList<>();
 
         for (FileIdResponseDto communityFileIdResponseDto : communityFileIdResponseDtoList) {
             fileId.add(communityFileIdResponseDto.getFileId());
         }
 
-        return communityService.findById(id, fileId);
+        return communityServiceImpl.findById(id, fileId);
     }
 
     // 게시글 수정
@@ -112,7 +109,7 @@ public class CommunityController {
                         .build();
 
         if (communitySaveVO.getFiles() != null) {
-            List<CommunityFile> dbCommunityFileList = communityFileService.imageList(id);
+            List<CommunityFile> dbCommunityFileList = (List<CommunityFile>) communityFileServiceImpl.imageList(id);
             List<MultipartFile> multipartList = communitySaveVO.getFiles();
             List<MultipartFile> addFileList = new ArrayList<>();
 
@@ -125,17 +122,17 @@ public class CommunityController {
             } else {
                 if (CollectionUtils.isEmpty(multipartList)) {
                     for (CommunityFile dbCommunityFile : dbCommunityFileList) {
-                        communityFileService.delete(dbCommunityFile.getId());
+                        communityFileServiceImpl.delete(dbCommunityFile.getId());
                     }
                 } else {
                     List<String> dbOriginNameList = new ArrayList<>();
 
                     for (CommunityFile dbCommunityFile : dbCommunityFileList) {
-                        FileResponseDto dbCommunityPhotoSaveRequestDto = communityFileService.findByFileId(dbCommunityFile.getId());
+                        FileResponseDto dbCommunityPhotoSaveRequestDto = communityFileServiceImpl.findByFileId(dbCommunityFile.getId());
                         String dbOrigFileName = dbCommunityPhotoSaveRequestDto.getOrigFileName();
 
                         if (!multipartList.contains(dbOrigFileName)) {
-                            communityFileService.delete(dbCommunityFile.getId());
+                            communityFileServiceImpl.delete(dbCommunityFile.getId());
                         } else {
                             dbOriginNameList.add(dbOrigFileName);
                         }
@@ -150,9 +147,9 @@ public class CommunityController {
                 }
             }
 
-            return communityService.updateWithImage(id, communityUpdateRequestDto, addFileList);
+            return communityServiceImpl.updateWithImage(id, communityUpdateRequestDto, addFileList);
         } else {
-            return communityService.update(id, communityUpdateRequestDto);
+            return communityServiceImpl.update(id, communityUpdateRequestDto);
         }
     }
 
@@ -161,7 +158,7 @@ public class CommunityController {
     @ApiOperation(value = "커뮤니티 글 삭제", notes = "게시글 글 삭제 API")
     @ApiImplicitParam(name = "id", value = "게시글 id", example = "1")
     public Long delete(@RequestParam Long id) {
-        communityService.delete(id);
+        communityServiceImpl.delete(id);
         return id;
     }
 
@@ -171,7 +168,7 @@ public class CommunityController {
     @ApiImplicitParam(name = "email", value = "사용자 이메일")
     public List<CommunityListResponseDto> my(@RequestParam String email) throws Exception {
 
-        List<Community> communityList = communityService.findByEmail(email);
+        List<Community> communityList = communityServiceImpl.findByEmail(email);
         List<CommunityListResponseDto> communityListResponseDtoList = new ArrayList<>();
 
         for (Community community : communityList) {
@@ -189,7 +186,7 @@ public class CommunityController {
     )
     @ApiOperation(value = "커뮤니티 이미지 ByteArray 조회", notes = "커뮤니티 이미지 ByteArray 조회 API")
     public ResponseEntity<String> getImage(@RequestParam Long id) throws IOException {
-        FileResponseDto fileResponseDto = communityFileService.findByFileId(id);
+        FileResponseDto fileResponseDto = communityFileServiceImpl.findByFileId(id);
         String absolutePath
                 = new File("").getAbsolutePath() + File.separator + File.separator;
         String path = fileResponseDto.getFilePath();

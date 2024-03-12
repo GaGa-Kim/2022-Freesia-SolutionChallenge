@@ -1,145 +1,55 @@
 package com.freesia.imyourfreesia.service.auth;
 
-import com.freesia.imyourfreesia.domain.user.GoalMsg;
-import com.freesia.imyourfreesia.domain.user.GoalMsgRepository;
+import com.freesia.imyourfreesia.domain.user.SocialProvider;
 import com.freesia.imyourfreesia.domain.user.User;
-import com.freesia.imyourfreesia.domain.user.UserRepository;
-import com.freesia.imyourfreesia.dto.auth.GoogleOAuth2UserInfoDto;
-import com.freesia.imyourfreesia.dto.auth.KakaoOAuth2UserInfoDto;
-import com.freesia.imyourfreesia.dto.auth.NaverOAuth2UserInfoDto;
-import com.freesia.imyourfreesia.dto.auth.TokenDto;
+import com.freesia.imyourfreesia.dto.auth.TokenResponseDto;
 import com.freesia.imyourfreesia.dto.auth.UserSaveRequestDto;
-import com.freesia.imyourfreesia.jwt.JwtTokenProvider;
-import com.freesia.imyourfreesia.service.file.FileHandler;
 import javax.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-@Service
-@RequiredArgsConstructor
-public class AuthService {
-    private final JwtTokenProvider jwtTokenProvider;
-    private final UserRepository userRepository;
-    private final GoalMsgRepository goalMsgRepository;
-    private final GoogleService googleService;
-    private final KakaoService kakaoService;
-    private final NaverService naverService;
-    private final PasswordEncoder passwordEncoder;
-    private final FileHandler fileHandler;
+@Transactional
+public interface AuthService {
+    /**
+     * 소셜 회원 가입 또는 로그인을 한 후, JWT 토큰을 발급 받고 사용자 정보를 조회한다.
+     *
+     * @param accessToken (소셜 회원 정보 조회를 위한 액세스 토큰)
+     * @param provider    (소셜 로그인 공급자 - 구글, 카카오, 네이버)
+     * @param response    (HttpServletResponse)
+     * @return TokenResponseDto (JWT 토큰과 회원 정보를 담은 DTO)
+     */
+    TokenResponseDto socialLogin(String accessToken, SocialProvider provider, HttpServletResponse response);
 
-    // 구글 로그인
-    @Transactional
-    public TokenDto googleLogin(String accessToken, HttpServletResponse response) {
+    /**
+     * 회원 가입 시 이메일 인증 코드를 전송한다.
+     *
+     * @param email (회원 이메일)
+     * @return String (이메일 인증 코드)
+     */
+    String sendAuthEmail(String email) throws Exception;
 
-        String jwt;
+    /**
+     * 일반 로그인을 한 후, 사용자 정보를 조회한다.
+     *
+     * @param requestDto   (회원 저장 정보를 담은 DTO)
+     * @param profileImage (프로필 이미지)
+     * @return User (회원)
+     */
+    User generalJoin(UserSaveRequestDto requestDto, MultipartFile profileImage) throws Exception;
 
-        GoogleOAuth2UserInfoDto googleOAuth2UserInfoDto = googleService.getUserInfoByAccessToken(accessToken);
-        if (!userRepository.existsByEmail(googleOAuth2UserInfoDto.getEmail())) {
-            User user = User.builder()
-                    .username(googleOAuth2UserInfoDto.getName())
-                    .email(googleOAuth2UserInfoDto.getEmail())
-                    .build();
+    /**
+     * 회원 가입을 한 후, JWT 토큰을 발급 받고 사용자 정보를 조회한다.
+     *
+     * @param loginId  (로그인 아이디)
+     * @param password (로그인 비밀번호)
+     * @param response (HttpServletResponse)
+     * @return TokenResponseDto (JWT 토큰과 회원 정보를 담은 DTO)
+     */
+    TokenResponseDto generalLogin(String loginId, String password, HttpServletResponse response);
 
-            userRepository.save(user);
-        }
-        jwt = jwtTokenProvider.generateToken(googleOAuth2UserInfoDto.getEmail());
-        jwtTokenProvider.setHeaderAccessToken(response, jwt);
-        return new TokenDto(jwt, googleOAuth2UserInfoDto.getEmail());
-    }
-
-    // 카카오 로그인
-    @Transactional
-    public TokenDto kakaoLogin(String accessToken, HttpServletResponse response) {
-
-        String jwt;
-
-        KakaoOAuth2UserInfoDto kakaoOAuth2UserInfoDto = kakaoService.getUserInfoByAccessToken(accessToken);
-
-        if (!userRepository.existsByEmail(kakaoOAuth2UserInfoDto.getEmail())) {
-            User user = User.builder()
-                    .username(kakaoOAuth2UserInfoDto.getName())
-                    .email(kakaoOAuth2UserInfoDto.getEmail())
-                    .build();
-
-            userRepository.save(user);
-        }
-        jwt = jwtTokenProvider.generateToken(kakaoOAuth2UserInfoDto.getEmail());
-        jwtTokenProvider.setHeaderAccessToken(response, jwt);
-        return new TokenDto(jwt, kakaoOAuth2UserInfoDto.getEmail());
-    }
-
-    // 네이버 로그인
-    @Transactional
-    public TokenDto naverLoin(String accessToken, HttpServletResponse response) {
-
-        String jwt;
-
-        NaverOAuth2UserInfoDto naverOAuth2UserInfoDto = naverService.getUserInfoByAccessToken(accessToken);
-
-        if (!userRepository.existsByEmail(naverOAuth2UserInfoDto.getEmail())) {
-            User user = User.builder()
-                    .username(naverOAuth2UserInfoDto.getName())
-                    .email(naverOAuth2UserInfoDto.getEmail())
-                    .build();
-
-            userRepository.save(user);
-        }
-        jwt = jwtTokenProvider.generateToken(naverOAuth2UserInfoDto.getEmail());
-        jwtTokenProvider.setHeaderAccessToken(response, jwt);
-        return new TokenDto(jwt, naverOAuth2UserInfoDto.getEmail());
-    }
-
-    // 일반 회원가입
-    @Transactional
-    public User generalJoin(UserSaveRequestDto userSaveRequestDto, MultipartFile profileImage) throws Exception {
-
-        if (userRepository.existsByEmail(userSaveRequestDto.getEmail())) {
-            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
-        }
-        String filePath = convertImage(profileImage);
-
-        User user = User.builder()
-                .username(userSaveRequestDto.getUsername())
-                .loginId(userSaveRequestDto.getLoginId())
-                .password(passwordEncoder.encode(userSaveRequestDto.getPassword()))
-                .email(userSaveRequestDto.getEmail())
-                .nickName(userSaveRequestDto.getNickName())
-                .profileImg(filePath)
-                .build();
-
-        GoalMsg goalMsg = GoalMsg.builder()
-                .goalMsg(userSaveRequestDto.getGoalMsg())
-                .build();
-
-        goalMsg.setUser(user);
-
-        goalMsgRepository.save(goalMsg);
-
-        return userRepository.save(user);
-    }
-
-    // 일반 로그인
-    public TokenDto generalLogin(String loginId, String password, HttpServletResponse response) {
-
-        String jwt;
-
-        User user = userRepository.findByLoginId(loginId);
-
-        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("로그인에 실패했습니다.");
-        }
-        jwt = jwtTokenProvider.generateToken(user.getEmail());
-        jwtTokenProvider.setHeaderAccessToken(response, jwt);
-        return new TokenDto(jwt, user.getEmail());
-    }
-
-    // 사진 변환
-    public String convertImage(MultipartFile profileImage) throws Exception {
-
-        return fileHandler.saveProfile(profileImage).getFilePath();
-    }
-
+    /**
+     * @param profileImage (프로필 이미지)
+     * @return String (프로필 이미지가 저장된 경로)
+     */
+    String saveProfileImage(MultipartFile profileImage) throws Exception;
 }

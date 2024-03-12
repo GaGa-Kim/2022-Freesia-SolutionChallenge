@@ -14,10 +14,10 @@ public class ChallengeSaveRequestDto {
 
 
     @Builder
-    public ChallengeSaveRequestDto(Long uid, String title, String contents) {
-        this.uid = uid;
-        this.title = title;
-        this.contents = contents;
+    public ChallengeSaveRequestDto(ChallengeSaveVO challengeSaveVO) {
+        this.uid = challengeSaveVO.getUid();
+        this.title = challengeSaveVO.getTitle();
+        this.contents = challengeSaveVO.getContents();
 
     }
 
