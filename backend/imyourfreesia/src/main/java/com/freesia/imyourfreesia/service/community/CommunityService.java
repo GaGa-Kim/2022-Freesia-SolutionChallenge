@@ -24,7 +24,7 @@ public interface CommunityService {
      * 커뮤니티 카테고리 목록을 조회한다.
      *
      * @param category (커뮤니티 카테고리)
-     * @return List<CommunityListResponseDto ( 커뮤니티 정보를 담은 DTO 목록 )
+     * @return List<CommunityListResponseDto> (커뮤니티 정보를 담은 DTO 목록)
      */
     @Transactional(readOnly = true)
     List<CommunityListResponseDto> findCommunityByCategory(String category);

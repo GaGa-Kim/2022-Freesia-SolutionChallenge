@@ -29,7 +29,6 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "userId")
     private User user;
 
-    @Setter
     @ManyToOne
     @JoinColumn(name = "communityId")
     private Community community;
@@ -47,5 +46,12 @@ public class Comment extends BaseTimeEntity {
     public Comment update(String content) {
         this.content = content;
         return this;
+    }
+
+    public void setCommunity(Community community) {
+        this.community = community;
+        if (!community.getComments().contains(this)) {
+            community.getComments().add(this);
+        }
     }
 }

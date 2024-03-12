@@ -11,7 +11,6 @@ import javax.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -22,7 +21,6 @@ public class CommunityFile extends File {
     @Column(name = "communityFileId")
     private Long id;
 
-    @Setter
     @ManyToOne
     @JoinColumn(name = "communityId")
     private Community community;
@@ -31,5 +29,12 @@ public class CommunityFile extends File {
     public CommunityFile(Long id, String origFileName, String filePath, Long fileSize) {
         super(origFileName, filePath, fileSize);
         this.id = id;
+    }
+
+    public void setCommunity(Community community) {
+        this.community = community;
+        if (!community.getFiles().contains(this)) {
+            community.getFiles().add(this);
+        }
     }
 }

@@ -15,7 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+@Entity(name = "Likes")
 @Getter
 @NoArgsConstructor
 public class Like extends BaseTimeEntity {
@@ -29,7 +29,6 @@ public class Like extends BaseTimeEntity {
     @JoinColumn(name = "uid")
     private User user;
 
-    @Setter
     @ManyToOne
     @JoinColumn(name = "pid")
     private Community community;
@@ -39,5 +38,12 @@ public class Like extends BaseTimeEntity {
         this.id = id;
         this.user = user;
         this.community = community;
+    }
+
+    public void setCommunity(Community community) {
+        this.community = community;
+        if (!community.getLikes().contains(this)) {
+            community.getLikes().add(this);
+        }
     }
 }

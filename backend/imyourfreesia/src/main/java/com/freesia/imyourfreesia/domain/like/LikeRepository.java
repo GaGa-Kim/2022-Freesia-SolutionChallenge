@@ -13,4 +13,6 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     Long countByCommunity(Community community);
 
     List<Like> findByUser(User user);
+
+    void deleteById(Long id);
 }

@@ -59,20 +59,6 @@ public class Challenge extends BaseTimeEntity {
         return this;
     }
 
-    public void addFile(ChallengeFile challengeFile) {
-        this.files.add(challengeFile);
-        if (challengeFile.getChallenge() != this) {
-            challengeFile.setChallenge(this);
-        }
-    }
-
-    public void addEmoticon(Emoticon emoticon) {
-        this.emoticons.add(emoticon);
-        if (emoticon.getChallenge() != this) {
-            emoticon.setChallenge(this);
-        }
-    }
-
     public void removeAllFiles() {
         this.files.clear();
     }

@@ -28,8 +28,8 @@ import org.springframework.stereotype.Service;
 public class YoutubeService {
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
-    private static final long NUMBER_OF_VIDEOS_RETURNED = 25; //수정해야 할 수도
-    private static String PROPERTIES_FILENAME = "application-youtube.yml";
+    private static final long NUMBER_OF_VIDEOS_RETURNED = 25;
+    private static final String PROPERTIES_FILENAME = "application-youtube.yml";
     private static YouTube youtube;
     private final YoutubeRepository youtubeRepository;
     private final GlobalConfig config;

@@ -87,13 +87,14 @@ public class ChallengeServiceImpl implements ChallengeService {
         List<FileSaveRequestDto> savedFiles = fileHandler.saveFiles(files);
         for (FileSaveRequestDto savedFile : savedFiles) {
             ChallengeFile challengeFile = savedFile.toChallengeFileEntity();
-            challenge.addFile(challengeFile);
+            challengeFile.setChallenge(challenge);
             challengeFileServiceImpl.saveFile(challengeFile);
         }
     }
 
     private List<Long> getFileIdListByChallenge(Challenge challenge) {
-        return challenge.getFiles().stream()
+        return challenge.getFiles()
+                .stream()
                 .map(ChallengeFile::getId)
                 .collect(Collectors.toList());
     }

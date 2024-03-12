@@ -11,7 +11,6 @@ import javax.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -22,7 +21,6 @@ public class ChallengeFile extends File {
     @Column(name = "challengeFileId")
     private Long id;
 
-    @Setter
     @ManyToOne
     @JoinColumn(name = "challengeId")
     private Challenge challenge;
@@ -31,5 +29,12 @@ public class ChallengeFile extends File {
     public ChallengeFile(Long id, String origFileName, String filePath, Long fileSize) {
         super(origFileName, filePath, fileSize);
         this.id = id;
+    }
+
+    public void setChallenge(Challenge challenge) {
+        this.challenge = challenge;
+        if (!challenge.getFiles().contains(this)) {
+            challenge.getFiles().add(this);
+        }
     }
 }

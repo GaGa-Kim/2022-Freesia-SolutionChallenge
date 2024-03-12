@@ -68,27 +68,6 @@ public class Community extends BaseTimeEntity {
         return this;
     }
 
-    public void addFile(CommunityFile communityFile) {
-        this.files.add(communityFile);
-        if (communityFile.getCommunity() != this) {
-            communityFile.setCommunity(this);
-        }
-    }
-
-    public void addLike(Like like) {
-        this.likes.add(like);
-        if (like.getCommunity() != this) {
-            like.setCommunity(this);
-        }
-    }
-
-    public void addComment(Comment comment) {
-        this.comments.add(comment);
-        if (comment.getCommunity() != this) {
-            comment.setCommunity(this);
-        }
-    }
-
     public void removeAllFiles() {
         this.files.clear();
     }

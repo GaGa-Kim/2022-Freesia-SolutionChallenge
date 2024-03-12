@@ -29,7 +29,6 @@ public class Emoticon extends BaseTimeEntity {
     @JoinColumn(name = "userId")
     private User user;
 
-    @Setter
     @ManyToOne
     @JoinColumn(name = "challengeId")
     private Challenge challenge;
@@ -43,5 +42,12 @@ public class Emoticon extends BaseTimeEntity {
         this.user = user;
         this.challenge = challenge;
         this.name = name;
+    }
+
+    public void setChallenge(Challenge challenge) {
+        this.challenge = challenge;
+        if (!challenge.getEmoticons().contains(this)) {
+            challenge.getEmoticons().add(this);
+        }
     }
 }

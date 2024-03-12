@@ -27,7 +27,6 @@ public class EmoticonServiceImpl implements EmoticonService {
         emoticon.setUser(user);
         emoticon.setChallenge(challenge);
         emoticonRepository.save(emoticon);
-        challenge.addEmoticon(emoticon);
         return findByChallengeAndUserAndName(challenge, user);
     }
 

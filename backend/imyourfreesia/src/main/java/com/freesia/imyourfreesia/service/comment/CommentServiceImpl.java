@@ -30,7 +30,6 @@ public class CommentServiceImpl implements CommentService {
         comment.setUser(user);
         comment.setCommunity(community);
         commentRepository.save(comment);
-        community.addComment(comment);
         return findAllCommentByCommunity(community);
     }
 
@@ -54,7 +53,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private List<CommentListResponseDto> findAllCommentByCommunity(Community community) {
-        return commentRepository.findAllByCommunity(community)
+        return community.getComments()
                 .stream()
                 .map(CommentListResponseDto::new)
                 .collect(Collectors.toList());

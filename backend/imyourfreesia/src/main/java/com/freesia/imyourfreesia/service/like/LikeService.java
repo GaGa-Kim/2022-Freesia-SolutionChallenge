@@ -1,86 +1,51 @@
 package com.freesia.imyourfreesia.service.like;
 
-import com.freesia.imyourfreesia.domain.community.Community;
-import com.freesia.imyourfreesia.domain.community.CommunityRepository;
-import com.freesia.imyourfreesia.domain.like.Like;
-import com.freesia.imyourfreesia.domain.like.LikeRepository;
-import com.freesia.imyourfreesia.domain.user.User;
-import com.freesia.imyourfreesia.dto.likes.LikesListResponseDto;
-import com.freesia.imyourfreesia.dto.likes.LikesSaveRequestDto;
-import com.freesia.imyourfreesia.service.user.UserService;
-import java.util.ArrayList;
+import com.freesia.imyourfreesia.dto.like.LikeListResponseDto;
+import com.freesia.imyourfreesia.dto.like.LikeResponseDto;
+import com.freesia.imyourfreesia.dto.like.LikeSaveRequestDto;
 import java.util.List;
-import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@RequiredArgsConstructor
-@Service
-public class LikeService {
-    private final CommunityRepository communityRepository;
-    private final LikeRepository likeRepository;
-    private final UserService userService;
-
-    /* 좋아요 설정 */
+@Transactional(readOnly = true)
+public interface LikeService {
+    /**
+     * 좋아요를 저장한다.
+     *
+     * @param requestDto (좋아요 저장 정보를 담은 DTO)
+     * @return LikeResponseDto (좋아요 정보를 담은 DTO)
+     */
     @Transactional
-    public Long likes(LikesSaveRequestDto requestDto) {
-        User user = userService.findUserByEmail(requestDto.getUid());
-        Community community = communityRepository.findById(requestDto.getPid())
-                .orElseThrow(IllegalArgumentException::new);
+    LikeResponseDto saveLike(LikeSaveRequestDto requestDto);
 
-        Like likes = new Like();
-        likes.setUser(user);
-        likes.setCommunity(community);
-
-        List<Like> likeList = new ArrayList<>();
-        likeList.add(likes);
-
-        if (!likeList.isEmpty()) {
-            for (Like like : likeList) {
-                community.addLike(likeRepository.save(like));
-            }
-        }
-
-        return likeRepository.save(likes).getId();
-    }
-
-    /* 좋아요 해제 */
+    /**
+     * 좋아요를 삭제한다.
+     *
+     * @param id (좋아요 아이디)
+     */
     @Transactional
-    public void unLikes(Long id) {
-        Like like = likeRepository.findById(id)
-                .orElseThrow(IllegalArgumentException::new);
-        likeRepository.delete(like);
-    }
+    void deleteLike(Long id);
 
-    /* 좋아요 목록 조회 */
-    @Transactional(readOnly = true)
-    public List<LikesListResponseDto> findAllByPid(Long pid) {
-        Community community = communityRepository.findById(pid)
-                .orElseThrow(IllegalArgumentException::new);
+    /**
+     * 커뮤니티 아이디에 따른 좋아요 목록을 조회한다.
+     *
+     * @param pid (커뮤니티 아이디)
+     * @return List<LikeListResponseDto> (좋아요 정보를 담은 DTO 목록)
+     */
+    List<LikeListResponseDto> findAllByCommunityId(Long pid);
 
-        return likeRepository.findAllByCommunity(community)
-                .stream()
-                .map(LikesListResponseDto::new)
-                .collect(Collectors.toList());
-    }
+    /**
+     * 커뮤니티 아이디에 따른 좋아요 개수를 조회한다.
+     *
+     * @param pid (커뮤니티 아이디)
+     * @return int (좋아요 개수)
+     */
+    int countByCommunityId(Long pid);
 
-    /* 좋아요 개수 조회 */
-    @Transactional
-    public Long countByPid(Long pid) {
-        Community community = communityRepository.findById(pid)
-                .orElseThrow(IllegalArgumentException::new);
-        return likeRepository.countByCommunity(community);
-    }
-
-    /* 마이페이지 북마크 조회 */
-    @Transactional(readOnly = true)
-    public List<LikesListResponseDto> findByUid(String email) {
-        User user = userService.findUserByEmail(email);
-
-        return likeRepository.findByUser(user)
-                .stream()
-                .map(LikesListResponseDto::new)
-                .collect(Collectors.toList());
-    }
+    /**
+     * 회원 이메일에 따른 좋아요 목록을 조회한다.
+     *
+     * @param email (회원 이메일)
+     * @return List<LikeListResponseDto> (좋아요 정보를 담은 DTO 목록)
+     */
+    List<LikeListResponseDto> findLikeByUser(String email);
 }

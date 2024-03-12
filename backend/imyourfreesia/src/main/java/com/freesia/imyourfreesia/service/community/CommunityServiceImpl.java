@@ -87,7 +87,7 @@ public class CommunityServiceImpl implements CommunityService {
         List<FileSaveRequestDto> savedFiles = fileHandler.saveFiles(files);
         for (FileSaveRequestDto savedFile : savedFiles) {
             CommunityFile communityFile = savedFile.toCommunityFileEntity();
-            community.addFile(communityFile);
+            communityFile.setCommunity(community);
             communityFileServiceImpl.saveFile(communityFile);
         }
     }

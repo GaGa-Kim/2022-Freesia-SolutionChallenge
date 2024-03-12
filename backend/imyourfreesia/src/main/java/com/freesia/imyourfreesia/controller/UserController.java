@@ -5,7 +5,7 @@ import com.freesia.imyourfreesia.domain.user.UserRepository;
 import com.freesia.imyourfreesia.dto.auth.GeneralAuthVO;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeListResponseDto;
 import com.freesia.imyourfreesia.dto.community.CommunityListResponseDto;
-import com.freesia.imyourfreesia.dto.likes.LikesListResponseDto;
+import com.freesia.imyourfreesia.dto.like.LikeListResponseDto;
 import com.freesia.imyourfreesia.dto.user.GoalMsgUpdateRequestDto;
 import com.freesia.imyourfreesia.dto.user.UserPasswordUpdateRequestDto;
 import com.freesia.imyourfreesia.dto.user.UserResponseDto;
@@ -13,7 +13,7 @@ import com.freesia.imyourfreesia.dto.user.UserUpdateRequestDto;
 import com.freesia.imyourfreesia.service.challenge.ChallengeServiceImpl;
 import com.freesia.imyourfreesia.service.community.CommunityServiceImpl;
 import com.freesia.imyourfreesia.service.file.ChallengeFileServiceImpl;
-import com.freesia.imyourfreesia.service.like.LikeService;
+import com.freesia.imyourfreesia.service.like.LikeServiceImpl;
 import com.freesia.imyourfreesia.service.user.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -46,7 +46,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
     private final ChallengeServiceImpl challengeServiceImpl;
     private final CommunityServiceImpl communityServiceImpl;
-    private final LikeService likeService;
+    private final LikeServiceImpl likeServiceImpl;
     private final UserService userService;
     private final UserRepository userRepository;
     private final ChallengeFileServiceImpl challengeFileServiceImpl;
@@ -140,9 +140,9 @@ public class UserController {
     @ApiOperation(value = "마이페이지 북마크 조회", notes = "마이페이지 북마크 조회 API")
     @ApiImplicitParam(name = "email", value = "유저 email")
     @GetMapping("/mypage/bookmark")
-    public ResponseEntity<List<LikesListResponseDto>> loadMyBookmark(@RequestParam String email) throws Exception {
+    public ResponseEntity<List<LikeListResponseDto>> loadMyBookmark(@RequestParam String email) throws Exception {
         return ResponseEntity.ok()
-                .body(likeService.findByUid(email));
+                .body(likeServiceImpl.findLikeByUser(email));
     }
 
 }
