@@ -38,10 +38,9 @@ public class ChallengeController {
 
     @PostMapping("/api/challenge")
     @ApiOperation(value = "챌린지 등록", notes = "챌린지 등록 API")
-    @ApiImplicitParam(name = "challengeRequestVO", value = "챌린지 저장 VO")
-    public ResponseEntity<ChallengeResponseDto> saveChallenge(@Valid ChallengeRequestVO challengeRequestVO) throws Exception {
-        ChallengeSaveRequestDto requestDto = ChallengeSaveRequestDto.builder().challengeRequestVO(challengeRequestVO).build();
-        return ResponseEntity.ok().body(challengeService.saveChallenge(requestDto, challengeRequestVO.getFiles()));
+    public ResponseEntity<ChallengeResponseDto> saveChallenge(@Valid ChallengeRequestVO requestVO) throws Exception {
+        ChallengeSaveRequestDto requestDto = ChallengeSaveRequestDto.builder().challengeRequestVO(requestVO).build();
+        return ResponseEntity.ok().body(challengeService.saveChallenge(requestDto, requestVO.getFiles()));
     }
 
     @GetMapping("/challenge/list")
@@ -60,13 +59,12 @@ public class ChallengeController {
     @PutMapping("/api/challenge")
     @ApiOperation(value = "챌린지 수정", notes = "챌린지 수정 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "챌린지 id", example = "1"),
-            @ApiImplicitParam(name = "challengeRequestVO", value = "챌린지 수정 VO")
+            @ApiImplicitParam(name = "id", value = "챌린지 id", example = "1")
     })
     public ResponseEntity<ChallengeResponseDto> updateChallenge(@RequestParam @NotNull Long id,
-                                                                @Valid ChallengeRequestVO challengeRequestVO) throws Exception {
-        ChallengeUpdateRequestDto requestDto = ChallengeUpdateRequestDto.builder().challengeRequestVO(challengeRequestVO).build();
-        return ResponseEntity.ok().body(challengeService.updateChallenge(id, requestDto, challengeRequestVO.getFiles()));
+                                                                @Valid ChallengeRequestVO requestVO) throws Exception {
+        ChallengeUpdateRequestDto requestDto = ChallengeUpdateRequestDto.builder().challengeRequestVO(requestVO).build();
+        return ResponseEntity.ok().body(challengeService.updateChallenge(id, requestDto, requestVO.getFiles()));
     }
 
     @DeleteMapping("/api/challenge")
@@ -80,7 +78,7 @@ public class ChallengeController {
     @GetMapping(value = "/challenge/image", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     @ApiOperation(value = "챌린지 이미지 ByteArray 조회", notes = "챌린지 이미지 ByteArray 조회 API")
     @ApiImplicitParam(name = "id", value = "챌린지 이미지 id", example = "1")
-    public ResponseEntity<String> getFileByteArray(@RequestParam Long id) throws IOException {
+    public ResponseEntity<String> getFileByteArray(@RequestParam @NotNull Long id) throws IOException {
         return ResponseEntity.ok().body(challengeFileServiceImpl.getFileByteArray(id));
     }
 }

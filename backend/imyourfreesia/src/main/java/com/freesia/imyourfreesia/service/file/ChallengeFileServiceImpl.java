@@ -7,6 +7,7 @@ import com.freesia.imyourfreesia.domain.file.ChallengeFileRepository;
 import com.freesia.imyourfreesia.domain.file.File;
 import com.freesia.imyourfreesia.dto.file.FileIdResponseDto;
 import com.freesia.imyourfreesia.dto.file.FileResponseDto;
+import com.freesia.imyourfreesia.except.NotFoundException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +31,7 @@ public class ChallengeFileServiceImpl implements FileService {
 
     @Override
     public FileResponseDto findByFileId(Long fileId) {
-        ChallengeFile challengeFile = challengeFileRepository.findById(fileId).orElseThrow(IllegalArgumentException::new);
+        ChallengeFile challengeFile = challengeFileRepository.findById(fileId).orElseThrow(NotFoundException::new);
         return new FileResponseDto(challengeFile);
     }
 
@@ -48,7 +49,7 @@ public class ChallengeFileServiceImpl implements FileService {
 
     @Override
     public void deleteFile(Long fileId) {
-        ChallengeFile challengeFile = challengeFileRepository.findById(fileId).orElseThrow(IllegalArgumentException::new);
+        ChallengeFile challengeFile = challengeFileRepository.findById(fileId).orElseThrow(NotFoundException::new);
         challengeFileRepository.delete(challengeFile);
     }
 

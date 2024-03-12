@@ -7,6 +7,7 @@ import com.freesia.imyourfreesia.domain.file.CommunityFileRepository;
 import com.freesia.imyourfreesia.domain.file.File;
 import com.freesia.imyourfreesia.dto.file.FileIdResponseDto;
 import com.freesia.imyourfreesia.dto.file.FileResponseDto;
+import com.freesia.imyourfreesia.except.NotFoundException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +31,7 @@ public class CommunityFileServiceImpl implements FileService {
 
     @Override
     public FileResponseDto findByFileId(Long fileId) {
-        CommunityFile communityFile = communityFileRepository.findById(fileId).orElseThrow(() -> new IllegalArgumentException("해당 파일이 존재하지 않습니다."));
+        CommunityFile communityFile = communityFileRepository.findById(fileId).orElseThrow(NotFoundException::new);
         return new FileResponseDto(communityFile);
     }
 
@@ -48,7 +49,7 @@ public class CommunityFileServiceImpl implements FileService {
 
     @Override
     public void deleteFile(Long fileId) {
-        CommunityFile communityFile = communityFileRepository.findById(fileId).orElseThrow(() -> new IllegalArgumentException("해당 이미지가 없습니다. id=" + fileId));
+        CommunityFile communityFile = communityFileRepository.findById(fileId).orElseThrow(NotFoundException::new);
         communityFileRepository.delete(communityFile);
     }
 

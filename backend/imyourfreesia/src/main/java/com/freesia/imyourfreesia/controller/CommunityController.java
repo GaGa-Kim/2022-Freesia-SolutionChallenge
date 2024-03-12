@@ -38,10 +38,9 @@ public class CommunityController {
 
     @PostMapping(value = "/api/community", consumes = {"multipart/form-data"})
     @ApiOperation(value = "커뮤니티 글 저장", notes = "커뮤니티 글 저장 API")
-    @ApiImplicitParam(name = "communityRequestVO", value = "커뮤니티 저장 VO")
-    public ResponseEntity<CommunityResponseDto> save(@Valid CommunityRequestVO communityRequestVO) throws Exception {
-        CommunitySaveRequestDto communitySaveRequestDto = CommunitySaveRequestDto.builder().communityRequestVO(communityRequestVO).build();
-        return ResponseEntity.ok().body(communityService.saveCommunity(communitySaveRequestDto, communityRequestVO.getFiles()));
+    public ResponseEntity<CommunityResponseDto> save(@Valid CommunityRequestVO requestVO) throws Exception {
+        CommunitySaveRequestDto communitySaveRequestDto = CommunitySaveRequestDto.builder().communityRequestVO(requestVO).build();
+        return ResponseEntity.ok().body(communityService.saveCommunity(communitySaveRequestDto, requestVO.getFiles()));
     }
 
     @GetMapping("/communities")
@@ -60,11 +59,10 @@ public class CommunityController {
 
     @PutMapping("/api/community")
     @ApiOperation(value = "커뮤니티 글 수정", notes = "게시글 글 수정 API")
-    @ApiImplicitParam(name = "communityRequestVO", value = "커뮤니티 수정 VO")
     public ResponseEntity<CommunityResponseDto> update(@RequestParam(value = "id") @NotNull Long id,
-                                                       @Valid CommunityRequestVO communityRequestVO) throws Exception {
-        CommunityUpdateRequestDto communityUpdateRequestDto = CommunityUpdateRequestDto.builder().communityRequestVO(communityRequestVO).build();
-        return ResponseEntity.ok().body(communityService.updateCommunity(id, communityUpdateRequestDto, communityRequestVO.getFiles()));
+                                                       @Valid CommunityRequestVO requestVO) throws Exception {
+        CommunityUpdateRequestDto communityUpdateRequestDto = CommunityUpdateRequestDto.builder().communityRequestVO(requestVO).build();
+        return ResponseEntity.ok().body(communityService.updateCommunity(id, communityUpdateRequestDto, requestVO.getFiles()));
     }
 
     @DeleteMapping("/api/community")

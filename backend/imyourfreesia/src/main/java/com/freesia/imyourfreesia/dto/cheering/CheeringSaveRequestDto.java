@@ -2,29 +2,36 @@ package com.freesia.imyourfreesia.dto.cheering;
 
 import com.freesia.imyourfreesia.domain.cheering.Cheering;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CheeringSaveRequestDto {
+    @ApiModelProperty(notes = "응원 누른 회원")
+    @NotBlank
+    @Email
+    private String senderEmail;
 
-    @ApiModelProperty(example = "응원 누른 사람")
-    private String myEmail;
-    @ApiModelProperty(example = "응원 받은 사람")
-    private String yourEmail;
+    @ApiModelProperty(notes = "응원 받은 회원")
+    @NotBlank
+    @Email
+    private String recipientEmail;
 
     @Builder
-    public CheeringSaveRequestDto(String myEmail, String yourEmail) {
-        this.myEmail = myEmail;
-        this.yourEmail = yourEmail;
+    public CheeringSaveRequestDto(String senderEmail, String recipientEmail) {
+        this.senderEmail = senderEmail;
+        this.recipientEmail = recipientEmail;
     }
 
     public Cheering toEntity() {
         return Cheering.builder()
-                .senderEmail(myEmail)
-                .recipientEmail(yourEmail)
+                .senderEmail(senderEmail)
+                .recipientEmail(recipientEmail)
                 .build();
     }
 }
