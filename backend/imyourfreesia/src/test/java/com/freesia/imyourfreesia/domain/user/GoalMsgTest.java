@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class GoalMsgTest {
+public class GoalMsgTest {
     public static final Long GOAL_MSG_ID = 1L;
     public static final String GOAL_MSG = "꾸준히 노력하자.";
     public static final String NEW_GOAL_MSG = "꾸준히 노력합시다.";

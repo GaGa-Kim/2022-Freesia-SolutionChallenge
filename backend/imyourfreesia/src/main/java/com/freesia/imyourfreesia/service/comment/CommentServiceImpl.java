@@ -54,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private List<CommentListResponseDto> getCommentListByCommunity(Community community) {
-        return community.getComments()
+        return community.getComment()
                 .stream()
                 .map(CommentListResponseDto::new)
                 .collect(Collectors.toList());

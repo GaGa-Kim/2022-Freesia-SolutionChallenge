@@ -28,7 +28,7 @@ public class ChallengeListResponseDto {
     private final String title;
 
     @ApiModelProperty(notes = "챌린지 내용", dataType = "String", example = "내용")
-    private final String contents;
+    private final String content;
 
     @ApiModelProperty(notes = "챌린지 썸네일 파일 아이디", dataType = "Long", example = "1")
     private final Long thumbnailFileId;
@@ -46,7 +46,7 @@ public class ChallengeListResponseDto {
         this.nickName = challenge.getUser().getNickName();
         this.profileImg = challenge.getUser().getProfileImg();
         this.title = challenge.getTitle();
-        this.contents = challenge.getContent();
+        this.content = challenge.getContent();
         this.thumbnailFileId = getFileThumbnail(challenge.getFiles());
         this.createdDate = challenge.getCreatedDate();
         this.modifiedDate = challenge.getModifiedDate();

@@ -2,10 +2,12 @@ package com.freesia.imyourfreesia.dto.challenge;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
+@Builder
 public class ChallengeRequestVO {
     @ApiModelProperty(notes = "챌린지 작성 회원 아이디", dataType = "Long", example = "1")
     private Long userId;

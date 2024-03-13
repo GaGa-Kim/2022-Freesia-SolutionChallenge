@@ -54,8 +54,8 @@ public class Comment extends BaseTimeEntity {
 
     public void setCommunity(Community community) {
         this.community = community;
-        if (!community.getComments().contains(this)) {
-            community.getComments().add(this);
+        if (!community.getComment().contains(this)) {
+            community.getComment().add(this);
         }
     }
 }

@@ -1,10 +1,12 @@
 package com.freesia.imyourfreesia.dto.auth;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
+@Builder
 public class UserRequestVO {
     @ApiModelProperty(notes = "회원 이름", dataType = "String", example = "freesia")
     private String username;

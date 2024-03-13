@@ -60,7 +60,7 @@ public class Community extends BaseTimeEntity {
     private List<Like> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "community", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    private List<Comment> comment = new ArrayList<>();
 
     @Builder
     public Community(Long id, String title, String content, String category) {
