@@ -33,6 +33,7 @@ public class CommunityResponseDtoTest {
     void testCommunityResponseDtoSave() {
         CommunityResponseDto communityResponseDto = testCommunityResponseDto(community, communityFile);
 
+        assertEquals(community.getId(), communityResponseDto.getCommunityId());
         assertEquals(community.getUser().getId(), communityResponseDto.getUserId());
         assertEquals(community.getUser().getEmail(), communityResponseDto.getEmail());
         assertEquals(community.getUser().getNickName(), communityResponseDto.getNickName());
