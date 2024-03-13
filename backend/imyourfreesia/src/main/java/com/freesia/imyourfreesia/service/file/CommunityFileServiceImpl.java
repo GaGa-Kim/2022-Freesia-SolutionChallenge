@@ -30,19 +30,19 @@ public class CommunityFileServiceImpl implements FileService {
     }
 
     @Override
-    public FileResponseDto findByFileId(Long fileId) {
+    public FileResponseDto getFileById(Long fileId) {
         CommunityFile communityFile = communityFileRepository.findById(fileId).orElseThrow(NotFoundException::new);
         return new FileResponseDto(communityFile);
     }
 
     @Override
-    public List<CommunityFile> fileList(Long communityId) {
+    public List<CommunityFile> findFileList(Long communityId) {
         Community community = communityRepository.getById(communityId);
         return community.getFiles();
     }
 
     @Override
-    public List<FileIdResponseDto> findAllFileId(Long communityId) {
+    public List<FileIdResponseDto> getFileListByCommunityOrChallenge(Long communityId) {
         Community community = communityRepository.getById(communityId);
         return community.getFiles().stream().map(FileIdResponseDto::new).collect(Collectors.toList());
     }
@@ -55,7 +55,7 @@ public class CommunityFileServiceImpl implements FileService {
 
     @Override
     public String getFileByteArray(Long fileId) throws IOException {
-        FileResponseDto photoDto = findByFileId(fileId);
+        FileResponseDto photoDto = getFileById(fileId);
         InputStream imageStream = new FileInputStream(photoDto.getFilePath());
         byte[] imageByteArray = IOUtils.toByteArray(imageStream);
         return Base64.getEncoder().encodeToString(imageByteArray);

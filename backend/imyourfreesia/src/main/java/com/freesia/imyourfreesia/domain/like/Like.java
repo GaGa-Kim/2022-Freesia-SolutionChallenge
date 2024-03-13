@@ -3,6 +3,7 @@ package com.freesia.imyourfreesia.domain.like;
 import com.freesia.imyourfreesia.domain.BaseTimeEntity;
 import com.freesia.imyourfreesia.domain.community.Community;
 import com.freesia.imyourfreesia.domain.user.User;
+import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,15 +23,18 @@ public class Like extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "likeId")
+    @ApiModelProperty(notes = "좋아요 아이디", dataType = "Long", example = "1")
     private Long id;
 
     @Setter
     @ManyToOne
-    @JoinColumn(name = "uid")
+    @JoinColumn(name = "userId")
+    @ApiModelProperty(notes = "좋아요 작성 회원", dataType = "User")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "pid")
+    @JoinColumn(name = "communityId")
+    @ApiModelProperty(notes = "커뮤니티", dataType = "Community")
     private Community community;
 
     @Builder

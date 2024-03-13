@@ -36,7 +36,7 @@ public class CheeringServiceImpl implements CheeringService {
     }
 
     @Override
-    public List<Map<String, Object>> cheeringRanking() {
+    public List<Map<String, Object>> cheeringRankList() {
         List<User> userList = userService.findUserList();
         return userList.stream()
                 .map(user -> {
@@ -68,7 +68,7 @@ public class CheeringServiceImpl implements CheeringService {
     }
 
     @Override
-    public List<Cheering> findCheeringByUser(String email) {
+    public List<Cheering> findCheeringListByUser(String email) {
         return cheeringRepository.findBySenderEmail(email);
     }
 }

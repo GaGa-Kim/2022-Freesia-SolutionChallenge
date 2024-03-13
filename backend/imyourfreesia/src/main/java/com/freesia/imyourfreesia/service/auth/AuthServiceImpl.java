@@ -33,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public TokenResponseDto socialLogin(String accessToken, SocialProvider provider, HttpServletResponse response) {
+    public TokenResponseDto loginWithSocial(String accessToken, SocialProvider provider, HttpServletResponse response) {
         User user = saveSocialUser(accessToken, provider);
         verifyUserActivation(user);
         return issueToken(user, response);
@@ -42,11 +42,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String sendAuthEmail(String email) throws Exception {
         checkUserExistence(email);
-        return emailService.sendAuthMail(email);
+        return emailService.sendAuthenticationEmail(email);
     }
 
     @Override
-    public UserResponseDto generalJoin(UserSaveRequestDto requestDto, MultipartFile profileImage) throws Exception {
+    public UserResponseDto register(UserSaveRequestDto requestDto, MultipartFile profileImage) throws Exception {
         checkUserExistence(requestDto.getEmail());
         User user = requestDto.toEntity();
         user.updatePassword(passwordEncoder.encode(requestDto.getPassword()));
@@ -57,9 +57,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public TokenResponseDto generalLogin(String loginId, String password, HttpServletResponse response) {
+    public TokenResponseDto login(String loginId, String password, HttpServletResponse response) {
         User user = userRepository.findByLoginId(loginId);
-        passwordAuthenticate(user, password);
+        authenticateWithPassword(user, password);
         verifyUserActivation(user);
         return issueToken(user, response);
     }
@@ -101,7 +101,7 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
-    private void passwordAuthenticate(User user, String password) {
+    private void authenticateWithPassword(User user, String password) {
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new InvalidPasswordException();
         }

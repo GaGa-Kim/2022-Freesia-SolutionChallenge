@@ -5,11 +5,14 @@ import com.freesia.imyourfreesia.domain.comment.Comment;
 import com.freesia.imyourfreesia.domain.file.CommunityFile;
 import com.freesia.imyourfreesia.domain.like.Like;
 import com.freesia.imyourfreesia.domain.user.User;
+import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,21 +31,27 @@ public class Community extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "communityId")
+    @ApiModelProperty(notes = "커뮤니티 아이디", dataType = "Long", example = "1")
     private Long id;
 
     @Setter
     @ManyToOne
     @JoinColumn(name = "userId")
+    @ApiModelProperty(notes = "커뮤니티 작성 회원", dataType = "User")
     private User user;
 
     @Column(length = 100, nullable = false)
+    @ApiModelProperty(notes = "커뮤니티 제목", dataType = "String", example = "제목")
     private String title;
 
     @Column(columnDefinition = "TEXT", nullable = false)
+    @ApiModelProperty(notes = "커뮤니티 내용", dataType = "String", example = "내용")
     private String content;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String category;
+    @ApiModelProperty(notes = "커뮤니티 카테고리", dataType = "Category", example = "worries")
+    private Category category;
 
     @OneToMany(mappedBy = "community", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<CommunityFile> files = new ArrayList<>();
@@ -58,13 +67,13 @@ public class Community extends BaseTimeEntity {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.category = category;
+        this.category = Category.findByCategoryName(category);
     }
 
     public Community update(String title, String content, String category) {
         this.title = title;
         this.content = content;
-        this.category = category;
+        this.category = Category.findByCategoryName(category);
         return this;
     }
 

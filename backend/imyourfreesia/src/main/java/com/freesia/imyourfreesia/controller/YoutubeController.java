@@ -22,7 +22,7 @@ public class YoutubeController {
 
     @GetMapping("/youtube")
     @ApiOperation(value = "유튜브 영상 조회", notes = "유튜브 영상 조회 API")
-    public ResponseEntity<List<Youtube>> loadYoutube() {
+    public ResponseEntity<List<Youtube>> list() {
         return ResponseEntity.ok().body(youtubeService.findAll());
     }
 }

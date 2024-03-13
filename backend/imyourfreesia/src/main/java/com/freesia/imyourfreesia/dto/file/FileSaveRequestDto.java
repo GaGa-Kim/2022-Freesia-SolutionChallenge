@@ -3,6 +3,7 @@ package com.freesia.imyourfreesia.dto.file;
 import com.freesia.imyourfreesia.domain.file.ChallengeFile;
 import com.freesia.imyourfreesia.domain.file.CommunityFile;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,13 +11,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class FileSaveRequestDto {
-    @ApiModelProperty(example = "파일 원본 이름")
+    @ApiModelProperty(notes = "파일 원본 이름", dataType = "String", example = "freesia")
+    @NotEmpty
     private String origFileName;
 
-    @ApiModelProperty(example = "파일 경로")
+    @ApiModelProperty(notes = "파일 경로", dataType = "String", example = "/images/")
+    @NotEmpty
     private String filePath;
 
-    @ApiModelProperty(example = "파일 크기")
+    @ApiModelProperty(notes = "파일 크기", dataType = "Long", example = "15")
     private Long fileSize;
 
     @Builder

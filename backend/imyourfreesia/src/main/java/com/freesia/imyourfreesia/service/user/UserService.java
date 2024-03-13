@@ -29,7 +29,7 @@ public interface UserService {
      * @param email (회원 이메일)
      * @return UserResponseDto (회원 정보를 담은 DTO)
      */
-    UserResponseDto findUserDetailsByEmail(String email);
+    UserResponseDto getUserByEmail(String email);
 
     /**
      * 회원 아이디로 회원을 조회한다.

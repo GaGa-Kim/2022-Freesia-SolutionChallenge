@@ -6,10 +6,10 @@ import lombok.Getter;
 
 @Getter
 public class TokenResponseDto {
-    @ApiModelProperty(notes = "회원 이메일")
+    @ApiModelProperty(notes = "회원 이메일", dataType = "String", example = "freesia@gmail.com")
     private final String email;
 
-    @ApiModelProperty(notes = "회원 토큰")
+    @ApiModelProperty(notes = "회원 토큰", dataType = "String", example = "token")
     private final String token;
 
     public TokenResponseDto(User user, String token) {

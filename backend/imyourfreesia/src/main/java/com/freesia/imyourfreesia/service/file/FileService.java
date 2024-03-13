@@ -22,7 +22,7 @@ public interface FileService {
      * @param fileId (파일 아이디)
      * @return FileResponseDto (파일 정보를 담은 DTO)
      */
-    FileResponseDto findByFileId(Long fileId);
+    FileResponseDto getFileById(Long fileId);
 
     /**
      * 챌린지 아이디 또는 커뮤니티 아이디에 따른 파일 목록을 조회한다.
@@ -30,7 +30,7 @@ public interface FileService {
      * @param id (챌린지 아이디 또는 커뮤니티 아이디)
      * @return List<? extends File> (파일 목록)
      */
-    List<? extends File> fileList(Long id);
+    List<? extends File> findFileList(Long id);
 
     /**
      * 챌린지 아이디 또는 커뮤니티 아이디에 따른 파일 아이디 목록을 조회한다.
@@ -38,7 +38,7 @@ public interface FileService {
      * @param id (챌린지 아이디 또는 커뮤니티 아이디)
      * @return List<FileIdResponseDto> (파일 아이디 정보를 담은 DTO 목록)
      */
-    List<FileIdResponseDto> findAllFileId(Long id);
+    List<FileIdResponseDto> getFileListByCommunityOrChallenge(Long id);
 
     /**
      * 파일 아이디에 따른 파일을 삭제한다.

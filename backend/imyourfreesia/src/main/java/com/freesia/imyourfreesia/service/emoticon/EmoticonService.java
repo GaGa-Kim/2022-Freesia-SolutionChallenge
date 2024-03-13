@@ -30,7 +30,7 @@ public interface EmoticonService {
      * @return EmoticonCountResponseDto (이모티콘 별 개수를 담은 DTO)
      */
     @Transactional(readOnly = true)
-    EmoticonCountResponseDto findByChallengeIdAndUidAndEmoticonName(Long challengeId, String email);
+    EmoticonCountResponseDto getEmoticonByChallengeAndUser(Long challengeId, String email);
 
     /**
      * 챌린지 아이디에 따른 이모티콘 개수를 조회한다.
@@ -39,5 +39,5 @@ public interface EmoticonService {
      * @return EmoticonCountResponseDto (이모티콘 별 개수를 담은 DTO)
      */
     @Transactional(readOnly = true)
-    EmoticonCountResponseDto count(Long challengeId);
+    EmoticonCountResponseDto countByChallenge(Long challengeId);
 }

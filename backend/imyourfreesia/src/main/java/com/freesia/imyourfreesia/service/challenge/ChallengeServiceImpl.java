@@ -31,16 +31,16 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public ChallengeResponseDto saveChallenge(ChallengeSaveRequestDto requestDto, List<MultipartFile> files) throws Exception {
-        User user = userService.findUserById(requestDto.getUid());
+        User user = userService.findUserById(requestDto.getUserId());
         Challenge challenge = requestDto.toEntity();
         challenge.setUser(user);
         saveChallengeFiles(challenge, files);
         challengeRepository.save(challenge);
-        return new ChallengeResponseDto(challenge, getFileIdListByChallenge(challenge));
+        return new ChallengeResponseDto(challenge, findFileIdListByChallenge(challenge));
     }
 
     @Override
-    public List<ChallengeListResponseDto> findAllChallengeDesc() {
+    public List<ChallengeListResponseDto> getAllChallengeList() {
         return challengeRepository.findAllDesc()
                 .stream()
                 .map(ChallengeListResponseDto::new)
@@ -53,9 +53,9 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public ChallengeResponseDto findChallengeDetailsById(Long challengeId) {
+    public ChallengeResponseDto getChallengeById(Long challengeId) {
         Challenge challenge = findChallengeById(challengeId);
-        return new ChallengeResponseDto(challenge, getFileIdListByChallenge(challenge));
+        return new ChallengeResponseDto(challenge, findFileIdListByChallenge(challenge));
     }
 
     @Override
@@ -65,8 +65,8 @@ public class ChallengeServiceImpl implements ChallengeService {
             challenge.removeAllFiles();
             saveChallengeFiles(challenge, files);
         }
-        challenge.update(requestDto.getTitle(), requestDto.getContents());
-        return new ChallengeResponseDto(challenge, getFileIdListByChallenge(challenge));
+        challenge.update(requestDto.getTitle(), requestDto.getContent());
+        return new ChallengeResponseDto(challenge, findFileIdListByChallenge(challenge));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public List<ChallengeListResponseDto> findChallengeByUser(String email) {
+    public List<ChallengeListResponseDto> getChallengeByUser(String email) {
         User user = userService.findUserByEmail(email);
         return challengeRepository.findByUser(user)
                 .stream()
@@ -92,7 +92,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         }
     }
 
-    private List<Long> getFileIdListByChallenge(Challenge challenge) {
+    private List<Long> findFileIdListByChallenge(Challenge challenge) {
         return challenge.getFiles()
                 .stream()
                 .map(ChallengeFile::getId)

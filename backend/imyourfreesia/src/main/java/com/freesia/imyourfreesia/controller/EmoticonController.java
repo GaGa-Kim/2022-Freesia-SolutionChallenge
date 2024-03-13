@@ -29,32 +29,33 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmoticonController {
     private final EmoticonService emoticonService;
 
-    @PostMapping("/api/emoticon")
+    @PostMapping("/api/emoticons")
     @ApiOperation(value = "이모티콘 저장", notes = "이모티콘 저장 API")
     public ResponseEntity<EmoticonCountResponseDto> save(@RequestBody @Valid EmoticonRequestDto requestDto) {
         return ResponseEntity.ok().body(emoticonService.saveEmotion(requestDto));
     }
 
-    @DeleteMapping("/api/emoticon")
+    @DeleteMapping("/api/emoticons")
     @ApiOperation(value = "이모티콘 삭제", notes = "이모티콘 삭제 API")
     public ResponseEntity<EmoticonCountResponseDto> delete(@RequestBody @Valid EmoticonRequestDto requestDto) {
         return ResponseEntity.ok().body(emoticonService.deleteEmotion(requestDto));
     }
 
-    @GetMapping("/api/emoticon/my")
-    @ApiOperation(value = "글 아이디와 사용자에 따른 이모티콘 조회", notes = "글 아이디와 사용자에 따른 이모티콘 조회 API")
+    @GetMapping("/api/emoticons/my")
+    @ApiOperation(value = "챌린지와 사용자에 따른 이모티콘 조회", notes = "챌린지와 사용자에 따른 이모티콘 조회 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "challengeId", value = "챌린지 게시글 id", example = "1"),
-            @ApiImplicitParam(name = "email", value = "사용자 이메일")
+            @ApiImplicitParam(name = "challengeId", value = "챌린지 아이디", dataType = "Long", example = "1"),
+            @ApiImplicitParam(name = "email", value = "회원 이메일", dataType = "String", example = "freesia@gmail.com")
     })
-    public ResponseEntity<EmoticonCountResponseDto> findByChallengeIdAndUidAndEmoticonName(@RequestParam @NotNull Long challengeId,
-                                                                                           @RequestParam @Email String email) {
-        return ResponseEntity.ok().body(emoticonService.findByChallengeIdAndUidAndEmoticonName(challengeId, email));
+    public ResponseEntity<EmoticonCountResponseDto> view(@RequestParam @NotNull Long challengeId,
+                                                         @RequestParam @Email String email) {
+        return ResponseEntity.ok().body(emoticonService.getEmoticonByChallengeAndUser(challengeId, email));
     }
 
-    @GetMapping("/emoticon/count")
-    @ApiOperation(value = "글에 따른 이모티콘 갯수 조회", notes = "글에 따른 이모티콘 갯수 조회 API")
+    @GetMapping("/emoticons/count")
+    @ApiOperation(value = "챌린지에 따른 이모티콘 갯수 조회", notes = "챌린지에 따른 이모티콘 갯수 조회 API")
+    @ApiImplicitParam(name = "challengeId", value = "챌린지 아이디", dataType = "Long", example = "1")
     public ResponseEntity<EmoticonCountResponseDto> count(@RequestParam @NotNull Long challengeId) {
-        return ResponseEntity.ok().body(emoticonService.count(challengeId));
+        return ResponseEntity.ok().body(emoticonService.countByChallenge(challengeId));
     }
 }

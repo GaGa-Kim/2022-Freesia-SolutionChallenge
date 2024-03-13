@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto findUserDetailsByEmail(String email) {
+    public UserResponseDto getUserByEmail(String email) {
         User user = findUserByEmail(email);
         GoalMsg goalMsg = goalMsgRepository.findByUser(user);
         return new UserResponseDto(user, goalMsg);

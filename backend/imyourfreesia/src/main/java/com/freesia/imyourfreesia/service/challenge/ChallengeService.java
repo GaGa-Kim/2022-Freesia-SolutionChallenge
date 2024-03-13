@@ -29,7 +29,7 @@ public interface ChallengeService {
      * @return List<ChallengeListResponseDto> (챌린지 정보를 담은 DTO 목록)
      */
     @Transactional(readOnly = true)
-    List<ChallengeListResponseDto> findAllChallengeDesc();
+    List<ChallengeListResponseDto> getAllChallengeList();
 
     /**
      * 챌린지 아이디에 따른 챌린지를 조회한다.
@@ -47,7 +47,7 @@ public interface ChallengeService {
      * @return ChallengeResponseDto (챌린지 정보를 담은 DTO)
      */
     @Transactional(readOnly = true)
-    ChallengeResponseDto findChallengeDetailsById(Long challengeId);
+    ChallengeResponseDto getChallengeById(Long challengeId);
 
     /**
      * 챌린지를 수정한다.
@@ -73,5 +73,5 @@ public interface ChallengeService {
      * @return List<ChallengeListResponseDto> (챌린지 정보를 담은 DTO 목록)
      */
     @Transactional(readOnly = true)
-    List<ChallengeListResponseDto> findChallengeByUser(String email);
+    List<ChallengeListResponseDto> getChallengeByUser(String email);
 }

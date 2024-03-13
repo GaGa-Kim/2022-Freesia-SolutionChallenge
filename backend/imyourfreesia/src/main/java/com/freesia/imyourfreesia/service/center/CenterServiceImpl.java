@@ -30,7 +30,7 @@ public class CenterServiceImpl implements CenterService {
     }
 
     @Override
-    public List<Center> findAllCenterList() {
+    public List<Center> findCenterList() {
         return centerRepository.findAll();
     }
 }

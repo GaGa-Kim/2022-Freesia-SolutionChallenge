@@ -26,18 +26,18 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentListResponseDto> saveComment(CommentSaveRequestDto requestDto) {
         User user = userService.findUserByEmail(requestDto.getEmail());
-        Community community = communityService.findCommunityById(requestDto.getPid());
+        Community community = communityService.findCommunityById(requestDto.getCommunityId());
         Comment comment = requestDto.toEntity();
         comment.setUser(user);
         comment.setCommunity(community);
         commentRepository.save(comment);
-        return findAllCommentByCommunity(community);
+        return getCommentListByCommunity(community);
     }
 
     @Override
-    public List<CommentListResponseDto> findAllCommentByCommunityId(Long communityId) {
+    public List<CommentListResponseDto> getCommentListByCommunity(Long communityId) {
         Community community = communityService.findCommunityById(communityId);
-        return findAllCommentByCommunity(community);
+        return getCommentListByCommunity(community);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(NotFoundException::new);
         comment.update(requestDto.getContent());
         Community community = communityService.findCommunityById(requestDto.getCommunityId());
-        return findAllCommentByCommunity(community);
+        return getCommentListByCommunity(community);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.deleteById(commentId);
     }
 
-    private List<CommentListResponseDto> findAllCommentByCommunity(Community community) {
+    private List<CommentListResponseDto> getCommentListByCommunity(Community community) {
         return community.getComments()
                 .stream()
                 .map(CommentListResponseDto::new)

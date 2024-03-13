@@ -1,6 +1,7 @@
 package com.freesia.imyourfreesia.domain.cheering;
 
 import com.freesia.imyourfreesia.domain.BaseTimeEntity;
+import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,11 +17,14 @@ import lombok.NoArgsConstructor;
 public class Cheering extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(notes = "응원 아이디", dataType = "Long", example = "1")
     @Column(name = "cheeringId")
     private Long id;
 
+    @ApiModelProperty(notes = "응원 받은 회원", dataType = "String", example = "reboot@gmail.com")
     private String recipientEmail;
 
+    @ApiModelProperty(notes = "응원 누른 회원", dataType = "String", example = "freesia@gmail.com")
     private String senderEmail;
 
     @Builder

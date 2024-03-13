@@ -21,9 +21,9 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender emailSender;
 
     @Override
-    public String sendAuthMail(String email) throws Exception {
+    public String sendAuthenticationEmail(String email) throws Exception {
         String authCode = generateAuthCode();
-        MimeMessage message = createAuthMail(email, authCode);
+        MimeMessage message = createAuthenticationEmail(email, authCode);
         sendEmail(message);
         return authCode;
     }
@@ -36,7 +36,7 @@ public class EmailServiceImpl implements EmailService {
                 .toString();
     }
 
-    private MimeMessage createAuthMail(String email, String authCode) throws Exception {
+    private MimeMessage createAuthenticationEmail(String email, String authCode) throws Exception {
         MimeMessage message = emailSender.createMimeMessage();
         message.addRecipients(MimeMessage.RecipientType.TO, email);
         message.setSubject("I'm your freesia Membership Registration Authentication");

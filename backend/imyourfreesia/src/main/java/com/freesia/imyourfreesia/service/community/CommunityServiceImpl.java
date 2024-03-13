@@ -36,11 +36,11 @@ public class CommunityServiceImpl implements CommunityService {
         community.setUser(user);
         saveCommunityFiles(community, files);
         communityRepository.save(community);
-        return new CommunityResponseDto(community, getFileIdListByCommunity(community));
+        return new CommunityResponseDto(community, findFileIdListByCommunity(community));
     }
 
     @Override
-    public List<CommunityListResponseDto> findCommunityByCategory(String category) {
+    public List<CommunityListResponseDto> getCommunityListByCategory(String category) {
         return communityRepository.findByCategory(category)
                 .stream()
                 .map(CommunityListResponseDto::new)
@@ -53,9 +53,9 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public CommunityResponseDto findCommunityDetailsById(Long communityId) {
+    public CommunityResponseDto getCommunityById(Long communityId) {
         Community community = findCommunityById(communityId);
-        return new CommunityResponseDto(community, getFileIdListByCommunity(community));
+        return new CommunityResponseDto(community, findFileIdListByCommunity(community));
     }
 
     @Override
@@ -66,7 +66,7 @@ public class CommunityServiceImpl implements CommunityService {
             saveCommunityFiles(community, files);
         }
         community.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getCategory());
-        return new CommunityResponseDto(community, getFileIdListByCommunity(community));
+        return new CommunityResponseDto(community, findFileIdListByCommunity(community));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public List<CommunityListResponseDto> findCommunityByUser(String email) {
+    public List<CommunityListResponseDto> getCommunityListByUser(String email) {
         User user = userService.findUserByEmail(email);
         return communityRepository.findByUser(user)
                 .stream()
@@ -92,7 +92,7 @@ public class CommunityServiceImpl implements CommunityService {
         }
     }
 
-    private List<Long> getFileIdListByCommunity(Community community) {
+    private List<Long> findFileIdListByCommunity(Community community) {
         return community.getFiles().stream()
                 .map(CommunityFile::getId)
                 .collect(Collectors.toList());

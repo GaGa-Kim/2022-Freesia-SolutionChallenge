@@ -1,43 +1,29 @@
 package com.freesia.imyourfreesia.dto.auth;
 
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class UserRequestVO {
-    @ApiModelProperty(notes = "회원 이름")
-    @NotBlank
+    @ApiModelProperty(notes = "회원 이름", dataType = "String", example = "freesia")
     private String username;
 
-    @ApiModelProperty(notes = "회원 아이디")
-    @NotBlank
+    @ApiModelProperty(notes = "회원 로그인 아이디", dataType = "String", example = "freesia123")
     private String loginId;
 
-    @ApiModelProperty(notes = "회원 비밀번호")
-    @NotBlank
-    @Size(min = 3, max = 100)
+    @ApiModelProperty(notes = "회원 비밀번호", dataType = "String", example = "password")
     private String password;
 
-    @ApiModelProperty(notes = "회원 이메일")
-    @Email
+    @ApiModelProperty(notes = "회원 이메일", dataType = "String", example = "freesia@gmail.com")
     private String email;
 
-    @ApiModelProperty(notes = "회원 닉네임")
-    @NotBlank
-    @Size(min = 1, max = 100)
+    @ApiModelProperty(notes = "회원 닉네임", dataType = "String", example = "freesia")
     private String nickName;
 
     @ApiModelProperty(notes = "회원 프로필 이미지")
-    @NotNull
     private MultipartFile profileImg;
 
-    @ApiModelProperty(notes = "회원 목표")
-    @NotNull
-    @Size(min = 3, max = 100)
+    @ApiModelProperty(notes = "회원 목표", dataType = "String", example = "꾸준히 노력하기")
     private String goalMsg;
 }

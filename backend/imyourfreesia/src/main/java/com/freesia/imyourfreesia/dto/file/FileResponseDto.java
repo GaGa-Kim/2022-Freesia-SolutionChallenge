@@ -7,14 +7,14 @@ import lombok.Getter;
 
 @Getter
 public class FileResponseDto {
-    @ApiModelProperty(example = "파일 원본 이름")
-    private String origFileName;
+    @ApiModelProperty(notes = "파일 원본 이름", dataType = "String", example = "freesia")
+    private final String origFileName;
 
-    @ApiModelProperty(example = "파일 경로")
-    private String filePath;
+    @ApiModelProperty(notes = "파일 경로", dataType = "String", example = "/images/")
+    private final String filePath;
 
-    @ApiModelProperty(example = "파일 크기")
-    private Long fileSize;
+    @ApiModelProperty(notes = "파일 크기", dataType = "Long", example = "15")
+    private final Long fileSize;
 
     public FileResponseDto(ChallengeFile challengeFile) {
         this.origFileName = challengeFile.getOrigFileName();

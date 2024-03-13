@@ -30,7 +30,7 @@ public interface CommunityService {
      * @return List<CommunityListResponseDto> (커뮤니티 정보를 담은 DTO 목록)
      */
     @Transactional(readOnly = true)
-    List<CommunityListResponseDto> findCommunityByCategory(String category);
+    List<CommunityListResponseDto> getCommunityListByCategory(String category);
 
     /**
      * 커뮤니티 아이디에 따른 커뮤니티를 조회한다.
@@ -48,7 +48,7 @@ public interface CommunityService {
      * @return CommunityResponseDto (커뮤니티 정보를 담은 DTO)
      */
     @Transactional(readOnly = true)
-    CommunityResponseDto findCommunityDetailsById(Long communityId);
+    CommunityResponseDto getCommunityById(Long communityId);
 
     /**
      * 커뮤니티를 수정한다.
@@ -74,5 +74,5 @@ public interface CommunityService {
      * @return List<CommunityListResponseDto> (커뮤니티 정보를 담은 DTO 목록)
      */
     @Transactional(readOnly = true)
-    List<CommunityListResponseDto> findCommunityByUser(String email);
+    List<CommunityListResponseDto> getCommunityListByUser(String email);
 }

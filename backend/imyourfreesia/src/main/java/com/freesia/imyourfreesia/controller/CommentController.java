@@ -30,32 +30,32 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/api/comment")
+    @PostMapping("/api/comments")
     @ApiOperation(value = "댓글 등록", notes = "댓글 등록 API")
-    public ResponseEntity<List<CommentListResponseDto>> saveCmt(@RequestBody @Valid CommentSaveRequestDto requestDto) {
+    public ResponseEntity<List<CommentListResponseDto>> save(@RequestBody @Valid CommentSaveRequestDto requestDto) {
         return ResponseEntity.ok().body(commentService.saveComment(requestDto));
     }
 
-    @GetMapping("/comment")
-    @ApiOperation(value = "댓글 조회", notes = "댓글 조회 API")
-    @ApiImplicitParam(name = "pid", value = "게시글 id", example = "1")
-    public ResponseEntity<List<CommentListResponseDto>> loadCmt(@RequestParam @NotNull Long pid) {
-        return ResponseEntity.ok().body(commentService.findAllCommentByCommunityId(pid));
+    @GetMapping("/comments")
+    @ApiOperation(value = "게시글 별 댓글 조회", notes = "게시글 별 댓글 조회 API")
+    @ApiImplicitParam(name = "communityId", value = "게시글 아이디", dataType = "Long", example = "1")
+    public ResponseEntity<List<CommentListResponseDto>> list(@RequestParam @NotNull Long communityId) {
+        return ResponseEntity.ok().body(commentService.getCommentListByCommunity(communityId));
     }
 
-    @PutMapping("/api/comment")
+    @PutMapping("/api/comments")
     @ApiOperation(value = "댓글 수정", notes = "댓글 수정 API")
-    @ApiImplicitParam(name = "id", value = "댓글 id", example = "1")
-    public ResponseEntity<List<CommentListResponseDto>> updateCmt(@RequestParam @NotNull Long id,
-                                                                  @RequestBody @Valid CommentUpdateRequestDto requestDto) {
-        return ResponseEntity.ok().body(commentService.updateComment(id, requestDto));
+    @ApiImplicitParam(name = "commentId", value = "댓글 아이디", dataType = "Long", example = "1")
+    public ResponseEntity<List<CommentListResponseDto>> update(@RequestParam @NotNull Long commentId,
+                                                               @RequestBody @Valid CommentUpdateRequestDto requestDto) {
+        return ResponseEntity.ok().body(commentService.updateComment(commentId, requestDto));
     }
 
-    @DeleteMapping("/api/comment")
+    @DeleteMapping("/api/comments")
     @ApiOperation(value = "댓글 삭제", notes = "댓글 삭제 API")
-    @ApiImplicitParam(name = "id", value = "댓글 id", example = "1")
-    public ResponseEntity<?> delete(@RequestParam @NotNull Long id) {
-        commentService.deleteComment(id);
+    @ApiImplicitParam(name = "commentId", value = "댓글 아이디", dataType = "Long", example = "1")
+    public ResponseEntity<?> delete(@RequestParam @NotNull Long commentId) {
+        commentService.deleteComment(commentId);
         return ResponseEntity.noContent().build();
     }
 }

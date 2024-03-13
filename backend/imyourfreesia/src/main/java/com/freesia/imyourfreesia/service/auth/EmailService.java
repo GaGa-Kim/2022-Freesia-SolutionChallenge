@@ -10,5 +10,5 @@ public interface EmailService {
      * @param email (회원 이메일)
      * @return String (인증 코드)
      */
-    String sendAuthMail(String email) throws Exception;
+    String sendAuthenticationEmail(String email) throws Exception;
 }

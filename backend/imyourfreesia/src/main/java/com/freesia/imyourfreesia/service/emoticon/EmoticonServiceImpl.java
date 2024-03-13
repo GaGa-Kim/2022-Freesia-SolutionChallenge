@@ -28,7 +28,7 @@ public class EmoticonServiceImpl implements EmoticonService {
         emoticon.setUser(user);
         emoticon.setChallenge(challenge);
         emoticonRepository.save(emoticon);
-        return findByChallengeAndUserAndName(challenge, user);
+        return getEmoticonByChallengeAndUserAndName(challenge, user);
     }
 
     @Override
@@ -36,23 +36,23 @@ public class EmoticonServiceImpl implements EmoticonService {
         User user = userService.findUserByEmail(requestDto.getEmail());
         Challenge challenge = challengeService.findChallengeById(requestDto.getChallengeId());
         emoticonRepository.deleteByUserAndChallengeAndName(user, challenge, requestDto.getEmoticonName());
-        return findByChallengeAndUserAndName(challenge, user);
+        return getEmoticonByChallengeAndUserAndName(challenge, user);
     }
 
     @Override
-    public EmoticonCountResponseDto findByChallengeIdAndUidAndEmoticonName(Long challengeId, String email) {
+    public EmoticonCountResponseDto getEmoticonByChallengeAndUser(Long challengeId, String email) {
         Challenge challenge = challengeService.findChallengeById(challengeId);
         User user = userService.findUserByEmail(email);
-        return findByChallengeAndUserAndName(challenge, user);
+        return getEmoticonByChallengeAndUserAndName(challenge, user);
     }
 
     @Override
-    public EmoticonCountResponseDto count(Long challengeId) {
+    public EmoticonCountResponseDto countByChallenge(Long challengeId) {
         Challenge challenge = challengeService.findChallengeById(challengeId);
-        return findByChallengeAndName(challenge);
+        return getEmoticonByChallengeAndName(challenge);
     }
 
-    private EmoticonCountResponseDto findByChallengeAndUserAndName(Challenge challenge, User user) {
+    private EmoticonCountResponseDto getEmoticonByChallengeAndUserAndName(Challenge challenge, User user) {
         return new EmoticonCountResponseDto(
                 countByChallengeAndUserAndName(challenge, user, EmoticonType.EMOTICON1),
                 countByChallengeAndUserAndName(challenge, user, EmoticonType.EMOTICON2),
@@ -65,7 +65,7 @@ public class EmoticonServiceImpl implements EmoticonService {
         return emoticonRepository.countByChallengeAndUserAndName(challenge, user, emoticonType.getEmoticonName());
     }
 
-    private EmoticonCountResponseDto findByChallengeAndName(Challenge challenge) {
+    private EmoticonCountResponseDto getEmoticonByChallengeAndName(Challenge challenge) {
         return new EmoticonCountResponseDto(
                 countByChallengeAndName(challenge, EmoticonType.EMOTICON1),
                 countByChallengeAndName(challenge, EmoticonType.EMOTICON2),

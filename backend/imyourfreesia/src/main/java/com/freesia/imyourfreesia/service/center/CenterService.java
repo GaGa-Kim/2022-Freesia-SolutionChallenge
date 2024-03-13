@@ -26,5 +26,5 @@ public interface CenterService {
      *
      * @return List<Center> (전체 센터 목록)
      */
-    List<Center> findAllCenterList();
+    List<Center> findCenterList();
 }

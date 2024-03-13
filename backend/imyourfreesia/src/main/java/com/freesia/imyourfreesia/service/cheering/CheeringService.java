@@ -37,7 +37,7 @@ public interface CheeringService {
      *
      * @return List<Map < String, Object>> (응원 랭킹 상위 10명의 이메일, 닉네임, 개수 정보를 담은 목록)
      */
-    List<Map<String, Object>> cheeringRanking();
+    List<Map<String, Object>> cheeringRankList();
 
     /**
      * 이메일에 따른 일주일 응원 개수를 조회한다.
@@ -62,5 +62,5 @@ public interface CheeringService {
      * @param email (회원 이메일)
      * @return List<Cheering> (응원한 회원 목록)
      */
-    List<Cheering> findCheeringByUser(String email);
+    List<Cheering> findCheeringListByUser(String email);
 }

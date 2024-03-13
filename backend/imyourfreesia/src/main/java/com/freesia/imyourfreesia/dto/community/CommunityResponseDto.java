@@ -8,46 +8,46 @@ import lombok.Getter;
 
 @Getter
 public class CommunityResponseDto {
-    @ApiModelProperty(notes = "커뮤니티 아이디")
-    private final Long id;
+    @ApiModelProperty(notes = "커뮤니티 아이디", dataType = "Long", example = "1")
+    private final Long communityId;
 
-    @ApiModelProperty(notes = "커뮤니티 작성자 아이디")
-    private final Long uid;
+    @ApiModelProperty(notes = "커뮤니티 작성 회원 아이디", dataType = "Long", example = "1")
+    private final Long userId;
 
-    @ApiModelProperty(notes = "커뮤니티 작성자 이메일")
+    @ApiModelProperty(notes = "커뮤니티 작성 회원 이메일", dataType = "String", example = "freesia@gmail.com")
     private final String email;
 
-    @ApiModelProperty(notes = "커뮤니티 작성자 닉네임")
+    @ApiModelProperty(notes = "작성 회원 닉네임", dataType = "String", example = "freesia")
     private final String nickName;
 
-    @ApiModelProperty(notes = "커뮤니티 제목")
+    @ApiModelProperty(notes = "커뮤니티 제목", dataType = "String", example = "제목")
     private final String title;
 
-    @ApiModelProperty(notes = "커뮤니티 내용")
+    @ApiModelProperty(notes = "커뮤니티 내용", dataType = "String", example = "내용")
     private final String content;
 
-    @ApiModelProperty(notes = "파일 아이디 목록")
-    private final List<Long> fileId;
+    @ApiModelProperty(notes = "커뮤니티 파일 아이디 목록", dataType = "List<Long>", example = "[1, 2, 3]")
+    private final List<Long> fileIdList;
 
-    @ApiModelProperty(notes = "커뮤니티 카테고리")
+    @ApiModelProperty(notes = "커뮤니티 카테고리", dataType = "String", example = "worries")
     private final String category;
 
-    @ApiModelProperty(notes = "커뮤니티 생성 날짜")
+    @ApiModelProperty(notes = "커뮤니티 생성 날짜", dataType = "LocalDate", example = "20XX.XX.XX")
     private final LocalDate createdDate;
 
-    @ApiModelProperty(notes = "커뮤니티 수정 날짜")
+    @ApiModelProperty(notes = "커뮤니티 수정 날짜", dataType = "LocalDate", example = "20XX.XX.XX")
     private final LocalDate modifiedDate;
 
     public CommunityResponseDto(Community community, List<Long> fileIdList) {
-        this.id = community.getId();
-        this.uid = community.getUser().getId();
+        this.communityId = community.getId();
+        this.userId = community.getUser().getId();
         this.createdDate = community.getCreatedDate();
         this.email = community.getUser().getEmail();
         this.nickName = community.getUser().getNickName();
         this.title = community.getTitle();
         this.content = community.getContent();
-        this.fileId = fileIdList;
-        this.category = community.getCategory();
+        this.fileIdList = fileIdList;
+        this.category = community.getCategory().getCategoryName();
         this.modifiedDate = community.getModifiedDate();
     }
 }

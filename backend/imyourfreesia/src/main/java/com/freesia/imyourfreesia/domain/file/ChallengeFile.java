@@ -1,6 +1,7 @@
 package com.freesia.imyourfreesia.domain.file;
 
 import com.freesia.imyourfreesia.domain.challenge.Challenge;
+import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,10 +20,12 @@ public class ChallengeFile extends File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "challengeFileId")
+    @ApiModelProperty(notes = "챌린지 파일 아이디", dataType = "Long", example = "1")
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "challengeId")
+    @ApiModelProperty(notes = "챌린지", dataType = "Challenge")
     private Challenge challenge;
 
     @Builder

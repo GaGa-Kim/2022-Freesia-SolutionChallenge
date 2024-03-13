@@ -23,7 +23,7 @@ public interface CommentService {
      * @return List<CommentListResponseDto> (댓글 정보를 담은 DTO 목록)
      */
     @Transactional(readOnly = true)
-    List<CommentListResponseDto> findAllCommentByCommunityId(Long communityId);
+    List<CommentListResponseDto> getCommentListByCommunity(Long communityId);
 
     /**
      * 댓글을 수정한다.

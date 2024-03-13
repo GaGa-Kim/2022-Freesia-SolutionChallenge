@@ -1,5 +1,6 @@
 package com.freesia.imyourfreesia.domain;
 
+import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
@@ -13,8 +14,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class BaseTimeEntity {
     @CreatedDate
+    @ApiModelProperty(notes = "생성 날짜", dataType = "LocalDate", example = "20XX.XX.XX")
     private LocalDate createdDate;
 
     @LastModifiedDate
+    @ApiModelProperty(notes = "수정 날짜", dataType = "LocalDate", example = "20XX.XX.XX")
     private LocalDate modifiedDate;
 }

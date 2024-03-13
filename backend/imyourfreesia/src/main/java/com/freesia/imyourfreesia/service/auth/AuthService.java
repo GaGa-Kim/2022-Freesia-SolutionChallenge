@@ -23,7 +23,7 @@ public interface AuthService {
      * @param response    (HttpServletResponse)
      * @return TokenResponseDto (JWT 토큰과 회원 정보를 담은 DTO)
      */
-    TokenResponseDto socialLogin(String accessToken, SocialProvider provider, HttpServletResponse response);
+    TokenResponseDto loginWithSocial(String accessToken, SocialProvider provider, HttpServletResponse response);
 
     /**
      * 일반 회원 가입 시 이메일 인증 코드를 전송한다.
@@ -40,7 +40,7 @@ public interface AuthService {
      * @param profileImage (프로필 이미지)
      * @return UserResponseDto (회원 정보를 담은 DTO)
      */
-    UserResponseDto generalJoin(@Valid UserSaveRequestDto requestDto, MultipartFile profileImage) throws Exception;
+    UserResponseDto register(@Valid UserSaveRequestDto requestDto, MultipartFile profileImage) throws Exception;
 
     /**
      * 일반 로그인을 한 후, JWT 토큰을 발급 받고 회원 정보를 조회한다.
@@ -50,7 +50,7 @@ public interface AuthService {
      * @param response (HttpServletResponse)
      * @return TokenResponseDto (JWT 토큰과 회원 정보를 담은 DTO)
      */
-    TokenResponseDto generalLogin(String loginId, String password, HttpServletResponse response);
+    TokenResponseDto login(String loginId, String password, HttpServletResponse response);
 
     /**
      * 회원 프로필 이미지를 저장한다.

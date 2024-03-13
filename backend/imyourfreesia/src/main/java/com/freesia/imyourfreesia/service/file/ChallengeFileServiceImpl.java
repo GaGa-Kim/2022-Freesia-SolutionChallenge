@@ -30,19 +30,19 @@ public class ChallengeFileServiceImpl implements FileService {
     }
 
     @Override
-    public FileResponseDto findByFileId(Long fileId) {
+    public FileResponseDto getFileById(Long fileId) {
         ChallengeFile challengeFile = challengeFileRepository.findById(fileId).orElseThrow(NotFoundException::new);
         return new FileResponseDto(challengeFile);
     }
 
     @Override
-    public List<ChallengeFile> fileList(Long challengeId) {
+    public List<ChallengeFile> findFileList(Long challengeId) {
         Challenge challenge = challengeRepository.getById(challengeId);
         return challenge.getFiles();
     }
 
     @Override
-    public List<FileIdResponseDto> findAllFileId(Long challengeId) {
+    public List<FileIdResponseDto> getFileListByCommunityOrChallenge(Long challengeId) {
         Challenge challenge = challengeRepository.getById(challengeId);
         return challenge.getFiles().stream().map(FileIdResponseDto::new).collect(Collectors.toList());
     }
@@ -55,7 +55,7 @@ public class ChallengeFileServiceImpl implements FileService {
 
     @Override
     public String getFileByteArray(Long fileId) throws IOException {
-        FileResponseDto photoDto = findByFileId(fileId);
+        FileResponseDto photoDto = getFileById(fileId);
         InputStream imageStream = new FileInputStream(photoDto.getFilePath());
         byte[] imageByteArray = IOUtils.toByteArray(imageStream);
         return Base64.getEncoder().encodeToString(imageByteArray);

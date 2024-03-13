@@ -39,8 +39,8 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
-    public List<LikeListResponseDto> findAllByCommunityId(Long pid) {
-        Community community = communityService.findCommunityById(pid);
+    public List<LikeListResponseDto> getListListByCommunity(Long communityId) {
+        Community community = communityService.findCommunityById(communityId);
         return community.getLikes()
                 .stream()
                 .map(LikeListResponseDto::new)
@@ -48,12 +48,12 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
-    public int countByCommunityId(Long pid) {
-        return communityService.findCommunityById(pid).getLikes().size();
+    public int countByCommunity(Long communityId) {
+        return communityService.findCommunityById(communityId).getLikes().size();
     }
 
     @Override
-    public List<LikeListResponseDto> findLikeByUser(String email) {
+    public List<LikeListResponseDto> getLikeListByUser(String email) {
         User user = userService.findUserByEmail(email);
         return likeRepository.findByUser(user)
                 .stream()

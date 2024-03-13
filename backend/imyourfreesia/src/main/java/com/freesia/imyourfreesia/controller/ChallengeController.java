@@ -20,9 +20,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Api(tags = {"Challenge API (챌린지 API)"})
@@ -34,46 +34,46 @@ public class ChallengeController {
     private final ChallengeService challengeService;
     private final FileService challengeFileServiceImpl;
 
-    @PostMapping("/api/challenge")
-    @ApiOperation(value = "챌린지 등록", notes = "챌린지 등록 API")
-    public ResponseEntity<ChallengeResponseDto> saveChallenge(ChallengeRequestVO requestVO) throws Exception {
+    @PostMapping("/api/challenges")
+    @ApiOperation(value = "챌린지 저장", notes = "챌린지 저장 API")
+    public ResponseEntity<ChallengeResponseDto> save(ChallengeRequestVO requestVO) throws Exception {
         ChallengeSaveRequestDto requestDto = ChallengeSaveRequestDto.builder().challengeRequestVO(requestVO).build();
         return ResponseEntity.ok().body(challengeService.saveChallenge(requestDto, requestVO.getFiles()));
     }
 
-    @GetMapping("/challenge/list")
+    @GetMapping("/challenges")
     @ApiOperation(value = "챌린지 리스트 조회", notes = "챌린지 리스트 조회 API")
-    public ResponseEntity<List<ChallengeListResponseDto>> findAllChallengeDesc() {
-        return ResponseEntity.ok().body(challengeService.findAllChallengeDesc());
+    public ResponseEntity<List<ChallengeListResponseDto>> list() {
+        return ResponseEntity.ok().body(challengeService.getAllChallengeList());
     }
 
-    @GetMapping("/challenge")
+    @GetMapping("/challenges/{challengeId}")
     @ApiOperation(value = "챌린지 상세 조회", notes = "챌린지 상세 조회 API")
-    @ApiImplicitParam(name = "id", value = "챌린지 id", example = "1")
-    public ResponseEntity<ChallengeResponseDto> findChallengeById(@RequestParam @NotNull Long id) {
-        return ResponseEntity.ok().body(challengeService.findChallengeDetailsById(id));
+    @ApiImplicitParam(name = "challengeId", value = "챌린지 아이디", dataType = "Long", example = "1")
+    public ResponseEntity<ChallengeResponseDto> view(@PathVariable @NotNull Long challengeId) {
+        return ResponseEntity.ok().body(challengeService.getChallengeById(challengeId));
     }
 
-    @PutMapping("/api/challenge")
+    @PutMapping("/api/challenges/{challengeId}")
     @ApiOperation(value = "챌린지 수정", notes = "챌린지 수정 API")
-    @ApiImplicitParam(name = "id", value = "챌린지 id", example = "1")
-    public ResponseEntity<ChallengeResponseDto> updateChallenge(@RequestParam @NotNull Long id, ChallengeRequestVO requestVO) throws Exception {
+    @ApiImplicitParam(name = "challengeId", value = "챌린지 아이디", dataType = "Long", example = "1")
+    public ResponseEntity<ChallengeResponseDto> update(@PathVariable @NotNull Long challengeId, ChallengeRequestVO requestVO) throws Exception {
         ChallengeUpdateRequestDto requestDto = ChallengeUpdateRequestDto.builder().challengeRequestVO(requestVO).build();
-        return ResponseEntity.ok().body(challengeService.updateChallenge(id, requestDto, requestVO.getFiles()));
+        return ResponseEntity.ok().body(challengeService.updateChallenge(challengeId, requestDto, requestVO.getFiles()));
     }
 
-    @DeleteMapping("/api/challenge")
+    @DeleteMapping("/api/challenges/{challengeId}")
     @ApiOperation(value = "챌린지 삭제", notes = "챌린지 삭제 API")
-    @ApiImplicitParam(name = "id", value = "챌린지 id", example = "1")
-    public ResponseEntity<?> deleteChallenge(@RequestParam @NotNull Long id) {
-        challengeService.deleteChallenge(id);
+    @ApiImplicitParam(name = "challengeId", value = "챌린지 아이디", dataType = "Long", example = "1")
+    public ResponseEntity<?> delete(@PathVariable @NotNull Long challengeId) {
+        challengeService.deleteChallenge(challengeId);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/challenge/image", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
-    @ApiOperation(value = "챌린지 이미지 ByteArray 조회", notes = "챌린지 이미지 ByteArray 조회 API")
-    @ApiImplicitParam(name = "id", value = "챌린지 이미지 id", example = "1")
-    public ResponseEntity<String> getFileByteArray(@RequestParam @NotNull Long id) throws IOException {
-        return ResponseEntity.ok().body(challengeFileServiceImpl.getFileByteArray(id));
+    @GetMapping(value = "/challenges/{fileId}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    @ApiOperation(value = "챌린지 파일 ByteArray 조회", notes = "챌린지 파일 ByteArray 조회 API")
+    @ApiImplicitParam(name = "fileId", value = "챌린지 파일 아이디", dataType = "Long", example = "1")
+    public ResponseEntity<String> fileByteArray(@PathVariable @NotNull Long fileId) throws IOException {
+        return ResponseEntity.ok().body(challengeFileServiceImpl.getFileByteArray(fileId));
     }
 }

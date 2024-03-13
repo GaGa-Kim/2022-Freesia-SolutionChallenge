@@ -41,55 +41,55 @@ public class UserController {
     private final CommunityService communityService;
     private final LikeService likeService;
 
-    @GetMapping("/user")
-    @ApiOperation(value = "유저 정보 조회", notes = "유저 정보 조회 API")
-    @ApiImplicitParam(name = "email", value = "유저 email")
-    public ResponseEntity<UserResponseDto> loadUser(@RequestParam @Email String email) {
-        return ResponseEntity.ok().body(userService.findUserDetailsByEmail(email));
+    @GetMapping("/api/user")
+    @ApiOperation(value = "회원 정보 조회", notes = "회원 정보 조회 API")
+    @ApiImplicitParam(name = "email", value = "회원 이메일", dataType = "String", example = "freesia@gmail.com")
+    public ResponseEntity<UserResponseDto> view(@RequestParam @Email String email) {
+        return ResponseEntity.ok().body(userService.getUserByEmail(email));
     }
 
-    @GetMapping(value = "/user/image", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
-    @ApiOperation(value = "유저 프로필 이미지 ByteArray 조회", notes = "유저 프로필 이미지 ByteArray 조회 API")
-    @ApiImplicitParam(name = "email", value = "유저 email")
-    public ResponseEntity<String> getUserImage(@RequestParam @Email String email) throws IOException {
+    @GetMapping(value = "/api/user/profile", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    @ApiOperation(value = "회원 프로필 이미지 ByteArray 조회", notes = "회원 프로필 이미지 ByteArray 조회 API")
+    @ApiImplicitParam(name = "email", value = "회원 이메일", dataType = "String", example = "freesia@gmail.com")
+    public ResponseEntity<String> profileByeArray(@RequestParam @Email String email) throws IOException {
         return ResponseEntity.ok().body(userService.getUserProfileByteArray(email));
     }
 
-    @PutMapping("/user")
-    @ApiOperation(value = "유저 정보 수정", notes = "유저 정보 수정 API")
-    @ApiImplicitParam(name = "email", value = "유저 email")
-    public ResponseEntity<UserResponseDto> updateUser(@RequestParam @Email String email, UserRequestVO userRequestVO) throws Exception {
+    @PutMapping("/api/user")
+    @ApiOperation(value = "회원 정보 수정", notes = "회원 정보 수정 API")
+    @ApiImplicitParam(name = "email", value = "회원 이메일", dataType = "String", example = "freesia@gmail.com")
+    public ResponseEntity<UserResponseDto> update(@RequestParam @Email String email, UserRequestVO userRequestVO) throws Exception {
         UserUpdateRequestDto requestDto = UserUpdateRequestDto.builder().userRequestVO(userRequestVO).build();
         GoalMsgUpdateRequestDto goalMsgUpdateRequestDto = GoalMsgUpdateRequestDto.builder().userRequestVO(userRequestVO).build();
         return ResponseEntity.ok().body(userService.update(email, requestDto, goalMsgUpdateRequestDto, userRequestVO.getProfileImg()));
     }
 
-    @PutMapping("/user/pw")
-    @ApiOperation(value = "유저 비밀번호 수정", notes = "유저 비밀번호 수정 API")
-    @ApiImplicitParam(name = "email", value = "유저 email")
-    public ResponseEntity<UserResponseDto> updateUserPw(@RequestParam @Email String email,
-                                                        @RequestBody @Valid UserPasswordUpdateRequestDto requestDto) {
+    @PutMapping("/api/user/pw")
+    @ApiOperation(value = "회원 비밀번호 수정", notes = "회원 비밀번호 수정 API")
+    @ApiImplicitParam(name = "email", value = "회원 이메일", dataType = "String", example = "freesia@gmail.com")
+    public ResponseEntity<UserResponseDto> updatePassword(@RequestParam @Email String email,
+                                                          @RequestBody @Valid UserPasswordUpdateRequestDto requestDto) {
         return ResponseEntity.ok().body(userService.updatePw(email, requestDto));
     }
 
-    @GetMapping("/mypage/challenge")
+    @GetMapping("/api/mypage/challenge")
     @ApiOperation(value = "마이페이지 챌린지 조회", notes = "마이페이지 챌린지 조회 API")
-    @ApiImplicitParam(name = "email", value = "유저 email")
-    public ResponseEntity<List<ChallengeListResponseDto>> loadMyChallenge(@RequestParam @Email String email) {
-        return ResponseEntity.ok().body(challengeService.findChallengeByUser(email));
+    @ApiImplicitParam(name = "email", value = "회원 이메일", dataType = "String", example = "freesia@gmail.com")
+    public ResponseEntity<List<ChallengeListResponseDto>> myChallengeList(@RequestParam @Email String email) {
+        return ResponseEntity.ok().body(challengeService.getChallengeByUser(email));
     }
 
-    @GetMapping("/mypage/community")
+    @GetMapping("/api/mypage/community")
     @ApiOperation(value = "마이페이지 커뮤니티 조회", notes = "마이페이지 커뮤니티 조회 API")
-    @ApiImplicitParam(name = "email", value = "유저 email")
-    public ResponseEntity<List<CommunityListResponseDto>> loadMyCommunity(@RequestParam @Email String email) {
-        return ResponseEntity.ok().body(communityService.findCommunityByUser(email));
+    @ApiImplicitParam(name = "email", value = "회원 이메일", dataType = "String", example = "freesia@gmail.com")
+    public ResponseEntity<List<CommunityListResponseDto>> myCommunityList(@RequestParam @Email String email) {
+        return ResponseEntity.ok().body(communityService.getCommunityListByUser(email));
     }
 
-    @GetMapping("/mypage/bookmark")
-    @ApiOperation(value = "마이페이지 북마크 조회", notes = "마이페이지 북마크 조회 API")
-    @ApiImplicitParam(name = "email", value = "유저 email")
-    public ResponseEntity<List<LikeListResponseDto>> loadMyBookmark(@RequestParam @Email String email) {
-        return ResponseEntity.ok().body(likeService.findLikeByUser(email));
+    @GetMapping("/api/mypage/bookmark")
+    @ApiOperation(value = "마이페이지 북마크 (좋아요) 조회", notes = "마이페이지 북마크 (좋아요) 조회 API")
+    @ApiImplicitParam(name = "email", value = "회원 이메일", dataType = "String", example = "freesia@gmail.com")
+    public ResponseEntity<List<LikeListResponseDto>> myLikeList(@RequestParam @Email String email) {
+        return ResponseEntity.ok().body(likeService.getLikeListByUser(email));
     }
 }

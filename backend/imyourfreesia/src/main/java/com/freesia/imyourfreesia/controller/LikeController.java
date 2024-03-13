@@ -29,31 +29,31 @@ import org.springframework.web.bind.annotation.RestController;
 public class LikeController {
     private final LikeService likeService;
 
-    @PostMapping("/api/like")
+    @PostMapping("/api/likes")
     @ApiOperation(value = "좋아요 설정", notes = "좋아요 설정 API")
-    public ResponseEntity<LikeResponseDto> likes(@RequestBody @Valid LikeSaveRequestDto requestDto) {
+    public ResponseEntity<LikeResponseDto> save(@RequestBody @Valid LikeSaveRequestDto requestDto) {
         return ResponseEntity.ok().body(likeService.saveLike(requestDto));
     }
 
-    @DeleteMapping("/api/like")
+    @DeleteMapping("/api/likes")
     @ApiOperation(value = "좋아요 해제", notes = "좋아요 해제 API")
-    @ApiImplicitParam(name = "id", value = "좋아요 id", dataType = "Long", example = "1")
-    public ResponseEntity<?> unLikes(@RequestParam @NotNull Long id) {
-        likeService.deleteLike(id);
+    @ApiImplicitParam(name = "likeId", value = "좋아요 아이디", dataType = "Long", example = "1")
+    public ResponseEntity<?> delete(@RequestParam @NotNull Long likeId) {
+        likeService.deleteLike(likeId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/likes")
     @ApiOperation(value = "좋아요 목록 조회", notes = "좋아요 목록 조회 API")
-    @ApiImplicitParam(name = "pid", value = "게시글 id", example = "1")
-    public ResponseEntity<List<LikeListResponseDto>> loadLikes(@RequestParam @NotNull Long pid) {
-        return ResponseEntity.ok().body(likeService.findAllByCommunityId(pid));
+    @ApiImplicitParam(name = "communityId", value = "커뮤니티 아이디", dataType = "Long", example = "1")
+    public ResponseEntity<List<LikeListResponseDto>> list(@RequestParam @NotNull Long communityId) {
+        return ResponseEntity.ok().body(likeService.getListListByCommunity(communityId));
     }
 
-    @GetMapping("/like/cnt")
-    @ApiOperation(value = "좋아요 개수 조회", notes = "좋아요 개수 조회 API")
-    @ApiImplicitParam(name = "pid", value = "게시글 id", dataType = "Long", example = "1")
-    public ResponseEntity<Integer> countLikes(@RequestParam @NotNull Long pid) {
-        return ResponseEntity.ok().body(likeService.countByCommunityId(pid));
+    @GetMapping("/likes/count")
+    @ApiOperation(value = "챌린지에 따른 좋아요 개수 조회", notes = "좋아요 개수 조회 API")
+    @ApiImplicitParam(name = "communityId", value = "커뮤니티 아이디", dataType = "Long", example = "1")
+    public ResponseEntity<Integer> count(@RequestParam @NotNull Long communityId) {
+        return ResponseEntity.ok().body(likeService.countByCommunity(communityId));
     }
 }

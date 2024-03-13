@@ -1,7 +1,7 @@
 package com.freesia.imyourfreesia.dto.comment;
 
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentUpdateRequestDto {
-    @ApiModelProperty(notes = "커뮤니티 아이디")
+    @ApiModelProperty(notes = "커뮤니티 아이디", dataType = "Long", example = "1")
     @NotNull
     private Long communityId;
 
-    @ApiModelProperty(example = "커뮤니티 내용")
-    @NotBlank
+    @ApiModelProperty(notes = "댓글 내용", dataType = "String", example = "내용")
+    @NotEmpty
     private String content;
 
     @Builder

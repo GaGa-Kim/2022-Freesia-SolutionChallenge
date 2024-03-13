@@ -14,7 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(tags = {"Auth API (회원 가입 및 로그인 API)"})
+@Api(tags = {"Auth API (회원 가입 ・ 로그인 API)"})
 @RestController
 @Validated
 @RequiredArgsConstructor
@@ -34,51 +34,51 @@ public class AuthController {
     private final AuthService authService;
 
     @ApiOperation(value = "애플리케이션 상태 검사", notes = "애플리케이션 상태 검사 API")
-    @GetMapping("/health_check")
+    @GetMapping("/healthCheck")
     public ResponseEntity<?> healthCheck() {
         return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "구글 로그인", notes = "구글 로그인 API")
-    @PostMapping("/google")
-    public ResponseEntity<TokenResponseDto> googleLogin(@RequestBody @Valid OAuth2LoginRequestDto googleLoginReqDto, HttpServletResponse response) {
-        return ResponseEntity.ok(authService.socialLogin(googleLoginReqDto.getAccessToken(), SocialProvider.GOOGLE, response));
+    @PostMapping("/googleLogin")
+    public ResponseEntity<TokenResponseDto> googleLogin(@RequestBody @Valid OAuth2LoginRequestDto requestDto, HttpServletResponse response) {
+        return ResponseEntity.ok(authService.loginWithSocial(requestDto.getAccessToken(), SocialProvider.GOOGLE, response));
     }
 
     @ApiOperation(value = "카카오 로그인", notes = "카카오 로그인 API")
-    @PostMapping("/kakao")
-    public ResponseEntity<TokenResponseDto> kakaoLogin(@RequestBody @Valid OAuth2LoginRequestDto kakaoLoginReqDto, HttpServletResponse response) {
-        return ResponseEntity.ok(authService.socialLogin(kakaoLoginReqDto.getAccessToken(), SocialProvider.KAKAO, response));
+    @PostMapping("/kakaoLogin")
+    public ResponseEntity<TokenResponseDto> kakaoLogin(@RequestBody @Valid OAuth2LoginRequestDto requestDto, HttpServletResponse response) {
+        return ResponseEntity.ok(authService.loginWithSocial(requestDto.getAccessToken(), SocialProvider.KAKAO, response));
     }
 
     @ApiOperation(value = "네이버 로그인", notes = "네이버 로그인 API")
-    @PostMapping("/naver")
-    public ResponseEntity<TokenResponseDto> naverLogin(@RequestBody @Valid OAuth2LoginRequestDto naverLoginReqDto, HttpServletResponse response) {
-        return ResponseEntity.ok(authService.socialLogin(naverLoginReqDto.getAccessToken(), SocialProvider.NAVER, response));
+    @PostMapping("/naverLogin")
+    public ResponseEntity<TokenResponseDto> naverLogin(@RequestBody @Valid OAuth2LoginRequestDto requestDto, HttpServletResponse response) {
+        return ResponseEntity.ok(authService.loginWithSocial(requestDto.getAccessToken(), SocialProvider.NAVER, response));
     }
 
-    @PostMapping("/sendAuthEmail")
+    @PostMapping("/emailAuth")
     @ApiOperation(value = "회원 가입 시 이메일 인증 코드 전송", notes = "이메일을 통해 인증 코드 전송 API")
-    @ApiImplicitParam(name = "email", value = "이메일")
-    public ResponseEntity<String> sendAuthEmail(@RequestParam @Email String email) throws Exception {
+    @ApiImplicitParam(name = "email", value = "회원 이메일", dataType = "String", example = "freesia@gmail.com")
+    public ResponseEntity<String> emailAuth(@RequestParam @Email String email) throws Exception {
         return ResponseEntity.ok(authService.sendAuthEmail(email));
     }
 
+    @PostMapping(value = "/register", consumes = {"multipart/form-data"})
     @ApiOperation(value = "일반 회원 가입 ", notes = "일반 회원 가입 API")
-    @PostMapping(value = "/generalJoin", consumes = {"multipart/form-data"})
-    public ResponseEntity<UserResponseDto> generalJoin(UserRequestVO userRequestVO) throws Exception {
+    public ResponseEntity<UserResponseDto> register(UserRequestVO userRequestVO) throws Exception {
         UserSaveRequestDto userSaveRequestDto = UserSaveRequestDto.builder().userRequestVO(userRequestVO).build();
-        return ResponseEntity.ok(authService.generalJoin(userSaveRequestDto, userRequestVO.getProfileImg()));
+        return ResponseEntity.ok(authService.register(userSaveRequestDto, userRequestVO.getProfileImg()));
     }
 
     @ApiOperation(value = "일반 로그인", notes = "일반 로그인 API")
-    @PostMapping("/generalLogin")
+    @PostMapping("/login")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "loginId", value = "사용자 아이디"),
-            @ApiImplicitParam(name = "password", value = "사용자 비밀번호")
+            @ApiImplicitParam(name = "loginId", value = "회원 로그인 아이디", dataType = "String", example = "freesia123"),
+            @ApiImplicitParam(name = "password", value = "회원 비밀번호", dataType = "String", example = "password")
     })
-    public ResponseEntity<TokenResponseDto> generalLogin(@RequestParam @NotBlank String loginId,
-                                                         @RequestParam @NotBlank String password, HttpServletResponse response) {
-        return ResponseEntity.ok(authService.generalLogin(loginId, password, response));
+    public ResponseEntity<TokenResponseDto> login(@RequestParam @NotEmpty String loginId,
+                                                  @RequestParam @NotEmpty String password, HttpServletResponse response) {
+        return ResponseEntity.ok(authService.login(loginId, password, response));
     }
 }
