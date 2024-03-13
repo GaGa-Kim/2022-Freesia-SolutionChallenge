@@ -1,5 +1,7 @@
 package com.freesia.imyourfreesia.jwt;
 
+import com.freesia.imyourfreesia.handler.ErrorCode;
+import com.freesia.imyourfreesia.handler.ErrorResponse;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +13,9 @@ import org.springframework.stereotype.Component;
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json; charset=UTF-8");
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.JWT_UNAUTHORIZED);
+        response.getWriter().write(errorResponse.convertToJson());
+        response.setStatus(errorResponse.getStatus());
     }
 }

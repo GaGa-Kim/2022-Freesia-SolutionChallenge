@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(tags = {"Likes API (좋아요 API)"})
+@Api(tags = {"Like API (좋아요 API)"})
 @RestController
 @Validated
 @RequiredArgsConstructor

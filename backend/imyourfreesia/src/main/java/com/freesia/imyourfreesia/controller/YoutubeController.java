@@ -26,4 +26,3 @@ public class YoutubeController {
         return ResponseEntity.ok().body(youtubeService.findAll());
     }
 }
-

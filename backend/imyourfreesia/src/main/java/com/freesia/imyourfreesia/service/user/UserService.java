@@ -7,10 +7,13 @@ import com.freesia.imyourfreesia.dto.user.UserResponseDto;
 import com.freesia.imyourfreesia.dto.user.UserUpdateRequestDto;
 import java.io.IOException;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 @Transactional(readOnly = true)
+@Validated
 public interface UserService {
     /**
      * 회원 이메일로 회원을 조회한다.
@@ -53,7 +56,7 @@ public interface UserService {
      * @return UserResponseDto (회원 정보를 담은 DTO)
      */
     @Transactional
-    UserResponseDto update(String email, UserUpdateRequestDto updateRequestDto, GoalMsgUpdateRequestDto msgRequestDto, MultipartFile file) throws Exception;
+    UserResponseDto update(String email, @Valid UserUpdateRequestDto updateRequestDto, GoalMsgUpdateRequestDto msgRequestDto, MultipartFile file) throws Exception;
 
     /**
      * 회원 비밀번호를 수정한다.

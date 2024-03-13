@@ -1,5 +1,7 @@
 package com.freesia.imyourfreesia.jwt;
 
+import com.freesia.imyourfreesia.handler.ErrorCode;
+import com.freesia.imyourfreesia.handler.ErrorResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -33,7 +35,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
             }
         } catch (ExpiredJwtException e) {
-            System.out.println("JWT Token has expired");
+            response.setContentType("application/json; charset=UTF-8");
+            ErrorResponse errorResponse = new ErrorResponse(ErrorCode.JWT_ACCESS_TOKEN_EXPIRED);
+            response.getWriter().write(errorResponse.convertToJson());
+            response.setStatus(errorResponse.getStatus());
         }
     }
 

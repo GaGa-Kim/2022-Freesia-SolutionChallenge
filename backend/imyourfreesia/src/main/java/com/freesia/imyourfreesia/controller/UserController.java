@@ -44,22 +44,21 @@ public class UserController {
     @GetMapping("/user")
     @ApiOperation(value = "유저 정보 조회", notes = "유저 정보 조회 API")
     @ApiImplicitParam(name = "email", value = "유저 email")
-    public ResponseEntity<UserResponseDto> loadUser(@RequestParam String email) {
+    public ResponseEntity<UserResponseDto> loadUser(@RequestParam @Email String email) {
         return ResponseEntity.ok().body(userService.findUserDetailsByEmail(email));
     }
 
     @GetMapping(value = "/user/image", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     @ApiOperation(value = "유저 프로필 이미지 ByteArray 조회", notes = "유저 프로필 이미지 ByteArray 조회 API")
     @ApiImplicitParam(name = "email", value = "유저 email")
-    public ResponseEntity<String> getUserImage(@RequestParam String email) throws IOException {
+    public ResponseEntity<String> getUserImage(@RequestParam @Email String email) throws IOException {
         return ResponseEntity.ok().body(userService.getUserProfileByteArray(email));
     }
 
     @PutMapping("/user")
     @ApiOperation(value = "유저 정보 수정", notes = "유저 정보 수정 API")
     @ApiImplicitParam(name = "email", value = "유저 email")
-    public ResponseEntity<UserResponseDto> updateUser(@RequestParam String email,
-                                                      @Valid UserRequestVO userRequestVO) throws Exception {
+    public ResponseEntity<UserResponseDto> updateUser(@RequestParam @Email String email, UserRequestVO userRequestVO) throws Exception {
         UserUpdateRequestDto requestDto = UserUpdateRequestDto.builder().userRequestVO(userRequestVO).build();
         GoalMsgUpdateRequestDto goalMsgUpdateRequestDto = GoalMsgUpdateRequestDto.builder().userRequestVO(userRequestVO).build();
         return ResponseEntity.ok().body(userService.update(email, requestDto, goalMsgUpdateRequestDto, userRequestVO.getProfileImg()));

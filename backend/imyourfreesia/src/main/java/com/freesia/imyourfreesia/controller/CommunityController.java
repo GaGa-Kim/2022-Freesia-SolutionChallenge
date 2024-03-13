@@ -12,7 +12,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
 import java.util.List;
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +37,7 @@ public class CommunityController {
 
     @PostMapping(value = "/api/community", consumes = {"multipart/form-data"})
     @ApiOperation(value = "커뮤니티 글 저장", notes = "커뮤니티 글 저장 API")
-    public ResponseEntity<CommunityResponseDto> save(@Valid CommunityRequestVO requestVO) throws Exception {
+    public ResponseEntity<CommunityResponseDto> save(CommunityRequestVO requestVO) throws Exception {
         CommunitySaveRequestDto communitySaveRequestDto = CommunitySaveRequestDto.builder().communityRequestVO(requestVO).build();
         return ResponseEntity.ok().body(communityService.saveCommunity(communitySaveRequestDto, requestVO.getFiles()));
     }
@@ -60,8 +59,7 @@ public class CommunityController {
     @PutMapping("/api/community")
     @ApiOperation(value = "커뮤니티 글 수정", notes = "게시글 글 수정 API")
     @ApiImplicitParam(name = "id", value = "게시글 id", example = "1")
-    public ResponseEntity<CommunityResponseDto> update(@RequestParam(value = "id") @NotNull Long id,
-                                                       @Valid CommunityRequestVO requestVO) throws Exception {
+    public ResponseEntity<CommunityResponseDto> update(@RequestParam @NotNull Long id, CommunityRequestVO requestVO) throws Exception {
         CommunityUpdateRequestDto communityUpdateRequestDto = CommunityUpdateRequestDto.builder().communityRequestVO(requestVO).build();
         return ResponseEntity.ok().body(communityService.updateCommunity(id, communityUpdateRequestDto, requestVO.getFiles()));
     }

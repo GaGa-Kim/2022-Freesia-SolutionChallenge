@@ -6,10 +6,13 @@ import com.freesia.imyourfreesia.dto.challenge.ChallengeResponseDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeSaveRequestDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeUpdateRequestDto;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 @Transactional
+@Validated
 public interface ChallengeService {
     /**
      * 챌린지를 저장한다.
@@ -18,7 +21,7 @@ public interface ChallengeService {
      * @param files      (챌린지 파일들)
      * @return ChallengeResponseDto (챌린지 정보를 담은 DTO)
      */
-    ChallengeResponseDto saveChallenge(ChallengeSaveRequestDto requestDto, List<MultipartFile> files) throws Exception;
+    ChallengeResponseDto saveChallenge(@Valid ChallengeSaveRequestDto requestDto, List<MultipartFile> files) throws Exception;
 
     /**
      * 챌린지 전체 목록을 조회한다.
@@ -54,7 +57,7 @@ public interface ChallengeService {
      * @param files       (챌린지 파일들)
      * @return ChallengeResponseDto (챌린지 정보를 담은 DTO)
      */
-    ChallengeResponseDto updateChallenge(Long challengeId, ChallengeUpdateRequestDto requestDto, List<MultipartFile> files) throws Exception;
+    ChallengeResponseDto updateChallenge(Long challengeId, @Valid ChallengeUpdateRequestDto requestDto, List<MultipartFile> files) throws Exception;
 
     /**
      * 챌린지를 삭제한다.

@@ -66,7 +66,7 @@ public class AuthController {
 
     @ApiOperation(value = "일반 회원 가입 ", notes = "일반 회원 가입 API")
     @PostMapping(value = "/generalJoin", consumes = {"multipart/form-data"})
-    public ResponseEntity<UserResponseDto> generalJoin(@Valid UserRequestVO userRequestVO) throws Exception {
+    public ResponseEntity<UserResponseDto> generalJoin(UserRequestVO userRequestVO) throws Exception {
         UserSaveRequestDto userSaveRequestDto = UserSaveRequestDto.builder().userRequestVO(userRequestVO).build();
         return ResponseEntity.ok(authService.generalJoin(userSaveRequestDto, userRequestVO.getProfileImg()));
     }

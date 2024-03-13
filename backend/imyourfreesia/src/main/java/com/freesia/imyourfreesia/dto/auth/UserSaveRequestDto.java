@@ -28,7 +28,6 @@ public class UserSaveRequestDto {
     private String password;
 
     @ApiModelProperty(notes = "회원 이메일")
-    @NotBlank
     @Email
     private String email;
 

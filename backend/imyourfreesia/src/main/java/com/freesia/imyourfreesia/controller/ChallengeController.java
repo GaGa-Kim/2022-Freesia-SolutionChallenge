@@ -12,7 +12,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
 import java.util.List;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -37,7 +36,7 @@ public class ChallengeController {
 
     @PostMapping("/api/challenge")
     @ApiOperation(value = "챌린지 등록", notes = "챌린지 등록 API")
-    public ResponseEntity<ChallengeResponseDto> saveChallenge(@Valid ChallengeRequestVO requestVO) throws Exception {
+    public ResponseEntity<ChallengeResponseDto> saveChallenge(ChallengeRequestVO requestVO) throws Exception {
         ChallengeSaveRequestDto requestDto = ChallengeSaveRequestDto.builder().challengeRequestVO(requestVO).build();
         return ResponseEntity.ok().body(challengeService.saveChallenge(requestDto, requestVO.getFiles()));
     }
@@ -58,8 +57,7 @@ public class ChallengeController {
     @PutMapping("/api/challenge")
     @ApiOperation(value = "챌린지 수정", notes = "챌린지 수정 API")
     @ApiImplicitParam(name = "id", value = "챌린지 id", example = "1")
-    public ResponseEntity<ChallengeResponseDto> updateChallenge(@RequestParam @NotNull Long id,
-                                                                @Valid ChallengeRequestVO requestVO) throws Exception {
+    public ResponseEntity<ChallengeResponseDto> updateChallenge(@RequestParam @NotNull Long id, ChallengeRequestVO requestVO) throws Exception {
         ChallengeUpdateRequestDto requestDto = ChallengeUpdateRequestDto.builder().challengeRequestVO(requestVO).build();
         return ResponseEntity.ok().body(challengeService.updateChallenge(id, requestDto, requestVO.getFiles()));
     }

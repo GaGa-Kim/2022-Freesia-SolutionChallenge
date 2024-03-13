@@ -7,10 +7,13 @@ import com.freesia.imyourfreesia.dto.auth.TokenResponseDto;
 import com.freesia.imyourfreesia.dto.auth.UserSaveRequestDto;
 import com.freesia.imyourfreesia.dto.user.UserResponseDto;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 @Transactional
+@Validated
 public interface AuthService {
     /**
      * 소셜 회원 가입 또는 로그인을 한 후, JWT 토큰을 발급 받고 회원 정보를 조회한다.
@@ -23,7 +26,7 @@ public interface AuthService {
     TokenResponseDto socialLogin(String accessToken, SocialProvider provider, HttpServletResponse response);
 
     /**
-     * 회원 가입 시 이메일 인증 코드를 전송한다.
+     * 일반 회원 가입 시 이메일 인증 코드를 전송한다.
      *
      * @param email (회원 이메일)
      * @return String (이메일 인증 코드)
@@ -31,16 +34,16 @@ public interface AuthService {
     String sendAuthEmail(String email) throws Exception;
 
     /**
-     * 일반 로그인을 한 후, 회원 정보를 조회한다.
+     * 일반 회원 가입을 한 후, 회원 정보를 조회한다.
      *
      * @param requestDto   (회원 저장 정보를 담은 DTO)
      * @param profileImage (프로필 이미지)
      * @return UserResponseDto (회원 정보를 담은 DTO)
      */
-    UserResponseDto generalJoin(UserSaveRequestDto requestDto, MultipartFile profileImage) throws Exception;
+    UserResponseDto generalJoin(@Valid UserSaveRequestDto requestDto, MultipartFile profileImage) throws Exception;
 
     /**
-     * 회원 가입을 한 후, JWT 토큰을 발급 받고 회원 정보를 조회한다.
+     * 일반 로그인을 한 후, JWT 토큰을 발급 받고 회원 정보를 조회한다.
      *
      * @param loginId  (로그인 아이디)
      * @param password (로그인 비밀번호)

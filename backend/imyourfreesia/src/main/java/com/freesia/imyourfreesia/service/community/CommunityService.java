@@ -6,10 +6,13 @@ import com.freesia.imyourfreesia.dto.community.CommunityResponseDto;
 import com.freesia.imyourfreesia.dto.community.CommunitySaveRequestDto;
 import com.freesia.imyourfreesia.dto.community.CommunityUpdateRequestDto;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 @Transactional
+@Validated
 public interface CommunityService {
     /**
      * 커뮤니티를 저장한다.
@@ -18,7 +21,7 @@ public interface CommunityService {
      * @param files      (커뮤니티 파일들)
      * @return CommunityResponseDto (커뮤니티 정보를 담은 DTO)
      */
-    CommunityResponseDto saveCommunity(CommunitySaveRequestDto requestDto, List<MultipartFile> files) throws Exception;
+    CommunityResponseDto saveCommunity(@Valid CommunitySaveRequestDto requestDto, List<MultipartFile> files) throws Exception;
 
     /**
      * 커뮤니티 카테고리 목록을 조회한다.
@@ -55,7 +58,7 @@ public interface CommunityService {
      * @param files       (커뮤니티 파일들)
      * @return CommunityResponseDto (커뮤니티 정보를 담은 DTO)
      */
-    CommunityResponseDto updateCommunity(Long communityId, CommunityUpdateRequestDto requestDto, List<MultipartFile> files) throws Exception;
+    CommunityResponseDto updateCommunity(Long communityId, @Valid CommunityUpdateRequestDto requestDto, List<MultipartFile> files) throws Exception;
 
     /**
      * 커뮤니티를 삭제한다.
