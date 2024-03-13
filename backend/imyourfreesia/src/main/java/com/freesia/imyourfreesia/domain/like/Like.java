@@ -38,10 +38,8 @@ public class Like extends BaseTimeEntity {
     private Community community;
 
     @Builder
-    public Like(Long id, User user, Community community) {
+    public Like(Long id) {
         this.id = id;
-        this.user = user;
-        this.community = community;
     }
 
     public void setCommunity(Community community) {

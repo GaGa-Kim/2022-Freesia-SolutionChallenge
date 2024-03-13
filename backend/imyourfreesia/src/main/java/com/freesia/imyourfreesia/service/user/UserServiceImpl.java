@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto updatePw(String email, UserPasswordUpdateRequestDto requestDto) {
         User user = findUserByEmail(email);
-        user.updatePassword(passwordEncoder.encode(requestDto.getPassword()));
+        user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         GoalMsg goalMsg = goalMsgRepository.findByUser(user);
         return new UserResponseDto(user, goalMsg);
     }

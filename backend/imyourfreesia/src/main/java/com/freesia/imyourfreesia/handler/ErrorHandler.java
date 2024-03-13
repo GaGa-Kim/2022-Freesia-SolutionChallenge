@@ -6,8 +6,8 @@ import com.freesia.imyourfreesia.except.AccessTokenException;
 import com.freesia.imyourfreesia.except.DuplicateEmailException;
 import com.freesia.imyourfreesia.except.EmailSendingException;
 import com.freesia.imyourfreesia.except.InvalidPasswordException;
-import com.freesia.imyourfreesia.except.InvalidProviderException;
 import com.freesia.imyourfreesia.except.NotFoundException;
+import com.freesia.imyourfreesia.except.UnexpectedValueException;
 import com.freesia.imyourfreesia.except.UserNotActivatedException;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,13 +76,6 @@ public class ErrorHandler {
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
-    @ExceptionHandler(InvalidProviderException.class)
-    protected ResponseEntity<ErrorResponse> handleInvalidProviderException() {
-        ErrorResponse response = new ErrorResponse(ErrorCode.INVALID_PROVIDER);
-        log.error("name : {}, message : {}", response.getError(), response.getMessage());
-        return ResponseEntity.status(response.getStatus()).body(response);
-    }
-
     @ExceptionHandler(NotFoundException.class)
     protected ResponseEntity<ErrorResponse> handleNotFoundException() {
         ErrorResponse response = new ErrorResponse(ErrorCode.DATA_NOT_FOUND);
@@ -93,6 +86,13 @@ public class ErrorHandler {
     @ExceptionHandler(UserNotActivatedException.class)
     protected ResponseEntity<ErrorResponse> handleUserNotActivatedException() {
         ErrorResponse response = new ErrorResponse(ErrorCode.USER_NOT_ACTIVATED);
+        log.error("name : {}, message : {}", response.getError(), response.getMessage());
+        return ResponseEntity.status(response.getStatus()).body(response);
+    }
+
+    @ExceptionHandler(UnexpectedValueException.class)
+    protected ResponseEntity<ErrorResponse> handleUnexpectedValueException() {
+        ErrorResponse response = new ErrorResponse(ErrorCode.BAD_REQUEST);
         log.error("name : {}, message : {}", response.getError(), response.getMessage());
         return ResponseEntity.status(response.getStatus()).body(response);
     }

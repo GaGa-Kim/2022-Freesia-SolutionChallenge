@@ -49,8 +49,8 @@ public class AuthServiceImpl implements AuthService {
     public UserResponseDto register(UserSaveRequestDto requestDto, MultipartFile profileImage) throws Exception {
         checkUserExistence(requestDto.getEmail());
         User user = requestDto.toEntity();
-        user.updatePassword(passwordEncoder.encode(requestDto.getPassword()));
-        user.updateProfileImg(saveProfileImage(profileImage));
+        user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+        user.setProfileImg(saveProfileImage(profileImage));
         GoalMsg goalMsg = saveGoalMsg(user, requestDto.getGoalMsg());
         userRepository.save(user);
         return new UserResponseDto(user, goalMsg);
@@ -80,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private User saveSocialUser(String accessToken, SocialProvider provider) {
-        String userInfoUrl = SocialProvider.findProviderInfoUrl(provider);
+        String userInfoUrl = provider.getUserInfoUrl();
         OAuth2UserInfoRequestDto oAuth2UserInfoRequestDto = oAuth2Service.getUserInfoByAccessToken(accessToken, userInfoUrl);
         return findOrAddUser(oAuth2UserInfoRequestDto);
     }

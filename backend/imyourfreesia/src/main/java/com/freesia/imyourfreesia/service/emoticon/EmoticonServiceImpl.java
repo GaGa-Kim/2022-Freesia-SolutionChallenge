@@ -35,7 +35,7 @@ public class EmoticonServiceImpl implements EmoticonService {
     public EmoticonCountResponseDto deleteEmotion(EmoticonRequestDto requestDto) {
         User user = userService.findUserByEmail(requestDto.getEmail());
         Challenge challenge = challengeService.findChallengeById(requestDto.getChallengeId());
-        emoticonRepository.deleteByUserAndChallengeAndName(user, challenge, requestDto.getEmoticonName());
+        emoticonRepository.deleteByUserAndChallengeAndName(user, challenge, EmoticonType.findByEmoticonName(requestDto.getEmoticonName()));
         return getEmoticonByChallengeAndUserAndName(challenge, user);
     }
 
@@ -62,7 +62,7 @@ public class EmoticonServiceImpl implements EmoticonService {
     }
 
     private Long countByChallengeAndUserAndName(Challenge challenge, User user, EmoticonType emoticonType) {
-        return emoticonRepository.countByChallengeAndUserAndName(challenge, user, emoticonType.getEmoticonName());
+        return emoticonRepository.countByChallengeAndUserAndName(challenge, user, emoticonType);
     }
 
     private EmoticonCountResponseDto getEmoticonByChallengeAndName(Challenge challenge) {
@@ -75,6 +75,6 @@ public class EmoticonServiceImpl implements EmoticonService {
     }
 
     private Long countByChallengeAndName(Challenge challenge, EmoticonType emoticonType) {
-        return emoticonRepository.countByChallengeAndName(challenge, emoticonType.getEmoticonName());
+        return emoticonRepository.countByChallengeAndName(challenge, emoticonType);
     }
 }

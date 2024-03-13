@@ -1,5 +1,6 @@
 package com.freesia.imyourfreesia.domain.user;
 
+import com.freesia.imyourfreesia.except.UnexpectedValueException;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
@@ -24,7 +25,7 @@ public enum Role {
     public static Role findByRoleName(String role) {
         Role foundRole = ROLE_MAP.get(role);
         if (foundRole == null) {
-            throw new RuntimeException();
+            throw new UnexpectedValueException();
         }
         return foundRole;
     }

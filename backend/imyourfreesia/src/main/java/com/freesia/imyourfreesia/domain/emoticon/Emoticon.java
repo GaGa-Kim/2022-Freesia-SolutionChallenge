@@ -6,6 +6,8 @@ import com.freesia.imyourfreesia.domain.user.User;
 import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,16 +39,15 @@ public class Emoticon extends BaseTimeEntity {
     @ApiModelProperty(notes = "챌린지", dataType = "Challenge")
     private Challenge challenge;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @ApiModelProperty(notes = "이모티콘 이름", dataType = "String", example = "emoticion1")
-    private String name;
+    @ApiModelProperty(notes = "이모티콘 이름", dataType = "String", example = "emoticon1")
+    private EmoticonType name;
 
     @Builder
-    public Emoticon(Long id, User user, Challenge challenge, String name) {
+    public Emoticon(Long id, String name) {
         this.id = id;
-        this.user = user;
-        this.challenge = challenge;
-        this.name = name;
+        this.name = EmoticonType.findByEmoticonName(name);
     }
 
     public void setChallenge(Challenge challenge) {

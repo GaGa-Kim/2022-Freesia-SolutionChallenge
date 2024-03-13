@@ -7,9 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CommunityRepository extends JpaRepository<Community, Long> {
-    List<Community> findByCategory(String category);
+    List<Community> findByCategory(Category category);
 
     List<Community> findByUser(User user);
-
-    void deleteById(Long id);
 }

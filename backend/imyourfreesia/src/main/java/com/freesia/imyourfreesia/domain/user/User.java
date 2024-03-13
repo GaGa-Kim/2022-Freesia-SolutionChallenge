@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity(name = "users")
 @Getter
@@ -30,6 +31,8 @@ public class User extends BaseTimeEntity {
     @ApiModelProperty(notes = "회원 로그인 아이디", dataType = "String", example = "freesia123")
     private String loginId;
 
+    @Setter
+    @ApiModelProperty(notes = "회원 비밀번호", dataType = "String", example = "password")
     private String password;
 
     @Column(unique = true)
@@ -39,13 +42,16 @@ public class User extends BaseTimeEntity {
     @ApiModelProperty(notes = "회원 닉네임", dataType = "String", example = "freesia")
     private String nickName;
 
+    @Setter
     @ApiModelProperty(notes = "회원 프로필 이미지", dataType = "String", example = "/images/")
     private String profileImg;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @ApiModelProperty(notes = "회원 권한", dataType = "Role")
     private Role role;
 
+    @ApiModelProperty(notes = "회원 활성 유무", dataType = "boolean", example = "true")
     private boolean activated;
 
     @Builder
@@ -64,13 +70,5 @@ public class User extends BaseTimeEntity {
     public void updateProfile(String nickName, String profileImg) {
         this.nickName = nickName;
         this.profileImg = profileImg;
-    }
-
-    public void updatePassword(String password) {
-        this.password = password;
-    }
-
-    public void updateProfileImg(String profilePath) {
-        this.profileImg = profilePath;
     }
 }

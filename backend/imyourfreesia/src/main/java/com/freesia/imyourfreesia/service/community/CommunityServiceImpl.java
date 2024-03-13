@@ -1,5 +1,6 @@
 package com.freesia.imyourfreesia.service.community;
 
+import com.freesia.imyourfreesia.domain.community.Category;
 import com.freesia.imyourfreesia.domain.community.Community;
 import com.freesia.imyourfreesia.domain.community.CommunityRepository;
 import com.freesia.imyourfreesia.domain.file.CommunityFile;
@@ -41,7 +42,7 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Override
     public List<CommunityListResponseDto> getCommunityListByCategory(String category) {
-        return communityRepository.findByCategory(category)
+        return communityRepository.findByCategory(Category.findByCategoryName(category))
                 .stream()
                 .map(CommunityListResponseDto::new)
                 .collect(Collectors.toList());

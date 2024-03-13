@@ -1,7 +1,5 @@
 package com.freesia.imyourfreesia.domain.user;
 
-import com.freesia.imyourfreesia.except.InvalidProviderException;
-import java.util.Arrays;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -13,12 +11,4 @@ public enum SocialProvider {
     NAVER("https://openapi.naver.com/v1/nid/me");
 
     private final String userInfoUrl;
-
-    public static String findProviderInfoUrl(SocialProvider provider) {
-        return Arrays.stream(SocialProvider.values())
-                .filter(p -> p == provider)
-                .findFirst()
-                .orElseThrow(InvalidProviderException::new)
-                .getUserInfoUrl();
-    }
 }

@@ -1,5 +1,6 @@
 package com.freesia.imyourfreesia.domain.community;
 
+import com.freesia.imyourfreesia.except.UnexpectedValueException;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
@@ -25,7 +26,7 @@ public enum Category {
     public static Category findByCategoryName(String category) {
         Category foundCategory = CATEGORY_MAP.get(category);
         if (foundCategory == null) {
-            throw new RuntimeException();
+            throw new UnexpectedValueException();
         }
         return foundCategory;
     }
