@@ -1,27 +1,31 @@
 package com.freesia.imyourfreesia.dto.community;
 
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.NotEmpty;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommunityUpdateRequestDto {
-
-    @ApiModelProperty(example = "게시글 제목")
+    @ApiModelProperty(notes = "커뮤니티 제목", dataType = "String", example = "제목")
+    @NotEmpty
     private String title;
 
-    @ApiModelProperty(example = "게시글 내용")
+    @ApiModelProperty(notes = "커뮤니티 내용", dataType = "String", example = "내용")
+    @NotEmpty
     private String content;
 
-    @ApiModelProperty(example = "카테고리")
+    @ApiModelProperty(notes = "커뮤니티 카테고리", dataType = "String", example = "worries")
+    @NotEmpty
     private String category;
 
     @Builder
-    public CommunityUpdateRequestDto(String title, String content, String category){
-        this.title = title;
-        this.content = content;
-        this.category = category;
+    public CommunityUpdateRequestDto(CommunityRequestVO communityRequestVO) {
+        this.title = communityRequestVO.getTitle();
+        this.content = communityRequestVO.getContent();
+        this.category = communityRequestVO.getCategory();
     }
 }

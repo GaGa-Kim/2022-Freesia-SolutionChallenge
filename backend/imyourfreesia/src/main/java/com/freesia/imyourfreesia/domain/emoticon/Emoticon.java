@@ -3,46 +3,57 @@ package com.freesia.imyourfreesia.domain.emoticon;
 import com.freesia.imyourfreesia.domain.BaseTimeEntity;
 import com.freesia.imyourfreesia.domain.challenge.Challenge;
 import com.freesia.imyourfreesia.domain.user.User;
-import lombok.*;
-
-import javax.persistence.*;
+import io.swagger.annotations.ApiModelProperty;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class Emoticon extends BaseTimeEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column(name = "emoticonId")
+    @ApiModelProperty(notes = "이모티콘 아이디", dataType = "Long", example = "1")
     private Long id;
 
+    @Setter
     @ManyToOne
-    @JoinColumn (name = "uid")
-    private User uid;
+    @JoinColumn(name = "userId")
+    @ApiModelProperty(notes = "이모티콘 작성 회원", dataType = "User")
+    private User user;
 
     @ManyToOne
-    @JoinColumn (name = "challengeId")
-    private Challenge challengeId;
+    @JoinColumn(name = "challengeId")
+    @ApiModelProperty(notes = "챌린지", dataType = "Challenge")
+    private Challenge challenge;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String emoticonName;
+    @ApiModelProperty(notes = "이모티콘 이름", dataType = "String", example = "emoticon1")
+    private EmoticonType name;
 
     @Builder
-    public Emoticon(User uid, Challenge challengeId, String emoticonName){
-        this.uid = uid;
-        this.challengeId = challengeId;
-        this.emoticonName = emoticonName;
+    public Emoticon(Long id, String name) {
+        this.id = id;
+        this.name = EmoticonType.findByEmoticonName(name);
     }
 
-    public void setUser(User user){
-        this.uid = user;
-    }
-
-    public void setChallenge(Challenge challenge){
-        this.challengeId = challenge;
+    public void setChallenge(Challenge challenge) {
+        this.challenge = challenge;
+        if (!challenge.getEmoticons().contains(this)) {
+            challenge.getEmoticons().add(this);
+        }
     }
 }
-

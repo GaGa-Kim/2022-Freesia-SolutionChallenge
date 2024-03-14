@@ -3,49 +3,59 @@ package com.freesia.imyourfreesia.domain.comment;
 import com.freesia.imyourfreesia.domain.BaseTimeEntity;
 import com.freesia.imyourfreesia.domain.community.Community;
 import com.freesia.imyourfreesia.domain.user.User;
-import lombok.*;
-
-import javax.persistence.*;
+import io.swagger.annotations.ApiModelProperty;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public class Comment extends BaseTimeEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column(name = "commentId")
+    @ApiModelProperty(notes = "댓글 아이디", dataType = "Long", example = "1")
     private Long id;
 
+    @Setter
     @ManyToOne
-    @JoinColumn (name = "uid")
-    private User uid;
+    @JoinColumn(name = "userId")
+    @ApiModelProperty(notes = "댓글 작성 회원", dataType = "User")
+    private User user;
 
     @ManyToOne
-    @JoinColumn (name = "pid")
-    private Community pid;
+    @JoinColumn(name = "communityId")
+    @ApiModelProperty(notes = "커뮤니티", dataType = "Community")
+    private Community community;
 
     @Column(columnDefinition = "TEXT", nullable = false)
+    @ApiModelProperty(notes = "댓글 내용", dataType = "String", example = "내용")
     private String content;
 
     @Builder
-    public Comment(User uid, Community pid, String content){
-        this.uid = uid;
-        this.pid = pid;
+    public Comment(Long id, String content) {
+        this.id = id;
         this.content = content;
     }
 
-    public void setUid(User uid){
-        this.uid = uid;
-    }
-
-    public void setPid(Community pid){
-        this.pid = pid;
-    }
-
-    public Comment update(String content){
-        this.content=content;
+    public Comment update(String content) {
+        this.content = content;
         return this;
+    }
+
+    public void setCommunity(Community community) {
+        this.community = community;
+        if (!community.getComment().contains(this)) {
+            community.getComment().add(this);
+        }
     }
 }

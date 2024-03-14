@@ -1,195 +1,80 @@
 package com.freesia.imyourfreesia.controller;
 
-import com.freesia.imyourfreesia.domain.community.Community;
-import com.freesia.imyourfreesia.domain.community.Photo;
-import com.freesia.imyourfreesia.domain.community.PhotoRepository;
-import com.freesia.imyourfreesia.dto.community.*;
-import com.freesia.imyourfreesia.service.CommunityService;
-import com.freesia.imyourfreesia.service.PhotoService;
-import com.nimbusds.oauth2.sdk.util.CollectionUtils;
+import com.freesia.imyourfreesia.dto.community.CommunityListResponseDto;
+import com.freesia.imyourfreesia.dto.community.CommunityRequestVO;
+import com.freesia.imyourfreesia.dto.community.CommunityResponseDto;
+import com.freesia.imyourfreesia.dto.community.CommunitySaveRequestDto;
+import com.freesia.imyourfreesia.dto.community.CommunityUpdateRequestDto;
+import com.freesia.imyourfreesia.service.community.CommunityService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import java.io.IOException;
+import java.util.List;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.IOUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-
-@Api(tags={"Community API"})
-@RequiredArgsConstructor
+@Api(tags = {"Community API (커뮤니티 API)"})
 @RestController
+@Validated
+@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
 public class CommunityController {
-
     private final CommunityService communityService;
-    private final PhotoService photoService;
-    private final PhotoRepository photoRepository;
 
-    // 게시글 저장
-    @PostMapping(value = "/api/community", consumes = {"multipart/form-data"})
-    @ApiOperation(value="커뮤니티 글 저장 (사용 X / 포스트맨 이용)", notes="커뮤니티 글 저장 API")
-    public Long save(
-            CommunityFileVO communityFileVO) throws Exception{
-
-        CommunitySaveRequestDto communitySaveRequestDto =
-                CommunitySaveRequestDto.builder()
-                        .email(communityFileVO.getEmail())
-                        .title(communityFileVO.getTitle())
-                        .content(communityFileVO.getContent())
-                        .category(communityFileVO.getCategory())
-                        .build();
-
-        return communityService.save(communitySaveRequestDto, communityFileVO.getFiles());
+    @PostMapping(value = "/api/communities", consumes = {"multipart/form-data"})
+    @ApiOperation(value = "커뮤니티 글 저장", notes = "커뮤니티 글 저장 API")
+    public ResponseEntity<CommunityResponseDto> save(CommunityRequestVO requestVO) throws Exception {
+        CommunitySaveRequestDto communitySaveRequestDto = CommunitySaveRequestDto.builder().communityRequestVO(requestVO).build();
+        return ResponseEntity.ok().body(communityService.saveCommunity(communitySaveRequestDto, requestVO.getFiles()));
     }
 
-    // 게시판 리스트 조회 (고민, 후기, 모임)
     @GetMapping("/communities")
-    @ApiOperation(value="카테고리에 따른 (고민, 후기, 모임) 게시판 리스트 조회", notes="카테고리에 따른 (고민, 후기, 모임) 게시판 리스트 조회 API")
-    @ApiImplicitParam(name = "category", value = "카테고리명")
-    public List<CommunityListResponseDto> list(@RequestParam String category) throws Exception{
-
-        List<Community> communityList = communityService.list(category);
-        List<CommunityListResponseDto> communityListResponseDtoList = new ArrayList<>();
-
-        for (Community community: communityList) {
-            CommunityListResponseDto communityResponseDto = new CommunityListResponseDto(community);
-            communityListResponseDtoList.add(communityResponseDto);
-        }
-
-        return communityListResponseDtoList;
+    @ApiOperation(value = "카테고리에 따른 (고민, 후기, 모임) 커뮤니티 리스트 조회", notes = "카테고리에 따른 (고민, 후기, 모임) 커뮤니티 리스트 조회 API")
+    @ApiImplicitParam(name = "category", value = "카테고리 명", dataType = "String", example = "worries")
+    public ResponseEntity<List<CommunityListResponseDto>> listByCategory(@RequestParam @NotEmpty String category) throws Exception {
+        return ResponseEntity.ok().body(communityService.getCommunityListByCategory(category));
     }
 
-    // 게시글 상세 조회
-    @GetMapping("/community")
-    @ApiOperation(value="커뮤니티 글 상세 조회", notes="커뮤니티 글 상세 조회 API")
-    @ApiImplicitParam(name = "id", value = "게시글 id", example = "1")
-    public CommunityResponseDto view(@RequestParam Long id) throws Exception{
-
-        List<PhotoResponseDto> photoResponseDtoList = photoService.findAllByCommunity(id);
-        List<Long> fileId = new ArrayList<>();
-
-        for (PhotoResponseDto photoResponseDto : photoResponseDtoList) {
-            fileId.add(photoResponseDto.getFileId());
-        }
-
-        return communityService.findById(id, fileId);
+    @GetMapping("/communities/{communityId}")
+    @ApiOperation(value = "커뮤니티 글 상세 조회", notes = "커뮤니티 글 상세 조회 API")
+    @ApiImplicitParam(name = "communityId", value = "커뮤니티 아이디", dataType = "Long", example = "1")
+    public ResponseEntity<CommunityResponseDto> view(@PathVariable @NotNull Long communityId) {
+        return ResponseEntity.ok().body(communityService.getCommunityById(communityId));
     }
 
-    // 게시글 수정
-    @PutMapping("/api/community")
-    @ApiOperation(value="커뮤니티 글 수정 (사용 X / 포스트맨 이용)", notes="게시글 글 수정 API")
-    public Long update(
-            @RequestParam(value = "id") Long id,
-            CommunityFileVO communityFileVO) throws Exception{
-
-        CommunityUpdateRequestDto communityUpdateRequestDto =
-                CommunityUpdateRequestDto.builder()
-                        .title(communityFileVO.getTitle())
-                        .content(communityFileVO.getContent())
-                        .category(communityFileVO.getCategory())
-                        .build();
-
-        if(communityFileVO.getFiles() != null) {
-            List<Photo> dbPhotoList = photoRepository.findAllByCommunityId(id);
-            List<MultipartFile> multipartList = communityFileVO.getFiles();
-            List<MultipartFile> addFileList = new ArrayList<>();
-
-            if(CollectionUtils.isEmpty(dbPhotoList)) {
-                if(!CollectionUtils.isEmpty(multipartList)) {
-                    for (MultipartFile multipartFile : multipartList)
-                        addFileList.add(multipartFile);
-                }
-            }
-            else {
-                if(CollectionUtils.isEmpty(multipartList)) {
-                    for(Photo dbPhoto : dbPhotoList)
-                        photoService.delete(dbPhoto.getId());
-                }
-                else {
-                    List<String> dbOriginNameList = new ArrayList<>();
-
-                    for(Photo dbPhoto : dbPhotoList) {
-                        PhotoDto dbPhotoDto = photoService.findByFileId(dbPhoto.getId());
-                        String dbOrigFileName = dbPhotoDto.getOrigFileName();
-
-                        if(!multipartList.contains(dbOrigFileName))
-                            photoService.delete(dbPhoto.getId());
-                        else
-                            dbOriginNameList.add(dbOrigFileName);
-                    }
-
-                    for (MultipartFile multipartFile : multipartList) {
-                        String multipartOrigName = multipartFile.getOriginalFilename();
-                        if(!dbOriginNameList.contains(multipartOrigName)){
-                            addFileList.add(multipartFile);
-                        }
-                    }
-                }
-            }
-
-            return communityService.updateWithImage(id, communityUpdateRequestDto, addFileList);
-        }
-
-        else {
-            return communityService.update(id, communityUpdateRequestDto);
-        }
+    @PutMapping("/api/communities/{communityId}")
+    @ApiOperation(value = "커뮤니티 글 수정", notes = "커뮤니티 글 수정 API")
+    @ApiImplicitParam(name = "communityId", value = "커뮤니티 아이디", dataType = "Long", example = "1")
+    public ResponseEntity<CommunityResponseDto> update(@PathVariable @NotNull Long communityId, CommunityRequestVO requestVO) throws Exception {
+        CommunityUpdateRequestDto communityUpdateRequestDto = CommunityUpdateRequestDto.builder().communityRequestVO(requestVO).build();
+        return ResponseEntity.ok().body(communityService.updateCommunity(communityId, communityUpdateRequestDto, requestVO.getFiles()));
     }
 
-    // 게시글 삭제
-    @DeleteMapping("/api/community")
-    @ApiOperation(value="커뮤니티 글 삭제", notes="게시글 글 삭제 API")
-    @ApiImplicitParam(name = "id", value = "게시글 id", example = "1")
-    public Long delete(@RequestParam Long id){
-        communityService.delete(id);
-        return id;
+    @DeleteMapping("/api/communities/{communityId}")
+    @ApiOperation(value = "커뮤니티 글 삭제", notes = "커뮤니티 글 삭제 API")
+    @ApiImplicitParam(name = "communityId", value = "커뮤니티 아이디", dataType = "Long", example = "1")
+    public ResponseEntity<?> delete(@PathVariable @NotNull Long communityId) {
+        communityService.deleteCommunity(communityId);
+        return ResponseEntity.noContent().build();
     }
 
-    // 카테고리에 따른 내 게시글 가져오기
-    @GetMapping("/api/community/my")
-    @ApiOperation(value="커뮤니티 내 글 조회", notes="커뮤니티 내 글 조회 API")
-    @ApiImplicitParam(name = "email", value = "사용자 이메일")
-    public List<CommunityListResponseDto> my(@RequestParam String email) throws Exception{
-
-        List<Community> communityList = communityService.findByEmail(email);
-        List<CommunityListResponseDto> communityListResponseDtoList = new ArrayList<>();
-
-        for (Community community: communityList) {
-            CommunityListResponseDto communityResponseDto = new CommunityListResponseDto(community);
-            communityListResponseDtoList.add(communityResponseDto);
-        }
-
-        return communityListResponseDtoList;
+    @GetMapping(value = "/communities/file/{fileId}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    @ApiOperation(value = "커뮤니티 파일 ByteArray 조회", notes = "커뮤니티 파일 ByteArray 조회 API")
+    @ApiImplicitParam(name = "fileId", value = "챌린지 파일 아이디", dataType = "Long", example = "1")
+    public ResponseEntity<String> fileByteArray(@PathVariable @NotNull Long fileId) throws IOException {
+        return ResponseEntity.ok().body(communityService.getFileByteArray(fileId));
     }
-
-    // 이미지 ByteArray 조회
-    @GetMapping(
-            value = "/community/image",
-            produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE}
-    )
-    @ApiOperation(value="커뮤니티 이미지 ByteArray 조회", notes="커뮤니티 이미지 ByteArray 조회 API")
-    public ResponseEntity<String> getImage(@RequestParam Long id) throws IOException {
-        PhotoDto photoDto = photoService.findByFileId(id);
-        String absolutePath
-                = new File("").getAbsolutePath() + File.separator + File.separator;
-        String path = photoDto.getFilePath();
-
-        InputStream imageStream = new FileInputStream(absolutePath + path);
-        byte[] imageByteArray = IOUtils.toByteArray(imageStream);
-        String encodedString = Base64.getEncoder().encodeToString(imageByteArray);
-        imageStream.close();
-
-        return new ResponseEntity<>(encodedString, HttpStatus.OK);
-    }
-
 }

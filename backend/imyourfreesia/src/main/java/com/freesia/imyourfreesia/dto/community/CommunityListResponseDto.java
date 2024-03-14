@@ -1,61 +1,61 @@
 package com.freesia.imyourfreesia.dto.community;
 
 import com.freesia.imyourfreesia.domain.community.Community;
+import com.freesia.imyourfreesia.domain.file.CommunityFile;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-
-import java.io.File;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
+import lombok.Getter;
 
 @Getter
 public class CommunityListResponseDto {
+    @ApiModelProperty(notes = "커뮤니티 아이디", dataType = "Long", example = "1")
+    private final Long communityId;
 
-    @ApiModelProperty(example = "게시글 아이디")
-    private Long id;
+    @ApiModelProperty(notes = "커뮤니티 작성 회원 아이디", dataType = "Long", example = "1")
+    private final Long userId;
 
-    @ApiModelProperty(example = "게시글 작성자 아이디")
-    private Long uid;
+    @ApiModelProperty(notes = "커뮤니티 작성 회원 이메일", dataType = "String", example = "freesia@gmail.com")
+    private final String email;
 
-    @ApiModelProperty(example = "게시글 작성자 이메일")
-    private String email;
+    @ApiModelProperty(notes = "작성 회원 닉네임", dataType = "String", example = "freesia")
+    private final String nickName;
 
-    @ApiModelProperty(example = "게시글 작성자 닉네임")
-    private String nickName;
+    @ApiModelProperty(notes = "커뮤니티 제목", dataType = "String", example = "제목")
+    private final String title;
 
-    @ApiModelProperty(example = "게시글 제목")
-    private String title;
+    @ApiModelProperty(notes = "커뮤니티 내용", dataType = "String", example = "내용")
+    private final String content;
 
-    @ApiModelProperty(example = "게시글 내용")
-    private String content;
+    @ApiModelProperty(notes = "커뮤니티 카테고리", dataType = "String", example = "worries")
+    private final String category;
 
-    @ApiModelProperty(example = "게시글 썸네일 이미지")
-    private Long thumbnailImageId;
+    @ApiModelProperty(notes = "커뮤니티 썸네일 파일 아이디", dataType = "Long", example = "1")
+    private final Long thumbnailFileId;
 
-    @ApiModelProperty(example = "카테고리")
-    private String category;
+    @ApiModelProperty(notes = "커뮤니티 생성 날짜", dataType = "LocalDate", example = "20XX.XX.XX")
+    private final LocalDate createdDate;
 
-    // private String createdDate;
-    // private String modifiedDate;
+    @ApiModelProperty(notes = "커뮤니티 수정 날짜", dataType = "LocalDate", example = "20XX.XX.XX")
+    private final LocalDate modifiedDate;
 
-    private LocalDate createdDate;
-    private LocalDate modifiedDate;
-
-    public CommunityListResponseDto(Community community){
-        this.id = community.getId();
-        this.uid = community.getUid().getId();
-        this.email = community.getUid().getEmail();
-        this.nickName = community.getUid().getNickName();
+    public CommunityListResponseDto(Community community) {
+        this.communityId = community.getId();
+        this.userId = community.getUser().getId();
+        this.email = community.getUser().getEmail();
+        this.nickName = community.getUser().getNickName();
         this.title = community.getTitle();
         this.content = community.getContent();
-        this.category = community.getCategory();
-
-        if(!community.getImage().isEmpty())
-            this.thumbnailImageId = community.getImage().get(0).getId();
-        else
-            this.thumbnailImageId = null;
-
+        this.category = community.getCategory().getCategoryName();
+        this.thumbnailFileId = getFileThumbnail(community.getFiles());
         this.createdDate = community.getCreatedDate();
         this.modifiedDate = community.getModifiedDate();
+    }
+
+    private Long getFileThumbnail(List<CommunityFile> fileList) {
+        if (fileList.isEmpty()) {
+            return null;
+        }
+        return fileList.get(0).getId();
     }
 }

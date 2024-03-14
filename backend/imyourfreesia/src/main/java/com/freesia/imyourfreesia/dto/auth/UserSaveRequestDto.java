@@ -1,54 +1,57 @@
 package com.freesia.imyourfreesia.dto.auth;
 
-import com.freesia.imyourfreesia.domain.user.GoalMsg;
+import com.freesia.imyourfreesia.domain.user.User;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Getter
-@Setter
-@Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserSaveRequestDto {
-
-    @ApiModelProperty(example = "유저 이름")
-    @NotNull
-    @Size(min = 3, max = 50)
+    @ApiModelProperty(notes = "회원 이름", dataType = "String", example = "freesia")
+    @NotEmpty
     private String username;
 
-    @ApiModelProperty(example = "유저 아이디")
-    @Size(min = 3, max = 100)
+    @ApiModelProperty(notes = "회원 로그인 아이디", dataType = "String", example = "freesia123")
+    @NotEmpty
     private String loginId;
 
-    @ApiModelProperty(example = "유저 비밀번호")
-    @Size(min = 3, max = 100)
+    @ApiModelProperty(notes = "회원 비밀번호", dataType = "String", example = "password")
+    @NotEmpty
     private String password;
-    
-    @ApiModelProperty(example = "유저 이메일")
-    @NotNull
-    @Size(min = 3, max = 100)
+
+    @ApiModelProperty(notes = "회원 이메일", dataType = "String", example = "freesia@gmail.com")
+    @Email
     private String email;
 
-    @ApiModelProperty(example = "유저 닉네임")
-    @Size(min = 3, max = 100)
+    @ApiModelProperty(notes = "회원 닉네임", dataType = "String", example = "freesia")
+    @NotEmpty
     private String nickName;
 
-    @ApiModelProperty(example = "유저 목표")
-    @Size(min = 3, max = 100)
+    @ApiModelProperty(notes = "회원 목표", dataType = "String", example = "꾸준히 노력하기")
+    @NotEmpty
     private String goalMsg;
 
     @Builder
-    public UserSaveRequestDto(String username, String loginId, String password, String email, String nickName, String goalMsg){
-        this.username = username;
-        this.loginId = loginId;
-        this.password = password;
-        this.email = email;
-        this.nickName = nickName;
-        this.goalMsg = goalMsg;
+    public UserSaveRequestDto(UserRequestVO userRequestVO) {
+        this.username = userRequestVO.getUsername();
+        this.loginId = userRequestVO.getLoginId();
+        this.password = userRequestVO.getPassword();
+        this.email = userRequestVO.getEmail();
+        this.nickName = userRequestVO.getNickName();
+        this.goalMsg = userRequestVO.getGoalMsg();
+    }
+
+    public User toEntity() {
+        return User.builder()
+                .username(username)
+                .loginId(loginId)
+                .email(email)
+                .nickName(nickName)
+                .build();
     }
 }
