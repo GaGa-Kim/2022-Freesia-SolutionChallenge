@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.freesia.imyourfreesia.domain.community.Community;
 import com.freesia.imyourfreesia.domain.community.CommunityTest;
-import com.freesia.imyourfreesia.domain.user.User;
 import com.freesia.imyourfreesia.domain.user.UserTest;
 import com.freesia.imyourfreesia.dto.ValidatorUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,9 +28,8 @@ public class CommunitySaveRequestDtoTest {
     @BeforeEach
     void setUp() {
         community = CommunityTest.testCommunity();
-        User user = UserTest.testUser();
-        community.setUser(user);
-        communityRequestVO = CommunityRequestVOTest.testCommunityRequestVO(community, user);
+        community.setUser(UserTest.testUser());
+        communityRequestVO = CommunityRequestVOTest.testCommunityRequestVO(community, community.getUser());
     }
 
     @Test

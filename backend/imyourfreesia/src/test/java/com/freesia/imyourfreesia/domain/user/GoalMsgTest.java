@@ -4,6 +4,7 @@ import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
+import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,10 +16,12 @@ public class GoalMsgTest {
     private GoalMsg goalMsg;
 
     public static GoalMsg testGoalMsg() {
-        return GoalMsg.builder()
+        GoalMsg testGoalMsg = GoalMsg.builder()
                 .id(GOAL_MSG_ID)
                 .goalMsg(GOAL_MSG)
                 .build();
+        testGoalMsg.setModifiedDate(LocalDate.now().minusDays(1));
+        return testGoalMsg;
     }
 
     @BeforeEach

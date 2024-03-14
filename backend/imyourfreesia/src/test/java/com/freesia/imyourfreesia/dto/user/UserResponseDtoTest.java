@@ -24,7 +24,6 @@ public class UserResponseDtoTest {
     void setUp() {
         user = UserTest.testUser();
         goalMsg = GoalMsgTest.testGoalMsg();
-        goalMsg.setModifiedDate(LocalDate.now());
     }
 
     @Test

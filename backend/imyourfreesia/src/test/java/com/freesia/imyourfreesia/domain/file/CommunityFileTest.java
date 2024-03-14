@@ -1,5 +1,6 @@
 package com.freesia.imyourfreesia.domain.file;
 
+import static com.freesia.imyourfreesia.domain.file.ChallengeFileTest.FILE_ID;
 import static com.freesia.imyourfreesia.domain.file.ChallengeFileTest.FILE_ORIGINAL_NAME;
 import static com.freesia.imyourfreesia.domain.file.ChallengeFileTest.FILE_PATH;
 import static com.freesia.imyourfreesia.domain.file.ChallengeFileTest.FILE_SIZE;
@@ -17,6 +18,7 @@ public class CommunityFileTest {
 
     public static CommunityFile testCommunityFile() {
         return CommunityFile.builder()
+                .id(FILE_ID)
                 .origFileName(FILE_ORIGINAL_NAME)
                 .filePath(FILE_PATH)
                 .fileSize(FILE_SIZE)

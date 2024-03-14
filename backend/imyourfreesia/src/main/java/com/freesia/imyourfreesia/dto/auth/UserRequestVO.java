@@ -6,7 +6,6 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
-@Builder
 public class UserRequestVO {
     @ApiModelProperty(notes = "회원 이름", dataType = "String", example = "freesia")
     private String username;
@@ -28,4 +27,15 @@ public class UserRequestVO {
 
     @ApiModelProperty(notes = "회원 목표", dataType = "String", example = "꾸준히 노력하기")
     private String goalMsg;
+
+    @Builder
+    public UserRequestVO(String username, String loginId, String password, String email, String nickName, MultipartFile profileImg, String goalMsg) {
+        this.username = username;
+        this.loginId = loginId;
+        this.password = password;
+        this.email = email;
+        this.nickName = nickName;
+        this.profileImg = profileImg;
+        this.goalMsg = goalMsg;
+    }
 }

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class YoutubeTest {
+public class YoutubeTest {
     public static final Long YOUTUBE_ID = 1L;
     public static final String YOUTUBE_TITLE = "제목";
     public static final String YOUTUBE_VIDEO_ID = "tbR4VEYEqSA";

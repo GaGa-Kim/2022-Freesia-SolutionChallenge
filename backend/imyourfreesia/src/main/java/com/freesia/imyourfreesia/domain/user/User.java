@@ -51,6 +51,7 @@ public class User extends BaseTimeEntity {
     @ApiModelProperty(notes = "회원 권한", dataType = "Role")
     private Role role;
 
+    @Setter
     @ApiModelProperty(notes = "회원 활성 유무", dataType = "boolean", example = "true")
     private boolean activated;
 

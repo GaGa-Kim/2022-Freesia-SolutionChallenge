@@ -14,7 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class CommentUpdateRequestDtoTest {
+public class CommentUpdateRequestDtoTest {
     private final ValidatorUtil<CommentUpdateRequestDto> validatorUtil = new ValidatorUtil<>();
     private Comment comment;
 

@@ -10,12 +10,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class OAuth2LoginRequestDtoTest {
-    private static final String VALID_ACCESS_TOKEN = "12345";
+    public static final String SOCIAL_ACCESS_TOKEN = "12345";
     private final ValidatorUtil<OAuth2LoginRequestDto> validatorUtil = new ValidatorUtil<>();
 
     public static OAuth2LoginRequestDto testOAuth2LoginRequestDto() {
         return OAuth2LoginRequestDto.builder()
-                .accessToken(VALID_ACCESS_TOKEN)
+                .accessToken(SOCIAL_ACCESS_TOKEN)
                 .build();
     }
 
@@ -24,7 +24,7 @@ public class OAuth2LoginRequestDtoTest {
     void testOAuth2LoginRequestDtoSave() {
         OAuth2LoginRequestDto oAuth2LoginRequestDto = testOAuth2LoginRequestDto();
 
-        assertEquals(VALID_ACCESS_TOKEN, oAuth2LoginRequestDto.getAccessToken());
+        assertEquals(SOCIAL_ACCESS_TOKEN, oAuth2LoginRequestDto.getAccessToken());
     }
 
     @Test

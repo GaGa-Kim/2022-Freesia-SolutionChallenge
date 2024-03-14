@@ -7,7 +7,6 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
-@Builder
 public class CommunityRequestVO {
     @ApiModelProperty(notes = "커뮤니티 작성 회원 이메일", dataType = "String", example = "freesia@gmail.com")
     private String email;
@@ -23,4 +22,13 @@ public class CommunityRequestVO {
 
     @ApiModelProperty(notes = "커뮤니티 파일들")
     private List<MultipartFile> files;
+
+    @Builder
+    public CommunityRequestVO(String email, String title, String content, String category, List<MultipartFile> files) {
+        this.email = email;
+        this.title = title;
+        this.content = content;
+        this.category = category;
+        this.files = files;
+    }
 }

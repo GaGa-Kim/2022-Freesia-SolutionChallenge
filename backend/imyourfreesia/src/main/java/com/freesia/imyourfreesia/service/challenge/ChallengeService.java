@@ -5,6 +5,7 @@ import com.freesia.imyourfreesia.dto.challenge.ChallengeListResponseDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeResponseDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeSaveRequestDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeUpdateRequestDto;
+import java.io.IOException;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,4 +75,12 @@ public interface ChallengeService {
      */
     @Transactional(readOnly = true)
     List<ChallengeListResponseDto> getChallengeByUser(String email);
+
+    /**
+     * 챌린지 파일을 ByteArray 형식으로 조회한다.
+     *
+     * @param fileId (파일 아이디)
+     * @return String (파일의 ByteArray 형식)
+     */
+    String getFileByteArray(Long fileId) throws IOException;
 }

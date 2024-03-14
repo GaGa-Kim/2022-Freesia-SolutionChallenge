@@ -66,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String saveProfileImage(MultipartFile profileImage) throws Exception {
-        return fileHandler.saveProfile(profileImage).getFilePath();
+        return fileHandler.saveProfile(profileImage);
     }
 
     @Override

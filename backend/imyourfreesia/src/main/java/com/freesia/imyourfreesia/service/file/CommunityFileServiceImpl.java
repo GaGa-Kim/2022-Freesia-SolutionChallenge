@@ -8,14 +8,9 @@ import com.freesia.imyourfreesia.domain.file.File;
 import com.freesia.imyourfreesia.dto.file.FileIdResponseDto;
 import com.freesia.imyourfreesia.dto.file.FileResponseDto;
 import com.freesia.imyourfreesia.except.NotFoundException;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -37,27 +32,22 @@ public class CommunityFileServiceImpl implements FileService {
 
     @Override
     public List<CommunityFile> findFileList(Long communityId) {
-        Community community = communityRepository.getById(communityId);
+        Community community = findCommunityById(communityId);
         return community.getFiles();
     }
 
     @Override
     public List<FileIdResponseDto> getFileListByCommunityOrChallenge(Long communityId) {
-        Community community = communityRepository.getById(communityId);
+        Community community = findCommunityById(communityId);
         return community.getFiles().stream().map(FileIdResponseDto::new).collect(Collectors.toList());
     }
 
     @Override
     public void deleteFile(Long fileId) {
-        CommunityFile communityFile = communityFileRepository.findById(fileId).orElseThrow(NotFoundException::new);
-        communityFileRepository.delete(communityFile);
+        communityFileRepository.deleteById(fileId);
     }
 
-    @Override
-    public String getFileByteArray(Long fileId) throws IOException {
-        FileResponseDto photoDto = getFileById(fileId);
-        InputStream imageStream = new FileInputStream(photoDto.getFilePath());
-        byte[] imageByteArray = IOUtils.toByteArray(imageStream);
-        return Base64.getEncoder().encodeToString(imageByteArray);
+    private Community findCommunityById(Long communityId) {
+        return communityRepository.findById(communityId).orElseThrow(NotFoundException::new);
     }
 }

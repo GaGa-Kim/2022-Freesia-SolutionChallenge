@@ -5,6 +5,7 @@ import com.freesia.imyourfreesia.dto.community.CommunityListResponseDto;
 import com.freesia.imyourfreesia.dto.community.CommunityResponseDto;
 import com.freesia.imyourfreesia.dto.community.CommunitySaveRequestDto;
 import com.freesia.imyourfreesia.dto.community.CommunityUpdateRequestDto;
+import java.io.IOException;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,4 +76,12 @@ public interface CommunityService {
      */
     @Transactional(readOnly = true)
     List<CommunityListResponseDto> getCommunityListByUser(String email);
+
+    /**
+     * 커뮤니티 파일을 ByteArray 형식으로 조회한다.
+     *
+     * @param fileId (파일 아이디)
+     * @return String (파일의 ByteArray 형식)
+     */
+    String getFileByteArray(Long fileId) throws IOException;
 }

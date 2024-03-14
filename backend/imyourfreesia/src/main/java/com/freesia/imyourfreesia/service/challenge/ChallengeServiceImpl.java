@@ -8,15 +8,20 @@ import com.freesia.imyourfreesia.dto.challenge.ChallengeListResponseDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeResponseDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeSaveRequestDto;
 import com.freesia.imyourfreesia.dto.challenge.ChallengeUpdateRequestDto;
+import com.freesia.imyourfreesia.dto.file.FileResponseDto;
 import com.freesia.imyourfreesia.dto.file.FileSaveRequestDto;
 import com.freesia.imyourfreesia.except.NotFoundException;
 import com.freesia.imyourfreesia.service.file.FileHandler;
 import com.freesia.imyourfreesia.service.file.FileService;
 import com.freesia.imyourfreesia.service.user.UserService;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -81,6 +86,14 @@ public class ChallengeServiceImpl implements ChallengeService {
                 .stream()
                 .map(ChallengeListResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getFileByteArray(Long fileId) throws IOException {
+        FileResponseDto photoDto = challengeFileServiceImpl.getFileById(fileId);
+        InputStream imageStream = new FileInputStream(photoDto.getFilePath());
+        byte[] imageByteArray = IOUtils.toByteArray(imageStream);
+        return Base64.getEncoder().encodeToString(imageByteArray);
     }
 
     private void saveChallengeFiles(Challenge challenge, List<MultipartFile> files) throws IOException {

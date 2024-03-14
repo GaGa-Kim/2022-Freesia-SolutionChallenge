@@ -48,15 +48,19 @@ public class UserResponseDto {
         if (goalMsg != null) {
             this.goalMsg = goalMsg.getGoalMsg();
             this.goalMsgModifiedDate = goalMsg.getModifiedDate();
-            this.days = calculateDays(this.goalMsgModifiedDate);
+            this.days = calculateDays(goalMsg.getModifiedDate());
         } else {
             this.days = 0;
         }
     }
 
     private int calculateDays(LocalDate goalMsgModifiedDate) {
-        LocalDate startDatetime = LocalDate.now();
-        Period period = Period.between(goalMsgModifiedDate, startDatetime);
-        return period.getDays() + 1;
+        if (goalMsgModifiedDate != null) {
+            LocalDate startDatetime = LocalDate.now();
+            Period period = Period.between(goalMsgModifiedDate, startDatetime);
+            return period.getDays() + 1;
+        } else {
+            return 0;
+        }
     }
 }

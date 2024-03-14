@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CenterRepositoryTest {
-    private static final String ADDRESS_KEYWORD = "강동구";
+public class CenterRepositoryTest {
+    public static final String ADDRESS_KEYWORD = "강동구";
 
     private Center center;
 

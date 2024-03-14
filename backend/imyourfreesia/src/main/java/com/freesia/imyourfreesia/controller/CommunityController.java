@@ -6,7 +6,6 @@ import com.freesia.imyourfreesia.dto.community.CommunityResponseDto;
 import com.freesia.imyourfreesia.dto.community.CommunitySaveRequestDto;
 import com.freesia.imyourfreesia.dto.community.CommunityUpdateRequestDto;
 import com.freesia.imyourfreesia.service.community.CommunityService;
-import com.freesia.imyourfreesia.service.file.FileService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -34,7 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:3000")
 public class CommunityController {
     private final CommunityService communityService;
-    private final FileService communityFileServiceImpl;
 
     @PostMapping(value = "/api/communities", consumes = {"multipart/form-data"})
     @ApiOperation(value = "커뮤니티 글 저장", notes = "커뮤니티 글 저장 API")
@@ -77,6 +75,6 @@ public class CommunityController {
     @ApiOperation(value = "커뮤니티 파일 ByteArray 조회", notes = "커뮤니티 파일 ByteArray 조회 API")
     @ApiImplicitParam(name = "fileId", value = "챌린지 파일 아이디", dataType = "Long", example = "1")
     public ResponseEntity<String> fileByteArray(@PathVariable @NotNull Long fileId) throws IOException {
-        return ResponseEntity.ok().body(communityFileServiceImpl.getFileByteArray(fileId));
+        return ResponseEntity.ok().body(communityService.getFileByteArray(fileId));
     }
 }

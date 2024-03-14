@@ -7,7 +7,6 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
-@Builder
 public class ChallengeRequestVO {
     @ApiModelProperty(notes = "챌린지 작성 회원 아이디", dataType = "Long", example = "1")
     private Long userId;
@@ -20,4 +19,12 @@ public class ChallengeRequestVO {
 
     @ApiModelProperty(notes = "챌린지 파일들")
     private List<MultipartFile> files;
+
+    @Builder
+    public ChallengeRequestVO(Long userId, String title, String content, List<MultipartFile> files) {
+        this.userId = userId;
+        this.title = title;
+        this.content = content;
+        this.files = files;
+    }
 }

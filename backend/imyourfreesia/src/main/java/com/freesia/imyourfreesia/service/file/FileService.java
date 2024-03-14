@@ -3,7 +3,6 @@ package com.freesia.imyourfreesia.service.file;
 import com.freesia.imyourfreesia.domain.file.File;
 import com.freesia.imyourfreesia.dto.file.FileIdResponseDto;
 import com.freesia.imyourfreesia.dto.file.FileResponseDto;
-import java.io.IOException;
 import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,12 +46,4 @@ public interface FileService {
      */
     @Transactional
     void deleteFile(Long fileId);
-
-    /**
-     * 파일을 ByteArray 형식으로 조회한다.
-     *
-     * @param fileId (파일 아이디)
-     * @return String (파일의 ByteArray 형식)
-     */
-    String getFileByteArray(Long fileId) throws IOException;
 }

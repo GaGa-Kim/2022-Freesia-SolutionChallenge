@@ -7,7 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.freesia.imyourfreesia.domain.challenge.Challenge;
 import com.freesia.imyourfreesia.domain.challenge.ChallengeTest;
-import com.freesia.imyourfreesia.domain.user.User;
+import com.freesia.imyourfreesia.domain.file.ChallengeFile;
+import com.freesia.imyourfreesia.domain.file.ChallengeFileTest;
 import com.freesia.imyourfreesia.domain.user.UserTest;
 import com.freesia.imyourfreesia.dto.ValidatorUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,9 +29,10 @@ public class ChallengeSaveRequestDtoTest {
     @BeforeEach
     void setUp() {
         challenge = ChallengeTest.testChallenge();
-        User user = UserTest.testUser();
-        challenge.setUser(user);
-        challengeRequestVO = ChallengeRequestVOTest.testChallengeRequestVO(challenge, user);
+        challenge.setUser(UserTest.testUser());
+        ChallengeFile challengeFile = ChallengeFileTest.testChallengeFile();
+        challengeFile.setChallenge(challenge);
+        challengeRequestVO = ChallengeRequestVOTest.testChallengeRequestVO(challenge, challenge.getUser());
     }
 
     @Test

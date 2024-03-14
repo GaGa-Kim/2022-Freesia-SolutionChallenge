@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class CenterTest {
+public class CenterTest {
     public static final Long CENTER_ID = 1L;
     public static final String CENTER_NAME = "강동새일센터";
     public static final String CENTER_ADDRESS = "서울특별시 강동구 양재대로 1458 (길동) 길동빌딩 5층, 6층 (길동)";

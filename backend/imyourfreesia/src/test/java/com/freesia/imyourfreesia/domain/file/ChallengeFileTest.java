@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class ChallengeFileTest {
+    public static final Long FILE_ID = 1L;
     public static final String FILE_ORIGINAL_NAME = "파일 이름";
     public static final String FILE_PATH = "/images/123.png";
     public static final Long FILE_SIZE = 123L;
@@ -17,6 +18,7 @@ public class ChallengeFileTest {
 
     public static ChallengeFile testChallengeFile() {
         return ChallengeFile.builder()
+                .id(FILE_ID)
                 .origFileName(FILE_ORIGINAL_NAME)
                 .filePath(FILE_PATH)
                 .fileSize(FILE_SIZE)

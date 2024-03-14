@@ -16,7 +16,7 @@ public class UserPasswordUpdateRequestDtoTest {
     private final ValidatorUtil<UserPasswordUpdateRequestDto> validatorUtil = new ValidatorUtil<>();
     private User user;
 
-    public UserPasswordUpdateRequestDto testUserPasswordUpdateRequestDto(User user) {
+    public static UserPasswordUpdateRequestDto testUserPasswordUpdateRequestDto(User user) {
         return UserPasswordUpdateRequestDto.builder()
                 .password(user.getPassword())
                 .build();

@@ -18,8 +18,8 @@ public class FileHandler {
     private static final String IMAGE_DIRECTORY = "images";
     private static final String FILE_SEPARATOR = File.separator;
 
-    public FileSaveRequestDto saveProfile(MultipartFile multipartFiles) throws IOException {
-        return saveFile(multipartFiles);
+    public String saveProfile(MultipartFile multipartFiles) throws IOException {
+        return Objects.requireNonNull(saveFile(multipartFiles)).getFilePath();
     }
 
     public List<FileSaveRequestDto> saveFiles(List<MultipartFile> multipartFiles) throws IOException {
