@@ -14,24 +14,23 @@ import org.junit.jupiter.api.Test;
 
 public class ChallengeResponseDtoTest {
     private Challenge challenge;
-    private ChallengeFile challengeFile;
 
-    public static ChallengeResponseDto testChallengeResponseDto(Challenge challenge, ChallengeFile challengeFile) {
-        return new ChallengeResponseDto(challenge, Collections.singletonList(challengeFile.getId()));
+    public static ChallengeResponseDto testChallengeResponseDto(Challenge challenge) {
+        return new ChallengeResponseDto(challenge, Collections.singletonList(challenge.getFiles().get(0).getId()));
     }
 
     @BeforeEach
     void setUp() {
         challenge = ChallengeTest.testChallenge();
         challenge.setUser(UserTest.testUser());
-        challengeFile = ChallengeFileTest.testChallengeFile();
+        ChallengeFile challengeFile = ChallengeFileTest.testChallengeFile();
         challengeFile.setChallenge(challenge);
     }
 
     @Test
     @DisplayName("ChallengeResponseDto 생성 테스트")
     void testChallengeResponseDtoSave() {
-        ChallengeResponseDto challengeResponseDto = testChallengeResponseDto(challenge, challengeFile);
+        ChallengeResponseDto challengeResponseDto = testChallengeResponseDto(challenge);
 
         assertEquals(challenge.getId(), challengeResponseDto.getChallengeId());
         assertEquals(challenge.getUser().getId(), challengeResponseDto.getUserId());

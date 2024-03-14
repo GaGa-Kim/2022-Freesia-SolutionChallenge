@@ -14,24 +14,23 @@ import org.junit.jupiter.api.Test;
 
 public class CommunityResponseDtoTest {
     private Community community;
-    private CommunityFile communityFile;
 
-    public static CommunityResponseDto testCommunityResponseDto(Community community, CommunityFile communityFile) {
-        return new CommunityResponseDto(community, Collections.singletonList(communityFile.getId()));
+    public static CommunityResponseDto testCommunityResponseDto(Community community) {
+        return new CommunityResponseDto(community, Collections.singletonList(community.getFiles().get(0).getId()));
     }
 
     @BeforeEach
     void setUp() {
         community = CommunityTest.testCommunity();
         community.setUser(UserTest.testUser());
-        communityFile = CommunityFileTest.testCommunityFile();
+        CommunityFile communityFile = CommunityFileTest.testCommunityFile();
         communityFile.setCommunity(community);
     }
 
     @Test
     @DisplayName("CommunityResponseDto 생성 테스트")
     void testCommunityResponseDtoSave() {
-        CommunityResponseDto communityResponseDto = testCommunityResponseDto(community, communityFile);
+        CommunityResponseDto communityResponseDto = testCommunityResponseDto(community);
 
         assertEquals(community.getId(), communityResponseDto.getCommunityId());
         assertEquals(community.getUser().getId(), communityResponseDto.getUserId());

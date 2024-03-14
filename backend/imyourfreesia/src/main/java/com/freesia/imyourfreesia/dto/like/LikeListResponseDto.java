@@ -24,12 +24,12 @@ public class LikeListResponseDto {
     @ApiModelProperty(notes = "커뮤니티 카테고리", dataType = "String", example = "worries")
     private final String category;
 
-    public LikeListResponseDto(Like entity) {
-        this.likeId = entity.getId();
-        this.userId = entity.getUser().getId();
-        this.communityId = entity.getCommunity().getId();
-        this.title = entity.getCommunity().getTitle();
-        this.content = entity.getCommunity().getContent();
-        this.category = entity.getCommunity().getCategory().getCategoryName();
+    public LikeListResponseDto(Like like) {
+        this.likeId = like.getId();
+        this.userId = like.getUser().getId();
+        this.communityId = like.getCommunity().getId();
+        this.title = like.getCommunity().getTitle();
+        this.content = like.getCommunity().getContent();
+        this.category = like.getCommunity().getCategory().getCategoryName();
     }
 }

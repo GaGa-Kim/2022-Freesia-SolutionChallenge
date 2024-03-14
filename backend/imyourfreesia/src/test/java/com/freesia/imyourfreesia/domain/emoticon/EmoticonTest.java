@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class EmoticonTest {
+public class EmoticonTest {
     public static final Long EMOTICON_ID = 1L;
     public static final String EMOTICON_NAME = EmoticonType.EMOTICON1.getEmoticonName();
     private Emoticon emoticon;

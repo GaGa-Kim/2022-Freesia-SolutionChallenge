@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class LikeTest {
+public class LikeTest {
     public static final Long LIKE_ID = 1L;
     private Like like;
 

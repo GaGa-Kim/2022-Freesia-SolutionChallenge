@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class CommentListResponseDtoTest {
+public class CommentListResponseDtoTest {
     private Comment comment;
 
     public static CommentListResponseDto testCommentListResponseDto(Comment comment) {

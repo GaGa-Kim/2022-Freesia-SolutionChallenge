@@ -15,9 +15,9 @@ public class LikeResponseDto {
     @ApiModelProperty(notes = "커뮤니티 아이디", dataType = "Long", example = "1")
     private final Long communityId;
 
-    public LikeResponseDto(Like entity) {
-        this.likeId = entity.getId();
-        this.userId = entity.getUser().getId();
-        this.communityId = entity.getCommunity().getId();
+    public LikeResponseDto(Like like) {
+        this.likeId = like.getId();
+        this.userId = like.getUser().getId();
+        this.communityId = like.getCommunity().getId();
     }
 }

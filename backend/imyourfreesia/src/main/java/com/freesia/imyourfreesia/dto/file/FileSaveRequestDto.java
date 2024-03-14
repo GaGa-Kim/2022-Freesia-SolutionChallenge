@@ -4,12 +4,13 @@ import com.freesia.imyourfreesia.domain.file.ChallengeFile;
 import com.freesia.imyourfreesia.domain.file.CommunityFile;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotEmpty;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FileSaveRequestDto {
     @ApiModelProperty(notes = "파일 원본 이름", dataType = "String", example = "freesia")
     @NotEmpty
@@ -29,16 +30,16 @@ public class FileSaveRequestDto {
         this.fileSize = fileSize;
     }
 
-    public CommunityFile toCommunityFileEntity() {
-        return CommunityFile.builder()
+    public ChallengeFile toChallengeFileEntity() {
+        return ChallengeFile.builder()
                 .origFileName(origFileName)
                 .filePath(filePath)
                 .fileSize(fileSize)
                 .build();
     }
 
-    public ChallengeFile toChallengeFileEntity() {
-        return ChallengeFile.builder()
+    public CommunityFile toCommunityFileEntity() {
+        return CommunityFile.builder()
                 .origFileName(origFileName)
                 .filePath(filePath)
                 .fileSize(fileSize)
