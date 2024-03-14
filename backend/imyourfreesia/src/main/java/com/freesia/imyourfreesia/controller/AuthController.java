@@ -71,14 +71,15 @@ public class AuthController {
         return ResponseEntity.ok(authService.register(userSaveRequestDto, userRequestVO.getProfileImg()));
     }
 
-    @ApiOperation(value = "일반 로그인", notes = "일반 로그인 API")
     @PostMapping("/login")
+    @ApiOperation(value = "일반 로그인", notes = "일반 로그인 API")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "loginId", value = "회원 로그인 아이디", dataType = "String", example = "freesia123"),
             @ApiImplicitParam(name = "password", value = "회원 비밀번호", dataType = "String", example = "password")
     })
     public ResponseEntity<TokenResponseDto> login(@RequestParam @NotEmpty String loginId,
-                                                  @RequestParam @NotEmpty String password, HttpServletResponse response) {
+                                                  @RequestParam @NotEmpty String password,
+                                                  HttpServletResponse response) {
         return ResponseEntity.ok(authService.login(loginId, password, response));
     }
 }

@@ -23,9 +23,7 @@ public enum ErrorCode {
     EMAIL_AUTH_CODE_NOT_SEND(HttpStatus.INTERNAL_SERVER_ERROR, "이메일 인증 코드 전송에 실패했습니다."),
     INVALID_PASSWORD(HttpStatus.INTERNAL_SERVER_ERROR, "비밀번호가 올바르지 않습니다. 로그인에 실패했습니다."),
     INVALID_PROVIDER(HttpStatus.INTERNAL_SERVER_ERROR, "지원하지 않는 로그인 공급자입니다. 구글, 카카오, 네이버 로그인만 가능합니다."),
-    USER_NOT_ACTIVATED(HttpStatus.INTERNAL_SERVER_ERROR, "비활성화된 회원입니다."),
-
-    SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "예기치 못한 오류가 발생하였습니다.");
+    USER_NOT_ACTIVATED(HttpStatus.INTERNAL_SERVER_ERROR, "비활성화된 회원입니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

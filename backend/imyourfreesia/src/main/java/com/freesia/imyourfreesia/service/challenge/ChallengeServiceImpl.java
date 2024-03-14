@@ -80,7 +80,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public List<ChallengeListResponseDto> getChallengeByUser(String email) {
+    public List<ChallengeListResponseDto> getChallengeListByUser(String email) {
         User user = userService.findUserByEmail(email);
         return challengeRepository.findByUser(user)
                 .stream()

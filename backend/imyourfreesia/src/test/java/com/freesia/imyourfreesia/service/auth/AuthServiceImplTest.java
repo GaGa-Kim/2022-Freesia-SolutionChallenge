@@ -42,7 +42,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
-class AuthServiceImplTest {
+public class AuthServiceImplTest {
     public static final String AUTH_CODE = "auth";
     private User user;
     private GoalMsg goalMsg;

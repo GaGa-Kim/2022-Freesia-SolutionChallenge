@@ -96,11 +96,4 @@ public class ErrorHandler {
         log.error("name : {}, message : {}", response.getError(), response.getMessage());
         return ResponseEntity.status(response.getStatus()).body(response);
     }
-
-    @ExceptionHandler(Exception.class)
-    protected ResponseEntity<ErrorResponse> handleException(Exception e) {
-        ErrorResponse response = new ErrorResponse(ErrorCode.SERVER_ERROR);
-        log.error("name : {}, message : {}", response.getError(), response.getMessage());
-        return ResponseEntity.status(response.getStatus()).body(response);
-    }
 }

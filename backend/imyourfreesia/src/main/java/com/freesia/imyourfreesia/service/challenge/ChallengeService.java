@@ -74,7 +74,7 @@ public interface ChallengeService {
      * @return List<ChallengeListResponseDto> (챌린지 정보를 담은 DTO 목록)
      */
     @Transactional(readOnly = true)
-    List<ChallengeListResponseDto> getChallengeByUser(String email);
+    List<ChallengeListResponseDto> getChallengeListByUser(String email);
 
     /**
      * 챌린지 파일을 ByteArray 형식으로 조회한다.

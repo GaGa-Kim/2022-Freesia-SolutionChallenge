@@ -58,20 +58,20 @@ public class CommunityController {
     @PutMapping("/api/communities/{communityId}")
     @ApiOperation(value = "커뮤니티 글 수정", notes = "커뮤니티 글 수정 API")
     @ApiImplicitParam(name = "communityId", value = "커뮤니티 아이디", dataType = "Long", example = "1")
-    public ResponseEntity<CommunityResponseDto> update(@PathVariable @NotNull Long id, CommunityRequestVO requestVO) throws Exception {
+    public ResponseEntity<CommunityResponseDto> update(@PathVariable @NotNull Long communityId, CommunityRequestVO requestVO) throws Exception {
         CommunityUpdateRequestDto communityUpdateRequestDto = CommunityUpdateRequestDto.builder().communityRequestVO(requestVO).build();
-        return ResponseEntity.ok().body(communityService.updateCommunity(id, communityUpdateRequestDto, requestVO.getFiles()));
+        return ResponseEntity.ok().body(communityService.updateCommunity(communityId, communityUpdateRequestDto, requestVO.getFiles()));
     }
 
     @DeleteMapping("/api/communities/{communityId}")
     @ApiOperation(value = "커뮤니티 글 삭제", notes = "커뮤니티 글 삭제 API")
     @ApiImplicitParam(name = "communityId", value = "커뮤니티 아이디", dataType = "Long", example = "1")
-    public ResponseEntity<?> delete(@PathVariable @NotNull Long id) {
-        communityService.deleteCommunity(id);
+    public ResponseEntity<?> delete(@PathVariable @NotNull Long communityId) {
+        communityService.deleteCommunity(communityId);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/communities/{fileId}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    @GetMapping(value = "/communities/file/{fileId}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     @ApiOperation(value = "커뮤니티 파일 ByteArray 조회", notes = "커뮤니티 파일 ByteArray 조회 API")
     @ApiImplicitParam(name = "fileId", value = "챌린지 파일 아이디", dataType = "Long", example = "1")
     public ResponseEntity<String> fileByteArray(@PathVariable @NotNull Long fileId) throws IOException {

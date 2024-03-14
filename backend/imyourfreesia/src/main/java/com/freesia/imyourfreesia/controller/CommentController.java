@@ -37,7 +37,7 @@ public class CommentController {
     }
 
     @GetMapping("/comments")
-    @ApiOperation(value = "게시글 별 댓글 조회", notes = "게시글 별 댓글 조회 API")
+    @ApiOperation(value = "커뮤니티 별 댓글 조회", notes = "커뮤니티 별 댓글 조회 API")
     @ApiImplicitParam(name = "communityId", value = "게시글 아이디", dataType = "Long", example = "1")
     public ResponseEntity<List<CommentListResponseDto>> list(@RequestParam @NotNull Long communityId) {
         return ResponseEntity.ok().body(commentService.getCommentListByCommunity(communityId));

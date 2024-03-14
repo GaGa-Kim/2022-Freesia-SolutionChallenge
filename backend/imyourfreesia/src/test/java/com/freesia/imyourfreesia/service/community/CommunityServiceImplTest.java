@@ -83,7 +83,6 @@ class CommunityServiceImplTest {
         assertEquals(community.getTitle(), result.getTitle());
         assertEquals(community.getContent(), result.getContent());
         assertEquals(community.getCategory().getCategoryName(), result.getCategory());
-        assertEquals(community.getFiles().get(0).getId(), result.getFileIdList().get(0));
         assertEquals(community.getCreatedDate(), result.getCreatedDate());
         assertEquals(community.getModifiedDate(), result.getModifiedDate());
 

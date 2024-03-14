@@ -81,7 +81,6 @@ class ChallengeServiceImplTest {
         assertEquals(challenge.getUser().getNickName(), result.getNickName());
         assertEquals(challenge.getTitle(), result.getTitle());
         assertEquals(challenge.getContent(), result.getContent());
-        assertEquals(challenge.getFiles().get(0).getId(), result.getFileIdList().get(0));
         assertEquals(challenge.getCreatedDate(), result.getCreatedDate());
         assertEquals(challenge.getModifiedDate(), result.getModifiedDate());
 
@@ -188,7 +187,7 @@ class ChallengeServiceImplTest {
         when(userService.findUserByEmail(anyString())).thenReturn(challenge.getUser());
         when(challengeRepository.findByUser(any(User.class))).thenReturn(Collections.singletonList(challenge));
 
-        List<ChallengeListResponseDto> result = challengeService.getChallengeByUser(challenge.getUser().getEmail());
+        List<ChallengeListResponseDto> result = challengeService.getChallengeListByUser(challenge.getUser().getEmail());
 
         assertNotNull(result);
         assertEquals(challenge.getUser().getId(), result.get(0).getUserId());

@@ -76,7 +76,7 @@ public class UserController {
     @ApiOperation(value = "마이페이지 챌린지 조회", notes = "마이페이지 챌린지 조회 API")
     @ApiImplicitParam(name = "email", value = "회원 이메일", dataType = "String", example = "freesia@gmail.com")
     public ResponseEntity<List<ChallengeListResponseDto>> myChallengeList(@RequestParam @Email String email) {
-        return ResponseEntity.ok().body(challengeService.getChallengeByUser(email));
+        return ResponseEntity.ok().body(challengeService.getChallengeListByUser(email));
     }
 
     @GetMapping("/api/mypage/community")

@@ -28,18 +28,18 @@ public interface LikeService {
     /**
      * 커뮤니티 아이디에 따른 좋아요 목록을 조회한다.
      *
-     * @param pid (커뮤니티 아이디)
+     * @param communityId (커뮤니티 아이디)
      * @return List<LikeListResponseDto> (좋아요 정보를 담은 DTO 목록)
      */
-    List<LikeListResponseDto> getListListByCommunity(Long pid);
+    List<LikeListResponseDto> getListListByCommunity(Long communityId);
 
     /**
      * 커뮤니티 아이디에 따른 좋아요 개수를 조회한다.
      *
-     * @param pid (커뮤니티 아이디)
+     * @param communityId (커뮤니티 아이디)
      * @return int (좋아요 개수)
      */
-    int countByCommunity(Long pid);
+    int countByCommunity(Long communityId);
 
     /**
      * 회원 이메일에 따른 좋아요 목록을 조회한다.

@@ -21,7 +21,7 @@ public class YoutubeController {
     private final YoutubeService youtubeService;
 
     @GetMapping("/youtube")
-    @ApiOperation(value = "유튜브 영상 조회", notes = "유튜브 영상 조회 API")
+    @ApiOperation(value = "유튜브 영상 전체 조회", notes = "유튜브 영상 전체 조회 API")
     public ResponseEntity<List<Youtube>> list() {
         return ResponseEntity.ok().body(youtubeService.findAll());
     }

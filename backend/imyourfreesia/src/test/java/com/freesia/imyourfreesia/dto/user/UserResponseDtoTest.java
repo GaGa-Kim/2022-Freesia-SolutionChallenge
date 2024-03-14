@@ -38,5 +38,6 @@ public class UserResponseDtoTest {
         assertEquals(user.getNickName(), userResponseDto.getNickName());
         assertEquals(Period.between(goalMsg.getModifiedDate(), LocalDate.now()).getDays() + 1, userResponseDto.getDays());
         assertEquals(goalMsg.getGoalMsg(), userResponseDto.getGoalMsg());
+        assertEquals(goalMsg.getModifiedDate(), userResponseDto.getGoalMsgModifiedDate());
     }
 }

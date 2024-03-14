@@ -32,7 +32,7 @@ public class CenterController {
     }
 
     @GetMapping("/centers/all")
-    @ApiOperation(value = "지역 센터 정보 전체 조회", notes = "지역 센터 전체 조회 API")
+    @ApiOperation(value = "센터 정보 전체 조회", notes = "지역 센터 전체 조회 API")
     public ResponseEntity<List<Center>> list() {
         return ResponseEntity.ok().body(centerService.findCenterList());
 

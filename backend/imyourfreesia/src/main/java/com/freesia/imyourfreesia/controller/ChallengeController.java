@@ -68,7 +68,7 @@ public class ChallengeController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/challenges/{fileId}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    @GetMapping(value = "/challenges/file/{fileId}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     @ApiOperation(value = "챌린지 파일 ByteArray 조회", notes = "챌린지 파일 ByteArray 조회 API")
     @ApiImplicitParam(name = "fileId", value = "챌린지 파일 아이디", dataType = "Long", example = "1")
     public ResponseEntity<String> fileByteArray(@PathVariable @NotNull Long fileId) throws IOException {
