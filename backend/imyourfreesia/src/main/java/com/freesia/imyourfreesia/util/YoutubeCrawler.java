@@ -1,4 +1,4 @@
-package com.freesia.imyourfreesia.service.youtube;
+package com.freesia.imyourfreesia.util;
 
 import com.freesia.imyourfreesia.config.GlobalConfig;
 import com.freesia.imyourfreesia.domain.youtube.Youtube;
@@ -28,7 +28,7 @@ public class YoutubeCrawler {
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
     private static final String QUERY_KEYWORD = "경력단절여성";
-    private static final long NUMBER_OF_VIDEOS_RETURNED = 25;
+    private static final long NUMBER_OF_VIDEOS_RETURNED = 100;
 
     private final GlobalConfig config;
 
@@ -45,7 +45,7 @@ public class YoutubeCrawler {
             search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
 
             SearchListResponse searchResponse = search.execute();
-            youtubeList = getAndSaveYoutubeVideos(searchResponse.getItems());
+            youtubeList = getYoutubeVideosInfo(searchResponse.getItems());
             if (youtubeList.isEmpty()) {
                 log.error(QUERY_KEYWORD + " 키워드의 영상이 없습니다.");
             }
@@ -69,7 +69,7 @@ public class YoutubeCrawler {
                 .build();
     }
 
-    private List<Youtube> getAndSaveYoutubeVideos(List<SearchResult> searchResults) {
+    private List<Youtube> getYoutubeVideosInfo(List<SearchResult> searchResults) {
         List<Youtube> youtubeList = new ArrayList<>();
         for (SearchResult singleVideo : searchResults) {
             ResourceId rId = singleVideo.getId();

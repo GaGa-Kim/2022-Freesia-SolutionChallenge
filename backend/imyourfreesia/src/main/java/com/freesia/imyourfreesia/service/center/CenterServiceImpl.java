@@ -2,6 +2,7 @@ package com.freesia.imyourfreesia.service.center;
 
 import com.freesia.imyourfreesia.domain.center.Center;
 import com.freesia.imyourfreesia.domain.center.CenterRepository;
+import com.freesia.imyourfreesia.util.CenterCrawler;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;

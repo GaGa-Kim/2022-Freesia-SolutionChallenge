@@ -1,4 +1,4 @@
-package com.freesia.imyourfreesia.service.center;
+package com.freesia.imyourfreesia.util;
 
 import com.freesia.imyourfreesia.domain.center.Center;
 import java.io.IOException;

@@ -2,6 +2,7 @@ package com.freesia.imyourfreesia.service.youtube;
 
 import com.freesia.imyourfreesia.domain.youtube.Youtube;
 import com.freesia.imyourfreesia.domain.youtube.YoutubeRepository;
+import com.freesia.imyourfreesia.util.YoutubeCrawler;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class YoutubeServiceImpl implements YoutubeService {
     private final YoutubeRepository youtubeRepository;
+    
     private final YoutubeCrawler youtubeCrawler;
 
     @Override
