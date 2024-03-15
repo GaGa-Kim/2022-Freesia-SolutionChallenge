@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 import com.freesia.imyourfreesia.domain.center.Center;
 import com.freesia.imyourfreesia.domain.center.CenterRepository;
 import com.freesia.imyourfreesia.domain.center.CenterTest;
+import com.freesia.imyourfreesia.util.CenterCrawler;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;

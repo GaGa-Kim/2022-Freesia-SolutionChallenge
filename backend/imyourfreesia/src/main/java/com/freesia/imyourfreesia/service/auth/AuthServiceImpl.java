@@ -13,7 +13,8 @@ import com.freesia.imyourfreesia.except.DuplicateEmailException;
 import com.freesia.imyourfreesia.except.InvalidPasswordException;
 import com.freesia.imyourfreesia.except.UserNotActivatedException;
 import com.freesia.imyourfreesia.jwt.JwtTokenProvider;
-import com.freesia.imyourfreesia.service.file.FileHandler;
+import com.freesia.imyourfreesia.util.AuthEmailSender;
+import com.freesia.imyourfreesia.util.FileHandler;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +27,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final GoalMsgRepository goalMsgRepository;
 
-    private final EmailService emailService;
+    private final AuthEmailSender authEmailSender;
     private final PasswordEncoder passwordEncoder;
     private final FileHandler fileHandler;
     private final OAuth2Service oAuth2Service;
@@ -42,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String sendAuthEmail(String email) throws Exception {
         checkUserExistence(email);
-        return emailService.sendAuthenticationEmail(email);
+        return authEmailSender.sendAuthenticationEmail(email);
     }
 
     @Override

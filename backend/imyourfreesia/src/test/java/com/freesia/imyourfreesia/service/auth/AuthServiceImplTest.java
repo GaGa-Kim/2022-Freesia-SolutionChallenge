@@ -29,7 +29,8 @@ import com.freesia.imyourfreesia.except.DuplicateEmailException;
 import com.freesia.imyourfreesia.except.InvalidPasswordException;
 import com.freesia.imyourfreesia.except.UserNotActivatedException;
 import com.freesia.imyourfreesia.jwt.JwtTokenProvider;
-import com.freesia.imyourfreesia.service.file.FileHandler;
+import com.freesia.imyourfreesia.util.AuthEmailSender;
+import com.freesia.imyourfreesia.util.FileHandler;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -54,7 +55,7 @@ public class AuthServiceImplTest {
     @Mock
     private OAuth2Service oAuth2Service;
     @Mock
-    private EmailService emailService;
+    private AuthEmailSender authEmailSender;
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
@@ -119,7 +120,7 @@ public class AuthServiceImplTest {
     @DisplayName("이메일 인증 코드 테스트")
     void testSendAuthEmail() throws Exception {
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
-        when(emailService.sendAuthenticationEmail(anyString())).thenReturn(AUTH_CODE);
+        when(authEmailSender.sendAuthenticationEmail(anyString())).thenReturn(AUTH_CODE);
 
         String result = authService.sendAuthEmail(user.getEmail());
 
@@ -127,7 +128,7 @@ public class AuthServiceImplTest {
         assertEquals(AUTH_CODE, result);
 
         verify(userRepository).existsByEmail(anyString());
-        verify(emailService).sendAuthenticationEmail(anyString());
+        verify(authEmailSender).sendAuthenticationEmail(anyString());
     }
 
     @Test

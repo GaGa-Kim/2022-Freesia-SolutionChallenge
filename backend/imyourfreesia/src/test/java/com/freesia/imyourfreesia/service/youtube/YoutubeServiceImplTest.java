@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import com.freesia.imyourfreesia.domain.youtube.Youtube;
 import com.freesia.imyourfreesia.domain.youtube.YoutubeRepository;
 import com.freesia.imyourfreesia.domain.youtube.YoutubeTest;
+import com.freesia.imyourfreesia.util.YoutubeCrawler;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;

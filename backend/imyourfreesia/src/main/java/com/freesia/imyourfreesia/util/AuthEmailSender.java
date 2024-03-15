@@ -1,4 +1,4 @@
-package com.freesia.imyourfreesia.service.auth;
+package com.freesia.imyourfreesia.util;
 
 import com.freesia.imyourfreesia.config.GlobalConfig;
 import com.freesia.imyourfreesia.except.EmailSendingException;
@@ -9,18 +9,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
-public class EmailServiceImpl implements EmailService {
+public class AuthEmailSender {
     private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     private final GlobalConfig config;
-    private final JavaMailSender emailSender;
+    private final JavaMailSender javaMailSender;
 
-    @Override
     public String sendAuthenticationEmail(String email) throws Exception {
         String authCode = generateAuthCode();
         MimeMessage message = createAuthenticationEmail(email, authCode);
@@ -37,7 +36,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private MimeMessage createAuthenticationEmail(String email, String authCode) throws Exception {
-        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessage message = javaMailSender.createMimeMessage();
         message.addRecipients(MimeMessage.RecipientType.TO, email);
         message.setSubject("I'm your freesia Membership Registration Authentication");
         String mailBody = createMailBody(authCode);
@@ -48,7 +47,7 @@ public class EmailServiceImpl implements EmailService {
 
     private void sendEmail(MimeMessage message) {
         try {
-            emailSender.send(message);
+            javaMailSender.send(message);
         } catch (MailException e) {
             log.error(e.getMessage());
             throw new EmailSendingException();
@@ -67,7 +66,7 @@ public class EmailServiceImpl implements EmailService {
                 " <p align='center' style=\"display: inline-block; width: 210px; height: 45px; margin: 30px 5px 40px; background: #FFEF5E; line-height: 45px; vertical-align: middle; font-size: 16px;\"><strong>"
                         + authCode + "</strong></p<br/>";
         mailBody += "</div><br/>";
-        mailBody += "<<div style=\"border-top: 1px solid #DDD; padding: 5px;\"></div>";
+        mailBody += "<div style=\"border-top: 1px solid #DDD; padding: 5px;\"></div>";
         mailBody += "</div>";
         return mailBody;
     }

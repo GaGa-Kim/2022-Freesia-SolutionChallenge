@@ -1,4 +1,4 @@
-package com.freesia.imyourfreesia.service.file;
+package com.freesia.imyourfreesia.util;
 
 import com.freesia.imyourfreesia.dto.file.FileSaveRequestDto;
 import java.io.File;
