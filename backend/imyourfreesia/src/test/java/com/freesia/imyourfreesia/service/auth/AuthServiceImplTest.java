@@ -78,7 +78,7 @@ public class AuthServiceImplTest {
         when(oAuth2Service.getUserInfoByAccessToken(anyString(), anyString())).thenReturn(OAuth2UserInfoRequestDtoTest.testOAuth2UserInfoRequestDto(user));
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
         when(userRepository.save(any(User.class))).thenReturn(user);
-        when(jwtTokenProvider.generateToken(anyString())).thenReturn(TOKEN);
+        when(jwtTokenProvider.generateToken(any())).thenReturn(TOKEN);
         doNothing().when(jwtTokenProvider).setHeaderAccessToken(any(HttpServletResponse.class), anyString());
 
         TokenResponseDto result = authService.loginWithSocial(SOCIAL_ACCESS_TOKEN, SocialProvider.GOOGLE, mock(HttpServletResponse.class));
@@ -90,7 +90,7 @@ public class AuthServiceImplTest {
         verify(oAuth2Service).getUserInfoByAccessToken(anyString(), anyString());
         verify(userRepository).existsByEmail(anyString());
         verify(userRepository).save(any(User.class));
-        verify(jwtTokenProvider).generateToken(anyString());
+        verify(jwtTokenProvider).generateToken(any());
         verify(jwtTokenProvider).setHeaderAccessToken(any(HttpServletResponse.class), anyString());
     }
 
@@ -100,7 +100,7 @@ public class AuthServiceImplTest {
         when(oAuth2Service.getUserInfoByAccessToken(anyString(), anyString())).thenReturn(OAuth2UserInfoRequestDtoTest.testOAuth2UserInfoRequestDto(user));
         when(userRepository.existsByEmail(anyString())).thenReturn(true);
         when(userRepository.findByEmail(anyString())).thenReturn(user);
-        when(jwtTokenProvider.generateToken(anyString())).thenReturn(TOKEN);
+        when(jwtTokenProvider.generateToken(any())).thenReturn(TOKEN);
         doNothing().when(jwtTokenProvider).setHeaderAccessToken(any(HttpServletResponse.class), anyString());
 
         TokenResponseDto result = authService.loginWithSocial(SOCIAL_ACCESS_TOKEN, SocialProvider.GOOGLE, mock(HttpServletResponse.class));
@@ -112,7 +112,7 @@ public class AuthServiceImplTest {
         verify(oAuth2Service).getUserInfoByAccessToken(anyString(), anyString());
         verify(userRepository).existsByEmail(anyString());
         verify(userRepository).findByEmail(anyString());
-        verify(jwtTokenProvider).generateToken(anyString());
+        verify(jwtTokenProvider).generateToken(any());
         verify(jwtTokenProvider).setHeaderAccessToken(any(HttpServletResponse.class), anyString());
     }
 
@@ -174,7 +174,7 @@ public class AuthServiceImplTest {
     void testLogin() {
         when(userRepository.findByLoginId(anyString())).thenReturn(user);
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
-        when(jwtTokenProvider.generateToken(anyString())).thenReturn(TOKEN);
+        when(jwtTokenProvider.generateToken(any())).thenReturn(TOKEN);
         doNothing().when(jwtTokenProvider).setHeaderAccessToken(any(HttpServletResponse.class), anyString());
 
         TokenResponseDto result = authService.login(user.getLoginId(), user.getPassword(), mock(HttpServletResponse.class));
@@ -185,7 +185,7 @@ public class AuthServiceImplTest {
 
         verify(userRepository).findByLoginId(anyString());
         verify(passwordEncoder).matches(anyString(), anyString());
-        verify(jwtTokenProvider).generateToken(anyString());
+        verify(jwtTokenProvider).generateToken(any());
         verify(jwtTokenProvider).setHeaderAccessToken(any(HttpServletResponse.class), anyString());
     }
 

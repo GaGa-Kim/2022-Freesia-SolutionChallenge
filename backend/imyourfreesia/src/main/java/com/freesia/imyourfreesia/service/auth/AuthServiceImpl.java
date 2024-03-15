@@ -115,7 +115,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private TokenResponseDto issueToken(User user, HttpServletResponse response) {
-        String token = jwtTokenProvider.generateToken(user.getEmail());
+        String token = jwtTokenProvider.generateToken(user);
         jwtTokenProvider.setHeaderAccessToken(response, token);
         return new TokenResponseDto(user, token);
     }
